@@ -1,9 +1,13 @@
 import argparse
 import json
 import math
+import os
 import sys
+import time
 from collections import Counter
 from pathlib import Path
+from urllib import error as url_error
+from urllib import request as url_request
 
 import numpy as np
 
@@ -17,6 +21,28 @@ def parse_args():
     parser.add_argument("--in", dest="input_path", required=True, help="Input JSONL")
     parser.add_argument("--out", dest="output_path", required=True, help="Output JSONL")
     parser.add_argument("--embeddings", required=True, help="Path to embeddings.npy")
+    parser.add_argument("--generate-embeddings", action="store_true", help="Generate embeddings via API")
+    parser.add_argument("--embed-model", default="text-embedding-3-large", help="Embedding model name")
+    parser.add_argument(
+        "--embed-base-url",
+        default=os.environ.get("DMX_API_BASE_URL", "https://www.dmxapi.cn/v1/"),
+        help="Embedding API base URL",
+    )
+    parser.add_argument(
+        "--embed-api-key",
+        default=os.environ.get("DMX_API_KEY") or os.environ.get("OPENAI_API_KEY") or "",
+        help="Embedding API key (DMX_API_KEY or OPENAI_API_KEY)",
+    )
+    parser.add_argument("--embed-batch-size", type=int, default=128, help="Embedding batch size")
+    parser.add_argument("--embed-timeout", type=int, default=60, help="Embedding API timeout (seconds)")
+    parser.add_argument("--embed-max-retries", type=int, default=3, help="Embedding API retries")
+    parser.add_argument("--embed-retry-sleep", type=float, default=2.0, help="Retry backoff base (seconds)")
+    parser.add_argument(
+        "--embed-input-mode",
+        choices=["tool_calls", "intent_action"],
+        default="tool_calls",
+        help="How to build embedding input text",
+    )
     parser.add_argument("--num-clusters", type=int, default=0, help="Number of clusters (0 = heuristic)")
     parser.add_argument(
         "--method",
@@ -66,6 +92,99 @@ def normalize_embeddings(embeddings):
 
 def heuristic_k(n):
     return int(max(10, min(2000, round(math.sqrt(n)))))
+
+
+def build_embedding_text(issue, mode):
+    if mode == "intent_action":
+        intent = issue.get("strategic_intent") or ""
+        action = issue.get("action") or ""
+        text = " | ".join([part for part in [intent, action] if part])
+        return text if text else "unknown"
+
+    calls = issue.get("latent_tool_calls") or []
+    parts = []
+    for call in calls:
+        tool_category = call.get("tool_category") or ""
+        operation = call.get("operation") or ""
+        target_type = call.get("target_type") or ""
+        segment = " | ".join([part for part in [tool_category, operation, target_type] if part])
+        if segment:
+            parts.append(segment)
+    if parts:
+        return " || ".join(parts)
+    return build_embedding_text(issue, "intent_action")
+
+
+def request_embeddings(texts, model, api_key, base_url, timeout):
+    if not api_key:
+        raise ValueError("Missing API key. Set DMX_API_KEY or OPENAI_API_KEY, or pass --embed-api-key.")
+    endpoint = base_url.rstrip("/") + "/embeddings"
+    payload = json.dumps({"model": model, "input": texts}).encode("utf-8")
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {api_key}",
+    }
+    req = url_request.Request(endpoint, data=payload, headers=headers, method="POST")
+    with url_request.urlopen(req, timeout=timeout) as resp:
+        body = resp.read().decode("utf-8", errors="ignore")
+    data = json.loads(body)
+    if "data" not in data:
+        raise RuntimeError(f"Unexpected response: {data}")
+    ordered = sorted(data["data"], key=lambda x: x.get("index", 0))
+    return [item["embedding"] for item in ordered]
+
+
+def embed_with_retries(texts, model, api_key, base_url, timeout, max_retries, retry_sleep, quiet):
+    last_exc = None
+    for attempt in range(max_retries):
+        try:
+            return request_embeddings(texts, model, api_key, base_url, timeout)
+        except (url_error.HTTPError, url_error.URLError, RuntimeError, ValueError) as exc:
+            last_exc = exc
+            if attempt == max_retries - 1:
+                break
+            sleep_for = retry_sleep * (2 ** attempt)
+            if not quiet:
+                print(f"[embed] retry {attempt + 1}/{max_retries} after {sleep_for:.1f}s: {exc}", file=sys.stderr)
+            time.sleep(sleep_for)
+    raise last_exc
+
+
+def generate_embeddings(records, args):
+    texts = [build_embedding_text(rec, args.embed_input_mode) for rec in records]
+    total = len(texts)
+    if not args.quiet:
+        print(f"[embed] total={total} model={args.embed_model}", file=sys.stderr)
+
+    out_path = Path(args.embeddings)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    memmap = None
+    dim = None
+    for start in range(0, total, args.embed_batch_size):
+        end = min(total, start + args.embed_batch_size)
+        batch = texts[start:end]
+        embeddings = embed_with_retries(
+            batch,
+            args.embed_model,
+            args.embed_api_key,
+            args.embed_base_url,
+            args.embed_timeout,
+            args.embed_max_retries,
+            args.embed_retry_sleep,
+            args.quiet,
+        )
+        if len(embeddings) != len(batch):
+            raise RuntimeError(f"Embedding batch mismatch: got {len(embeddings)} expected {len(batch)}")
+        if memmap is None:
+            dim = len(embeddings[0])
+            memmap = np.lib.format.open_memmap(out_path, mode="w+", dtype="float32", shape=(total, dim))
+        memmap[start:end] = np.asarray(embeddings, dtype=np.float32)
+        if not args.quiet and args.log_every > 0 and end % args.log_every == 0:
+            print(f"[embed] {end}/{total} texts", file=sys.stderr)
+    if memmap is None:
+        raise RuntimeError("No embeddings generated.")
+    memmap.flush()
+    return memmap
 
 
 def compute_labels(chunk, centers, normalized):
@@ -174,16 +293,21 @@ def main():
         print(f"[load] records={total}", file=sys.stderr)
 
     emb_path = Path(args.embeddings)
-    if not emb_path.exists():
-        raise FileNotFoundError(f"Embeddings file not found: {emb_path}")
-    embeddings = load_embeddings(args.embeddings, args.mmap)
-    if embeddings.shape[0] != total:
-        raise ValueError(
-            f"Embedding count {embeddings.shape[0]} does not match input records {total}. "
-            "Ensure the input JSONL aligns with the embeddings order."
-        )
-    if not args.quiet:
-        print(f"[load] embeddings shape={embeddings.shape}", file=sys.stderr)
+    if args.generate_embeddings:
+        embeddings = generate_embeddings(records, args)
+        if not args.quiet:
+            print(f"[embed] saved embeddings to {emb_path}", file=sys.stderr)
+    else:
+        if not emb_path.exists():
+            raise FileNotFoundError(f"Embeddings file not found: {emb_path}")
+        embeddings = load_embeddings(args.embeddings, args.mmap)
+        if embeddings.shape[0] != total:
+            raise ValueError(
+                f"Embedding count {embeddings.shape[0]} does not match input records {total}. "
+                "Ensure the input JSONL aligns with the embeddings order, or use --generate-embeddings."
+            )
+        if not args.quiet:
+            print(f"[load] embeddings shape={embeddings.shape}", file=sys.stderr)
 
     if args.normalize:
         embeddings = normalize_embeddings(embeddings)

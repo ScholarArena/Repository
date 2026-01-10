@@ -63,6 +63,17 @@ Common flags:
 - `--log-every 5000` and `--log-every-iter 10`
 - `--stats-out data/processed/cluster_stats.json`
 
+Optional embedding generation (DMXAPI):
+```
+export DMX_API_KEY=sk-...
+python foundry/issue_mining/cluster_issues.py \
+  --in data/interim/grounded_issues.jsonl \
+  --embeddings data/raw/embeddings.npy \
+  --generate-embeddings \
+  --embed-model text-embedding-3-large \
+  --out data/processed/issues.jsonl
+```
+
 ### 4) Build ontology summaries
 
 - Script: `foundry/ontology/build_ontology.py`
