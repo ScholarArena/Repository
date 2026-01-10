@@ -1,0 +1,851 @@
+{
+    "forum_id": "GLWf2fq0bX",
+    "title": "Skill Expansion and Composition in Parameter Space",
+    "timestamp": 1765636813.92774,
+    "analysis":
+    {
+        "mining_results":
+        [
+            {
+                "source_seg_ids":
+                [
+                    "7vTPFp2uOB_sum_0"
+                ],
+                "role": "Reviewer",
+                "grounding_ref": "Abstract, Sec 3.2, Sec 3.3",
+                "cognitive_chain": "I have read the paper's proposal for Parametric Skill Expansion and Composition (PSEC). The core idea is to use LoRA modules as a 'skill library' and combine them in parameter space. The authors claim this allows agents to leverage prior knowledge and avoid catastrophic forgetting. I need to formulate a summary of this approach for the meta-review. I will highlight the key components: the plug-and-play LoRA modules, the parameter-space composition, and the context-aware module. My summary should accurately capture the essence of their contribution for the record. I will also note the application areas they tested (multi-objective, continual learning, dynamics shift) to show the breadth of their claims.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Cognitive_Synthesis",
+                        "operation": "Summarize_Proposed_Framework",
+                        "target_type": "PSEC_Framework",
+                        "outcome": "Synthesized a high-level summary of the PSEC framework, focusing on LoRA-based skill library, parameter-space composition, and adaptive module for dynamic environments."
+                    }
+                ],
+                "strategic_intent": "Establish_Baseline_Understanding",
+                "action": "Summarize the PSEC framework: It uses a library of LoRA modules for skills, enables direct skill synthesis in parameter space, and employs a context-aware module for adaptive composition, demonstrating efficiency in diverse RL scenarios."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "7vTPFp2uOB_sum_1"
+                ],
+                "role": "Reviewer",
+                "grounding_ref": "Sec 4",
+                "cognitive_chain": "The authors have evaluated their method across several benchmarks. I need to briefly summarize this to complete my meta-review. I recall they tested on multi-objective composition (safe RL), continual policy shift (DMC), and dynamics shift (D4RL). This diversity of experiments is a strength of the paper. My summary should reflect this comprehensive evaluation strategy, showing that the authors didn't just test on a single, narrow problem. This supports their claims of 'versatility'. I will state that the results show improved efficiency compared to vanilla RL.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Cognitive_Synthesis",
+                        "operation": "Summarize_Experimental_Evaluation",
+                        "target_type": "Benchmarks",
+                        "outcome": "Extracted and summarized the key experimental setups (multi-objective, continual, dynamics shift) and the conclusion that PSEC enables efficient, flexible learning."
+                    }
+                ],
+                "strategic_intent": "Establish_Baseline_Understanding",
+                "action": "Acknowledge the comprehensive experimental evaluation across DSRL, DMC, and D4RL benchmarks, which demonstrates the framework's versatility and efficiency over standard RL approaches."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "7vTPFp2uOB_wea_0"
+                ],
+                "role": "Reviewer",
+                "grounding_ref": "Related Works",
+                "cognitive_chain": "I am concerned about the paper's novelty. The authors claim their method is new, but using LoRA for multi-task learning has been explored before, as in papers [1] and [2]. The core idea of a skill library is not entirely new either. It is crucial for the authors to clearly differentiate their work from prior art. My goal is to highlight this potential weakness so the authors must provide a stronger justification of their novel contributions. I need to frame this as a request for a more detailed comparative analysis.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Literature_Cross_Check",
+                        "operation": "Compare_with_Prior_Art",
+                        "target_type": "PSEC_vs_Prior_Work",
+                        "outcome": "Identified potential overlap with prior work on LoRA-based multi-task learning, questioning the stated novelty of the framework."
+                    }
+                ],
+                "strategic_intent": "Expose_Methodological_Weakness",
+                "action": "Question the novelty of PSEC, citing prior works [1, 2] that also use LoRA for multi-task learning, and request a more detailed differentiation to clarify the unique contributions."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "7vTPFp2uOB_wea_1"
+                ],
+                "role": "Reviewer",
+                "grounding_ref": "Appendix A",
+                "cognitive_chain": "The authors' framework seems to revisit an older paradigm criticized by prior work, specifically [5], which argued against learning and storing a separate policy for every skill. PSEC appears to bring back this growing library of policies. This re-introduces a known limitation: the linear growth of computational and memory requirements as more skills are added. The paper does not seem to acknowledge or debate this limitation adequately. I must point this out as a significant weakness that needs to be addressed in the paper's discussion of limitations.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Logical_Deduction",
+                        "operation": "Identify_Recurring_Limitation",
+                        "target_type": "PSEC_Scalability",
+                        "outcome": "Detected that PSEC re-introduces the scalability issue of a growing skill library without a clear mitigation strategy, a known limitation from prior literature."
+                    }
+                ],
+                "strategic_intent": "Expose_Methodological_Weakness",
+                "action": "Critique PSEC for revisiting a known limitation from prior work [5] regarding the linear growth in computational costs and memory usage as the skill library expands, without sufficient debate in the current manuscript."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "Xn1GMLdiSP_sum_0"
+                ],
+                "role": "Reviewer",
+                "grounding_ref": "Sec 1, Sec 3.3",
+                "cognitive_chain": "The paper introduces PSEC, focusing on parameter-space composition. It contrasts this with noise-level and action-level composition. I understand the core proposal. The t-SNE plots in Figure 4 are meant to provide evidence for the superiority of parameter-space composition. I need to summarize this core idea and the claimed contribution for my official review. I will state that the paper presents an interesting categorization of skill composition methods and claims a performance advantage for the parameter-level approach.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Cognitive_Synthesis",
+                        "operation": "Summarize_Core_Contribution",
+                        "target_type": "Parameter-level_Composition",
+                        "outcome": "Synthesized a concise summary of PSEC's main contribution: composing skills in parameter space and contrasting it with noise- and action-level alternatives."
+                    }
+                ],
+                "strategic_intent": "Establish_Baseline_Understanding",
+                "action": "Summarize that PSEC introduces a novel skill composition method at the parameter space level, contrasting it with noise- and action-level composition, and claims a performance improvement."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "Xn1GMLdiSP_str_0"
+                ],
+                "role": "Reviewer",
+                "grounding_ref": "Sec 3.3, Fig 4",
+                "cognitive_chain": "The paper's central contribution is parameter-level composition. The idea of merging LoRA weights before action generation is interesting and plausible for improving efficiency. However, the paper's argument for its superiority is not strongly supported by evidence. The text explanation from lines 256-304 is intuitive but lacks rigorous proof. I need to challenge the authors to provide more convincing evidence beyond the t-SNE plots, which I find insufficient. This is a key point of criticism that affects the paper's persuasiveness.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Argumentation_Validation",
+                        "operation": "Challenge_Claim_Rigor",
+                        "target_type": "Parameter_Superiority_Argument",
+                        "outcome": "Identified a weakness in the paper's argument, deeming the evidence for parameter-level composition's superiority as not well-grounded."
+                    }
+                ],
+                "strategic_intent": "Expose_Methodological_Weakness",
+                "action": "State that the argument for the superiority of parameter-level composition is not well-grounded, citing the insufficient explanation and the non-conclusive t-SNE visualization as evidence."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "Xn1GMLdiSP_wea_1"
+                ],
+                "role": "Reviewer",
+                "grounding_ref": "Abstract, Sec 3.2",
+                "cognitive_chain": "The authors use the term 'rapid' in the abstract, but their example of learning to walk versus learning to stand takes 2-2.5 months, based on online statistics. This is not universally considered 'rapid'. Using such a strong, subjective claim without proper context or justification weakens the paper's scientific tone. I must point this out as an issue of overstatement. This is a minor but important point about scientific writing and framing.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Textual_Analysis",
+                        "operation": "Flag_Overstatement",
+                        "target_type": "Word_Choice",
+                        "outcome": "Identified the use of the subjective term 'rapid' as potentially inaccurate and unsubstantiated."
+                    }
+                ],
+                "strategic_intent": "Expose_Methodological_Weakness",
+                "action": "Question the use of the term 'rapid' in the abstract, arguing that the 2-2.5 month timeframe for learning to walk may not be considered rapid by all standards in the community."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "Xn1GMLdiSP_wea_2"
+                ],
+                "role": "Reviewer",
+                "grounding_ref": "Fig 4",
+                "cognitive_chain": "The t-SNE plot in Figure 4(a) is presented as evidence that the parameter space shares knowledge while preserving skill distinctions. However, the plot is just a 2D projection. It doesn't explicitly 'reveal shared knowledge'. The distinction between Fig 4(a) and 4(b) is not clear-cut proof of 'sharing' versus 'not sharing'. The authors need a more direct and unambiguous visualization to support this core claim about the structure of the parameter space. I am requesting a better-designed experiment or visualization to make this point concrete.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Figure_Analysis",
+                        "operation": "Challenge_Visual_Evidence",
+                        "target_type": "t-SNE_Plot_Fig4",
+                        "outcome": "Determined that the t-SNE plot does not sufficiently and directly demonstrate the concept of 'shared knowledge' in the parameter space."
+                    }
+                ],
+                "strategic_intent": "Expose_Methodological_Weakness",
+                "action": "Argue that the t-SNE plot (Fig 4) does not directly reveal that the parameter space shares knowledge, and suggest the authors design a more specific visualization to illustrate this concept clearly."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "Xn1GMLdiSP_wea_3"
+                ],
+                "role": "Reviewer",
+                "grounding_ref": "Abstract",
+                "cognitive_chain": "I am encountering several terms in the paper that are not clearly defined or are used in confusing ways. For example, 'versatility' on Line 354 is vague. What exactly does it mean in the context of their work? A precise definition is needed for reproducibility and clarity. Similarly, 'generated' is used on Line 397. Why this word? Is it for baselines? It's an odd choice. These linguistic issues detract from the paper's clarity. I must request clear definitions for these and other terms.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Textual_Analysis",
+                        "operation": "Request_Definition",
+                        "target_type": "Ambiguous_Terms",
+                        "outcome": "Identified several terms ('versatility', 'generated') that lack clear, specific definitions within the paper's context."
+                    }
+                ],
+                "strategic_intent": "Clarify_Misunderstanding",
+                "action": "Request clear definitions for ambiguously used terms such as 'versatility' and 'generated', pointing out their negative impact on the paper's clarity."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "Xn1GMLdiSP_wea_4"
+                ],
+                "role": "Reviewer",
+                "grounding_ref": "Table 1",
+                "cognitive_chain": "The paper mentions a 'popular safe offline RL benchmark' on Line 374. This is not informative. What makes it popular? Is it the scale, the diversity of tasks, or its adoption rate? Why was it chosen as a benchmark for PSEC? The authors should replace this generic phrase with a concrete explanation of the benchmark's characteristics and why it's suitable for evaluating a skill composition framework. This is crucial for motivating the experimental section.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Experimental_Design_Check",
+                        "operation": "Request_Benchmark_Justification",
+                        "target_type": "Benchmark_Choice",
+                        "outcome": "Identified a lack of justification for the choice of the 'popular safe offline RL benchmark', requesting specific details on its characteristics."
+                    }
+                ],
+                "strategic_intent": "Clarify_Misunderstanding",
+                "action": "Question the vague description of the benchmark, asking for specific details on why it was chosen and what makes it suitable for evaluating PSEC."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "Xn1GMLdiSP_wea_5"
+                ],
+                "role": "Reviewer",
+                "grounding_ref": "Table 1",
+                "cognitive_chain": "The term 'safety' is used in the caption of Table 1 but is not well-defined in the text. The only clue is that it relates to 'cost' being below 1. This is an implicit definition that leaves room for interpretation. A clear, upfront definition of 'safety' as used in this paper is necessary for understanding the results and the contribution of the multi-objective experiment. I need to ask the authors to clarify this fundamental term.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Textual_Analysis",
+                        "operation": "Request_Definition",
+                        "target_type": "Key_Term",
+                        "outcome": "Flagged the term 'safety' as being poorly defined in the context of the paper's results."
+                    }
+                ],
+                "strategic_intent": "Clarify_Misunderstanding",
+                "action": "Request a clear definition of the term 'safety' as it pertains to the experimental results, noting the current ambiguity."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "Xn1GMLdiSP_wea_7"
+                ],
+                "role": "Reviewer",
+                "grounding_ref": "Related Works",
+                "cognitive_chain": "The paper discusses multi-task learning and continual learning, but most citations are from 2023-2024. There's a lack of historical context. Works like Caruana (1997), Kirkpatrick (2017), or even Eysenbach (2018) are missing. Without situating PSEC within the broader history of these fields, it's difficult to properly assess its true novelty and significance. The contribution might be an incremental improvement rather than a fundamental leap, but this is hard to judge without proper historical perspective. I must point this out.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Literature_Cross_Check",
+                        "operation": "Assess_Historical_Context",
+                        "target_type": "Related_Work_Section",
+                        "outcome": "Identified a lack of foundational and recent historical citations in the Related Work section, hindering the assessment of novelty."
+                    }
+                ],
+                "strategic_intent": "Expose_Methodological_Weakness",
+                "action": "Criticize the lack of historical context in the Related Work section, noting that the predominance of recent citations makes it difficult to assess the paper's true novelty and significance."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "Xn1GMLdiSP_wea_9"
+                ],
+                "role": "Reviewer",
+                "grounding_ref": "Abstract",
+                "cognitive_chain": "I found a grammatical error in the first sentence of the abstract: 'humans excel at reusing prior knowledge to address new challenges and developing skills while solving problems'. The structure 'developing skills while solving problems' is awkward. This suggests a lack of careful proofreading. While a minor point, numerous such errors throughout the paper would significantly impact its readability and professionalism. I will mention this as a presentation weakness that should be corrected.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Textual_Analysis",
+                        "operation": "Flag_Grammatical_Error",
+                        "target_type": "Abstract",
+                        "outcome": "Detected an awkward grammatical structure in the first sentence of the abstract."
+                    }
+                ],
+                "strategic_intent": "Expose_Presentation_Flaw",
+                "action": "Point out a grammatical error in the first sentence of the abstract, suggesting the paper needs more careful proofreading."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "Xn1GMLdiSP_que_0"
+                ],
+                "role": "Reviewer",
+                "grounding_ref": "Sec 3.3, Eq 7",
+                "cognitive_chain": "I am analyzing the context-aware composition module. If I understand correctly, only the weights for the new skill k, represented by $W_k = W_0 + \\alpha(s; \\theta) \\Delta W_k, are being updated during its training. This means the context-aware module is trained from scratch for each new skill. But how does this handle interference or contradiction with pre-trained LoRA weights? If a new skill requires an action that contradicts a skill represented by an existing LoRA, training $\\alpha(s; \\theta)$ might struggle to find a good combination. This is a critical robustness question. I also want to know about scalability. What happens with dozens of skills? Does the context module become too complex to train? I need to ask for experiments that stress-test these boundary conditions.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Mathematical_Verification",
+                        "operation": "Analyze_Training_Dynamics",
+                        "target_type": "Context_Aware_Module_Training",
+                        "outcome": "Identified a potential conflict issue when training the context-aware module for a new skill that contradicts existing skills, and raised a scalability concern."
+                    }
+                ],
+                "strategic_intent": "Test_Boundary_Conditions",
+                "action": "Question the dynamics of training the context-aware module with contradictory skills and ask for stress tests on the scalability of the method with dozens of skills."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "bieH71x0DX_sum_0"
+                ],
+                "role": "Reviewer",
+                "grounding_ref": "Abstract, Sec 3.2, 3.3",
+                "cognitive_chain": "I need to summarize the paper's core idea for my review. The authors propose PSEC, a framework for skill learning. The key mechanisms are LoRA for parameter-efficient skill encoding and a context-aware module for dynamic composition. They evaluate on several benchmarks. I will create a concise summary capturing these essential elements: LoRA modules, parameter-space composition, context-awareness, and evaluation across different RL scenarios.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Cognitive_Synthesis",
+                        "operation": "Summarize_Proposed_Framework",
+                        "target_type": "PSEC_Framework",
+                        "outcome": "Synthesized a summary of PSEC, highlighting its use of LoRA, context-aware composition, and evaluation on diverse scenarios."
+                    }
+                ],
+                "strategic_intent": "Establish_Baseline_Understanding",
+                "action": "Summarize the PSEC framework, noting its use of LoRA for skill encoding, context-aware composition, and application in multi-objective, continual, and dynamic shift scenarios."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "bieH71x0DX_str_1"
+                ],
+                "role": "Reviewer",
+                "grounding_ref": "Sec 4",
+                "cognitive_chain": "The authors' experiments are very extensive and seem to support their claims. The strength lies in demonstrating the practical application of their framework. My summary should reflect this as a major positive point. I will list the key strengths identified: the intuitive design of LoRA for skills, the t-SNE analysis providing a rationale for their design choice, and the broad experimental validation.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Experimental_Analysis",
+                        "operation": "Identify_Experimental_Strengths",
+                        "target_type": "Evaluation_Suite",
+                        "outcome": "Identified the strengths of the paper as its intuitive LoRA-based design, the t-SNE analysis, and extensive experiments."
+                    }
+                ],
+                "strategic_intent": "Acknowledge_Strength",
+                "action": "Acknowledge the paper's strengths, including its intuitive design, the t-SNE analysis supporting the parameter-space composition, and extensive experimental validation."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "bieH71x0DX_wea_0"
+                ],
+                "role": "Reviewer",
+                "grounding_ref": "Sec 4",
+                "cognitive_chain": "The authors primarily evaluate in offline settings. I see this as a potential limitation. Real-world deployment often involves online learning or adapting to unseen tasks without a pre-collected dataset. The paper focuses on adaptation 'given solely limited data', but what if there is no data? The framework's applicability seems restricted to data-rich environments. This is a significant constraint on the framework's generality that I must highlight as a weakness.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Scope_Validation",
+                        "operation": "Identify_Scope_Limitation",
+                        "target_type": "Applicability",
+                        "outcome": "Identified that the framework is limited to environments where data is available, not addressing zero-shot or purely online scenarios."
+                    }
+                ],
+                "strategic_intent": "Expose_Methodological_Weakness",
+                "action": "Point out a limitation that the framework's applicability is restricted to environments with available data, and question its performance in zero-shot or purely online settings."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "bieH71x0DX_wea_3"
+                ],
+                "role": "Reviewer",
+                "grounding_ref": "Abstract",
+                "cognitive_chain": "The term 'skill' in this paper refers to a LoRA module for a whole task. This differs from the standard RL literature where a 'skill' is often a temporal abstraction or a sub-goal option. This discrepancy in terminology could cause confusion for readers familiar with the standard definitions. The authors should be aware of this and perhaps clarify their terminology choice to avoid misunderstanding. This is a conceptual clarity issue.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Conceptual_Clarification",
+                        "operation": "Highlight_Terminology_Discrepancy",
+                        "target_type": "Skill_Definition",
+                        "outcome": "Identified that the paper's definition of 'skill' as a task-specific LoRA module differs from common temporal abstractions in RL."
+                    }
+                ],
+                "strategic_intent": "Clarify_Misunderstanding",
+                "action": "Point out that the paper's definition of 'skill' may conflict with existing concepts in RL that refer to temporal abstractions, potentially causing confusion."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "bieH71x0DX_que_0"
+                ],
+                "role": "Reviewer",
+                "grounding_ref": "Sec 4.2, 4.3",
+                "cognitive_chain": "The authors claim PSEC 'reduced computational costs and memory usage'. This is a strong claim. I need to see the evidence. I will compare their numbers against a baseline. Do they provide FLOPs, parameter counts, training time, or memory footprint? Without a direct comparison, this claim is an unsubstantiated assertion. I must ask for specific metrics and comparisons to validate this key selling point of the framework.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Experimental_Design_Check",
+                        "operation": "Request_Empirical_Evidence",
+                        "target_type": "Efficiency_Claims",
+                        "outcome": "Identified a need for empirical metrics (e.g., FLOPs, params, time) to substantiate the claim of reduced computational costs."
+                    }
+                ],
+                "strategic_intent": "Demand_Empirical_Validation",
+                "action": "Request concrete evidence, such as FLOPs, parameter counts, or memory usage, to back up the claim that PSEC reduces computational costs and memory usage compared to baselines."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "Ve7e1f9y2f_sum_0"
+                ],
+                "role": "Reviewer",
+                "grounding_ref": "Sec 1, 3.2, 3.3",
+                "cognitive_chain": "The paper proposes a skill composition method. It introduces three levels: parameter-level, noise-level, action-level. The core idea is to argue for the superiority of the parameter-level approach. The LoRA structure is a key part of the implementation. The authors use diffusion models to represent the policies. I need to summarize this for the review record. I will mention the key contribution: the classification of composition levels and the proposed parameter-level method.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Cognitive_Synthesis",
+                        "operation": "Summarize_Proposed_Framework",
+                        "target_type": "Skill_Composition_Method",
+                        "outcome": "Synthesized a summary of the paper's proposal, focusing on the categorization of composition methods and the introduction of PSEC."
+                    }
+                ],
+                "strategic_intent": "Establish_Baseline_Understanding",
+                "action": "Summarize the paper's core proposal: a new skill composition method that merges LoRA modules in parameter space, contrasting it with noise- and action-level alternatives."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "Ve7e1f9y2f_sum_1"
+                ],
+                "role": "Reviewer",
+                "grounding_ref": "Abstract, Sec 3.2",
+                "cognitive_chain": "The authors' use of LoRA as 'plug-and-play' skill modules is intuitive and makes sense. The t-SNE analysis in Fig 4 to justify their choice of parameter space is a good piece of analysis. The paper is well-structured and the arguments are generally easy to follow. I find this clarity in presentation a major strength. The related work section is also thorough, which helps situate their contribution properly. I should highlight these strengths in my review.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Manuscript_Evaluation",
+                        "operation": "Identify_Presentation_Strengths",
+                        "target_type": "Clarity_and_Structure",
+                        "outcome": "Assessed the paper as having a strong, intuitive design, clear structure, and a thorough related work section."
+                    }
+                ],
+                "strategic_intent": "Acknowledge_Strength",
+                "action": "Acknowledge the paper's strengths, including the intuitive LoRA-based design, the well-structured presentation, and the clear rationale provided for parameter-space composition."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "Ve7e1f9y2f_sum_2"
+                ],
+                "role": "Reviewer",
+                "grounding_ref": "Fig 4, 5, 6, 7, 8",
+                "cognitive_chain": "The paper's figures are very clear and effectively summarize the key points. The graphics are easy to understand and directly support the text. For example, the t-SNE plot (Fig 4), the framework diagram (Fig 1), the visualization of context-aware weights (Fig 5), and the performance plots (Figs 6, 7, 8) all enhance comprehension. This high-quality visual presentation is a significant positive aspect of the paper. I will note this as a strength.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Figure_Evaluation",
+                        "operation": "Assess_Visual_Quality",
+                        "target_type": "Figures_and_Graphics",
+                        "outcome": "Determined that the figures are of high quality, being clear, well-captioned, and supportive of the main text."
+                    }
+                ],
+                "strategic_intent": "Acknowledge_Strength",
+                "action": "Acknowledge that the figures and graphics are high-quality, clear, and effective in summarizing key points of the paper."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "Ve7e1f9y2f_sum_3"
+                ],
+                "role": "Reviewer",
+                "grounding_ref": "Sec 4",
+                "cognitive_chain": "The paper's experiments are extensive, covering multiple benchmarks and settings. This is a major strength. They cover multi-objective composition, continual learning, and dynamics shifts. This breadth demonstrates the framework's versatility. The large number of experiments makes the authors' claims more convincing. I should highlight this comprehensive evaluation as a key positive.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Experimental_Analysis",
+                        "operation": "Assess_Experimental_Breadth",
+                        "target_type": "Benchmarks_and_Settings",
+                        "outcome": "Identified the extensive experimental evaluation across multiple diverse benchmarks as a significant strength."
+                    }
+                ],
+                "strategic_intent": "Acknowledge_Strength",
+                "action": "Acknowledge the extensive and diverse experimental evaluation as a major strength of the paper."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "Ve7e1f9y2f_wea_0"
+                ],
+                "role": "Reviewer",
+                "grounding_ref": "Abstract",
+                "cognitive_chain": "The abstract mentions LoRA, but doesn't explain what it stands for or what it is until page 2. A reader unfamiliar with PEFT might be lost. The authors should either define it upfront or use a more descriptive term in the abstract. This is a minor but important point about accessibility for the reader. I need to point this out as an area for improvement.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Textual_Analysis",
+                        "operation": "Request_Prior_Definition",
+                        "target_type": "Acronym",
+                        "outcome": "Identified that the acronym LoRA is used in the abstract without prior definition, which could hinder reader comprehension."
+                    }
+                ],
+                "strategic_intent": "Clarify_Misunderstanding",
+                "action": "Suggest defining the term 'LoRA' in the abstract or using a more descriptive phrase instead, to improve accessibility for readers not familiar with the term."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "Ve7e1f9y2f_wea_1"
+                ],
+                "role": "Reviewer",
+                "grounding_ref": "Sec 1",
+                "cognitive_chain": "The motivation for the paper is clear. However, the example of a child learning to walk versus a child learning to stand with support is not universally applicable. The 2-2.5 month figure from online statistics seems anecdotal and not a strong scientific motivator for 'rapid' adaptation. Also, some assumptions and motivations could be better explained. I feel the paper could be strengthened with a more robust and general motivation. I will provide this as constructive feedback.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Motivation_Analysis",
+                        "operation": "Question_Example_Relevance",
+                        "target_type": "Problem_Motivation",
+                        "outcome": "Assessed the motivating example in the introduction as potentially weak and not universally supportive of the claims."
+                    }
+                ],
+                "strategic_intent": "Expose_Methodological_Weakness",
+                "action": "Critique the motivating example in the introduction as potentially weak and suggest strengthening the general motivation and assumptions."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "Ve7e1f9y2f_wea_2"
+                ],
+                "role": "Reviewer",
+                "grounding_ref": "Abstract, Sec 3.3",
+                "cognitive_chain": "I am thinking about the compositional aspect. The paper composes skills as weighted sums of LoRA actions. But what about complex, fluid skills like throwing a ball? This is not a simple combination of sub-skills like 'walk' or 'grasp'. Can PSEC handle such skills? The paper seems to assume skills are composable primitives. This is a potential limitation of the framework's expressiveness that isn't discussed. I need to ask how PSEC would perform on more complex, non-decomposable tasks.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Generalization_Check",
+                        "operation": "Probe_Expressiveness_Boundary",
+                        "target_type": "Skill_Composition_Assumption",
+                        "outcome": "Identified a limitation in the assumption that all skills are composable primitives, questioning performance on complex, fluid tasks like 'throwing'."
+                    }
+                ],
+                "strategic_intent": "Test_Boundary_Conditions",
+                "action": "Question how PSEC would handle complex, non-decomposable skills (e.g., throwing a ball), highlighting a potential limitation of the weighted sum composition assumption."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "Ve7e1f9y2f_que_0"
+                ],
+                "role": "Reviewer",
+                "grounding_ref": "Sec 4.1",
+                "cognitive_chain": "I am trying to understand the experimental setup. The paper uses an offline safe RL benchmark. Why this specific benchmark? What are the tasks? What does the data look like? What specific characteristics of the benchmark highlight PSEC's pros and cons? Without this context, it's hard to evaluate the experiment's meaningfulness. For example, is it good for testing compositional abilities because of multiple objectives? I need to ask for this missing information.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Experimental_Design_Check",
+                        "operation": "Request_Benchmark_Details",
+                        "target_type": "DSRL_Benchmark",
+                        "outcome": "Identified a lack of detail on the nature of the DSRL benchmark and the data, which is necessary to evaluate the experimental design."
+                    }
+                ],
+                "strategic_intent": "Clarify_Misunderstanding",
+                "action": "Request a detailed overview of the offline safe RL benchmark used, including the nature of the tasks and data, to better understand the experimental setup and its rationale."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "NcQdyhj2eA_com_10"
+                ],
+                "role": "Author",
+                "grounding_ref": "Appendix F",
+                "cognitive_chain": "The reviewers requested more complex experiments. We have conducted extensive new experiments on the Meta-World benchmark, which involves 50 diverse robotic manipulation tasks. This is a significant addition that directly addresses concerns about the scalability and applicability of PSEC to complex problems. We need to introduce this new evidence strongly in the rebuttal to strengthen our paper's claims.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Experimental_Addition",
+                        "operation": "Introduce_New_Evidence",
+                        "target_type": "Meta-World_Benchmark",
+                        "outcome": "Prepared to present extensive new experimental results on the complex Meta-World benchmark to address scalability and applicability concerns."
+                    }
+                ],
+                "strategic_intent": "Defend_With_Empirical_Evidence",
+                "action": "Introduce new, extensive experiments on the Meta-World benchmark (50 skills) to demonstrate PSEC's effectiveness on more complex and scalable problems."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "2zu3dGFpHF_com_21"
+                ],
+                "role": "Author",
+                "grounding_ref": "Appendix F",
+                "cognitive_chain": "We are presenting the mean success rates for the Meta-World experiments. PSEC achieves a mean of 0.90, which is significantly higher than the baselines L2M (0.65), L2M-oracle (0.77), and others. This stark numerical difference provides strong evidence for PSEC's superior performance in this challenging continual learning setting. We must highlight this quantitative result in the rebuttal.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Quantitative_Analysis",
+                        "operation": "Report_Performance_Metric",
+                        "target_type": "Meta-World_Mean_Success_Rate",
+                        "outcome": "Calculated and highlighted the mean success rate of PSEC (0.90) against baselines to showcase a significant performance gap."
+                    }
+                ],
+                "strategic_intent": "Quantify_Superiority",
+                "action": "Report that PSEC achieves a mean success rate of 0.90 on the Meta-World benchmark, significantly outperforming baselines and demonstrating strong performance."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "2zu3dGFpHF_com_23"
+                ],
+                "role": "Author",
+                "grounding_ref": "Appendix F",
+                "cognitive_chain": "We are now presenting the few-shot results. In this setting, PSEC still achieves very high success rates on the 12 unseen tasks, often exceeding 0.80. This is crucial for demonstrating PSEC's sample efficiency and fast adaptation capabilities, which are key claims of the paper. We will emphasize these results to counter any concerns about data efficiency.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Quantitative_Analysis",
+                        "operation": "Report_Performance_Metric",
+                        "target_type": "Meta-World_Few-Shot_Results",
+                        "outcome": "Prepared to highlight high few-shot success rates on unseen tasks to demonstrate PSEC's data efficiency."
+                    }
+                ],
+                "strategic_intent": "Quantify_Superiority",
+                "action": "Report PSEC's high success rates in the few-shot setting on unseen tasks, demonstrating strong data-efficient adaptation."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "2zu3dGFpHF_com_38"
+                ],
+                "role": "Author",
+                "grounding_ref": "Appendix F",
+                "cognitive_chain": "We are presenting the zero-shot results. Remarkably, PSEC achieves non-zero performance on several unseen tasks even without any task-specific data, solely by training the context module on existing tasks. This strongly supports our claim about leveraging shared knowledge for generalization. We will present these results as powerful evidence for PSEC's zero-shot capabilities.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Quantitative_Analysis",
+                        "operation": "Report_Performance_Metric",
+                        "target_type": "Meta-World_Zero-Shot_Results",
+                        "outcome": "Prepared to highlight surprising zero-shot performance to demonstrate the framework's ability to generalize without new task data."
+                    }
+                ],
+                "strategic_intent": "Quantify_Superiority",
+                "action": "Report PSEC's zero-shot results, highlighting its ability to generalize to unseen tasks without task-specific data, showcasing strong knowledge transfer."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "2zu3dGFpHF_com_67"
+                ],
+                "role": "Author",
+                "grounding_ref": "Appendix F",
+                "cognitive_chain": "We need to analyze why PSEC outperforms the baselines. We attribute this to several factors: avoiding parameter conflicts during training (as in [1]), superior sample efficiency compared to [2], and the optimal composition from our context-aware module versus manual merging. We will write this analysis to justify our performance advantage and provide a narrative for why PSEC works better.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Performance_Analysis",
+                        "operation": "Explain_Superiority_Factors",
+                        "target_type": "PSEC_vs_Baselines",
+                        "outcome": "Formulated an explanation for PSEC's superior performance based on avoiding parameter conflicts, sample efficiency, and optimal composition."
+                    }
+                ],
+                "strategic_intent": "Defend_Novelty_Against_Prior_Work",
+                "action": "Analyze and explain PSEC's superior performance over baselines by attributing it to avoiding parameter conflicts, better sample efficiency, and optimal context-aware composition."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "HLV1WSdaYS_com_3"
+                ],
+                "role": "Author",
+                "grounding_ref": "Related Works",
+                "cognitive_chain": "The reviewer is concerned about our comparison to prior work. We must clarify our novelty. Our primary differentiator from [1-2] and [4] is the context-aware, dynamic composition. They use static weights. For [3], our focus is on fast adaptation and continual improvement, whereas [3] focuses on pretraining and requires manual effort. For [5], the problems are fundamentally different. We will clearly articulate these distinctions to defend our contribution.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Literature_Cross_Check",
+                        "operation": "Differentiate_from_Prior_Art",
+                        "target_type": "PSEC_vs_Specific_Related_Work",
+                        "outcome": "Prepared a defense highlighting the differences between PSEC's dynamic composition and the static composition of prior work."
+                    }
+                ],
+                "strategic_intent": "Defend_Novelty_Against_Prior_Work",
+                "action": "Contrast PSEC's context-aware, dynamic composition with the static composition of prior works [1-4] and clarify that [5] addresses a different problem, to establish PSEC's novelty."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "PmGdR6rOr4_com_5"
+                ],
+                "role": "Author",
+                "grounding_ref": "Appendix G, Fig 19",
+                "cognitive_chain": "The reviewer questioned if parameter space shares knowledge. Our original t-SNE was not convincing. We need a better visualization. We propose a new experiment: rollout the final 'running' skill and evaluate it with 'stand', 'walk', and 'run' rewards. If PSEC's running skill retains high rewards for stand and walk, it proves knowledge sharing. We will add this as a new figure (Fig 19) to the appendix to provide this direct evidence.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Experimental_Addition",
+                        "operation": "Design_Empirical_Test",
+                        "target_type": "Knowledge_Sharing_Hypothesis",
+                        "outcome": "Designed a new visualization (reward distribution analysis) to empirically test the knowledge sharing claim."
+                    }
+                ],
+                "strategic_intent": "Defend_With_Empirical_Evidence",
+                "action": "Propose a new visualization (Fig 19) showing that PSEC's final composed running skill retains high stand and walk rewards, providing empirical evidence for knowledge sharing in parameter space."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "PmGdR6rOr4_com_10"
+                ],
+                "role": "Author",
+                "grounding_ref": "Abstract, Sec 3.3",
+                "cognitive_chain": "The reviewer pointed out that we used the term 'generated' for baselines. This was an error. We should not have used that word. We will acknowledge this mistake and state that we have revised the paper to remove it. This is a minor but important correction for clarity and professionalism.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Textual_Correction",
+                        "operation": "Acknowledge_and_Correct_Error",
+                        "target_type": "Word_Choice",
+                        "outcome": "Identified and acknowledged the incorrect use of the word 'generated' and committed to its removal."
+                    }
+                ],
+                "strategic_intent": "Concede_Minor_Point_To_Win_Major",
+                "action": "Acknowledge the error in using the word 'generated' and state that it has been revised in the paper."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "Fb8S4e6s7N_com_5"
+                ],
+                "role": "Author",
+                "grounding_ref": "Sec 3.3, Fig 5",
+                "cognitive_chain": "The reviewer is concerned that some skills, like throwing, may not be simple sums of sub-skills. This is a valid point about the expressiveness of our model. Our framework can handle this by treating 'throwing' as a new, atomic skill added to the library. The context-aware module can then combine 'throwing' with other skills for complex tasks like playing basketball. We will explain this to defend PSEC's generality.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Conceptual_Clarification",
+                        "operation": "Express_Framework_Generality",
+                        "target_type": "Skill_Composition_Assumption",
+                        "outcome": "Formulated an explanation for how PSEC handles non-decomposable skills by treating them as new primitives in the library."
+                    }
+                ],
+                "strategic_intent": "Clarify_Misunderstanding",
+                "action": "Explain that non-decomposable skills like 'throwing' can be added as new atomic skills to the PSEC library and then composed for more complex tasks, defending the framework's expressiveness."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "dt6ofU1ePx_com_3"
+                ],
+                "role": "Author",
+                "grounding_ref": "Sec 1, Appendix A",
+                "cognitive_chain": "The reviewer is confused about our definition of 'skill'. In our paper, a 'skill' corresponds to a LoRA module for a full task, which differs from temporal abstractions in some RL works. We should acknowledge this potential for confusion. We can add a note to clarify our terminology choice, explaining that our 'skill' is defined for parameter-space modularity, which facilitates library expansion and management.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Terminology_Clarification",
+                        "operation": "Define_and_Differentiate",
+                        "target_type": "Skill_Definition_in_PSEC",
+                        "outcome": "Prepared to clarify that PSEC's 'skill' is defined as a task-specific LoRA module, differing from temporal abstraction definitions, to avoid confusion."
+                    }
+                ],
+                "strategic_intent": "Clarify_Misunderstanding",
+                "action": "Clarify that PSEC's definition of 'skill' is a task-specific LoRA module for library management, distinguishing it from temporal abstractions, to prevent confusion."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "dt6ofU1ePx_com_8"
+                ],
+                "role": "Author",
+                "grounding_ref": "Appendix D.2",
+                "cognitive_chain": "The reviewer asked for empirical evidence on computational costs. We need to provide concrete numbers. We can compare our PSEC implementation with the FISOR baseline on the safe RL benchmark. We should create a table showing training time, training steps, and parameter counts. PSEC uses much fewer parameters and steps, leading to lower training time. This will directly substantiate our claim.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Quantitative_Analysis",
+                        "operation": "Compare_Resource_Usage",
+                        "target_type": "PSEC_vs_FISOR_Efficiency",
+                        "outcome": "Prepared a table with training time, steps, and parameter counts to empirically demonstrate PSEC's superior efficiency."
+                    }
+                ],
+                "strategic_intent": "Defend_With_Empirical_Evidence",
+                "action": "Present a quantitative comparison (training time, steps, parameters) against the FISOR baseline to empirically demonstrate PSEC's reduced computational costs."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "1qpJIVmfA7_com_1"
+                ],
+                "role": "Author",
+                "grounding_ref": "Related Works",
+                "cognitive_chain": "The reviewer questions how we pretrain skills differently from prior work [1,2]. We must be precise. [1] trains all LoRAs jointly, which can cause parameter conflicts and requires complex regularization like IBR prior. [2] trains a full DT model for each task, which is data-inefficient. In contrast, we train each LoRA independently on a frozen base model. This is simpler, avoids conflicts, and is more data-efficient. We need to clearly articulate these differences.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Methodology_Comparison",
+                        "operation": "Contrast_Training_Strategies",
+                        "target_type": "PSEC_vs_[1,2]_Skill_Pretraining",
+                        "outcome": "Prepared a detailed contrast of PSEC's independent LoRA training against the joint training of [1] and the full-model training of [2]."
+                    }
+                ],
+                "strategic_intent": "Defend_Novelty_Against_Prior_Work",
+                "action": "Contrast PSEC's independent LoRA training strategy with prior works, highlighting PSEC's advantages of avoiding parameter conflicts and improving data efficiency."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "a5w17Kc3BX_com_2"
+                ],
+                "role": "Author",
+                "grounding_ref": "Appendix A",
+                "cognitive_chain": "The reviewer followed up on the scalability issue from [5]. We must defend our design. Linear growth in parameters is acceptable because the expressiveness grows exponentially. For n skills, there are 2^n possible combinations. Our context-aware module enables forming even more complex behaviors than simple binary composition. The modular design also allows easy management of the library (e.g., removing bad skills), which is an advantage over monolithic models. We will explain this trade-off.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Scalability_Analysis",
+                        "operation": "Justify_Linear_Growth_Tradeoff",
+                        "target_type": "PSEC_Skill_Library_Size",
+                        "outcome": "Formulated a justification for the linear growth of the skill library by framing it as an acceptable trade-off for exponential expressiveness."
+                    }
+                ],
+                "strategic_intent": "Defend_Novelty_Against_Prior_Work",
+                "action": "Argue that the linear growth in computational cost is an acceptable trade-off for the exponential increase in expressive power, and that the modular design allows for better library management compared to monolithic approaches."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "2AqEz5m9nF_com_1"
+                ],
+                "role": "Reviewer",
+                "grounding_ref": "Sec 3.3",
+                "cognitive_chain": "The authors' rebuttal seems to be that PSEC is better because it has a context-aware module. But adding a context-aware module to adapt weights is a well-known technique. Is this the *only* novel part? The paper feels like a combination of existing ideas (LoRA for skills, context modules) without a single, groundbreaking component. I need to press them for a more explicit breakdown of their novelty beyond this combination.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Argumentation_Validation",
+                        "operation": "Probe_Novelty_Claim",
+                        "target_type": "Context_Aware_Module_Novelty",
+                        "outcome": "Questioned whether the use of a context-aware module is sufficiently novel to justify the paper's claimed advantages over a simple combination of existing techniques."
+                    }
+                ],
+                "strategic_intent": "Trap_With_Definition_Request",
+                "action": "Request a more detailed justification for PSEC's novelty, pressing beyond the explanation of the context-aware module, and ask which specific component is the main contribution."
+            },
+            {
+                "source_seg_ids":
+                [
+                    "ivZGdZH3ND_com_0"
+                ],
+                "role": "Author",
+                "grounding_ref": "Appendix B",
+                "cognitive_chain": "The reviewer is concerned about the literature review. We have addressed this by significantly expanding Appendix B with over 30 new references, from classic works on modular networks in the 90s to recent PEFT literature. We have also structured the discussion along three axes: how to obtain modules, how to compose them, and where to compose them. This comprehensive addition should satisfy the reviewer's demand for more context. We will state this clearly.",
+                "latent_tool_calls":
+                [
+                    {
+                        "tool_category": "Literature_Expansion",
+                        "operation": "Systematically_Add_Related_Work",
+                        "target_type": "Related_Work_Section",
+                        "outcome": "Prepared a statement outlining the extensive expansion of the related work section with over 30 new references and a new structural organization."
+                    }
+                ],
+                "strategic_intent": "Defend_With_Empirical_Evidence",
+                "action": "State that the related work section has been significantly expanded with over 30 new references and restructured along three axes to provide a more thorough context and address the reviewer's concerns."
+            }
+        ]
+    }
+}
