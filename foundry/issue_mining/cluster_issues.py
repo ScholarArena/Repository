@@ -84,8 +84,16 @@ def derive_issue_type(issue):
     if intent:
         return intent
     calls = issue.get("latent_tool_calls") or []
-    if calls:
-        return calls[0].get("operation") or "UNKNOWN"
+    if isinstance(calls, dict):
+        return calls.get("operation") or "UNKNOWN"
+    if isinstance(calls, str):
+        return calls.strip()[:80] or "UNKNOWN"
+    if isinstance(calls, list) and calls:
+        first = calls[0]
+        if isinstance(first, dict):
+            return first.get("operation") or "UNKNOWN"
+        if isinstance(first, str):
+            return first.strip()[:80] or "UNKNOWN"
     return "UNKNOWN"
 
 
@@ -108,6 +116,26 @@ def heuristic_k(n):
     return int(max(10, min(2000, round(math.sqrt(n)))))
 
 
+def normalize_tool_calls(value):
+    if value is None:
+        return []
+    if isinstance(value, dict):
+        return [value]
+    if isinstance(value, str):
+        return [value]
+    if isinstance(value, list):
+        cleaned = []
+        for item in value:
+            if item is None:
+                continue
+            if isinstance(item, (dict, str)):
+                cleaned.append(item)
+            else:
+                cleaned.append(str(item))
+        return cleaned
+    return [str(value)]
+
+
 def build_embedding_text(issue, mode, include_outcome, include_grounding_ref):
     if mode == "intent_action":
         intent = issue.get("strategic_intent") or ""
@@ -115,9 +143,14 @@ def build_embedding_text(issue, mode, include_outcome, include_grounding_ref):
         text = " | ".join([part for part in [intent, action] if part])
         return text if text else "unknown"
 
-    calls = issue.get("latent_tool_calls") or []
+    calls = normalize_tool_calls(issue.get("latent_tool_calls"))
     parts = []
     for call in calls:
+        if isinstance(call, str):
+            segment = call.strip()
+            if segment:
+                parts.append(segment)
+            continue
         tool_category = call.get("tool_category") or ""
         operation = call.get("operation") or ""
         target_type = call.get("target_type") or ""
