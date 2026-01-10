@@ -1,10 +1,69 @@
 import argparse
+import re
 import sys
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).resolve().parents[2]))
 
 from foundry.utils import read_json_or_jsonl, write_jsonl
+
+
+ROLE_SPLIT_RE = re.compile(r"\\s*(?:,|/|;|\\||\\band\\b|&)\\s*", re.IGNORECASE)
+
+
+def normalize_role_token(token):
+    if token is None:
+        return None
+    cleaned = str(token).strip()
+    if not cleaned:
+        return None
+    lowered = re.sub(r"[_-]+", " ", cleaned).strip().lower()
+    lowered = re.sub(r"\\s+", " ", lowered)
+    if lowered in {"ac", "area chair"} or "area chair" in lowered:
+        return "Area Chair"
+    if "meta reviewer" in lowered or "meta-reviewer" in lowered or "meta review" in lowered or lowered == "metareviewer":
+        return "Meta-Reviewer"
+    if "reviewer" in lowered or lowered == "review":
+        return "Reviewer"
+    if "author" in lowered or "rebuttal" in lowered:
+        return "Author"
+    if "editor" in lowered:
+        return "Editor"
+    if "chair" in lowered:
+        return "Chair"
+    return " ".join(part.capitalize() for part in lowered.split())
+
+
+def normalize_roles(value):
+    items = []
+    if value is None:
+        return []
+    if isinstance(value, (list, tuple, set)):
+        for item in value:
+            if isinstance(item, dict):
+                item = item.get("role") or item.get("type") or str(item)
+            items.append(item)
+    else:
+        items.append(value)
+
+    tokens = []
+    for item in items:
+        if item is None:
+            continue
+        token = item.get("role") if isinstance(item, dict) else str(item)
+        token = token or ""
+        parts = ROLE_SPLIT_RE.split(token)
+        tokens.extend([part for part in parts if part])
+
+    normalized = []
+    seen = set()
+    for token in tokens:
+        norm = normalize_role_token(token)
+        if not norm or norm in seen:
+            continue
+        normalized.append(norm)
+        seen.add(norm)
+    return normalized
 
 
 def parse_args():
@@ -25,6 +84,8 @@ def main():
     missing_forum = 0
     issues_with_tool_calls = 0
     issues_with_grounding_ref = 0
+    multi_role_issues = 0
+    unknown_role_issues = 0
     role_counts = {}
     intent_counts = {}
     out = []
@@ -41,9 +102,16 @@ def main():
         for idx, item in enumerate(mining):
             issue_id = f"{forum_id}#{idx:04d}"
             total_issues += 1
-            role = item.get("role")
-            if role:
-                role_counts[role] = role_counts.get(role, 0) + 1
+            raw_role = item.get("role")
+            roles = normalize_roles(raw_role)
+            if not roles and raw_role not in (None, ""):
+                roles = ["Unknown"]
+                unknown_role_issues += 1
+            if len(roles) > 1:
+                multi_role_issues += 1
+            role = roles[0] if roles else None
+            for role_name in roles:
+                role_counts[role_name] = role_counts.get(role_name, 0) + 1
             intent = item.get("strategic_intent")
             if intent:
                 intent_counts[intent] = intent_counts.get(intent, 0) + 1
@@ -58,6 +126,7 @@ def main():
                     "title": title,
                     "timestamp": timestamp,
                     "role": role,
+                    "roles": roles,
                     "source_seg_ids": item.get("source_seg_ids") or [],
                     "grounding_ref": item.get("grounding_ref"),
                     "paper_span": None,
@@ -66,7 +135,7 @@ def main():
                     "latent_tool_calls": item.get("latent_tool_calls") or [],
                     "issue_type": None,
                     "cluster_id": None,
-                    "meta": {"cognitive_chain": item.get("cognitive_chain")},
+                    "meta": {"cognitive_chain": item.get("cognitive_chain"), "role_raw": raw_role},
                 }
             )
         if not args.quiet and args.log_every > 0 and idx_paper % args.log_every == 0:
@@ -80,6 +149,10 @@ def main():
             f"[summary] papers={total_papers} issues={total_issues} "
             f"empty_mining={empty_mining} missing_forum_id={missing_forum} "
             f"with_tool_calls={issues_with_tool_calls} with_grounding_ref={issues_with_grounding_ref}",
+            file=sys.stderr,
+        )
+        print(
+            f"[summary] multi_role_issues={multi_role_issues} unknown_role_issues={unknown_role_issues}",
             file=sys.stderr,
         )
         if role_counts:
