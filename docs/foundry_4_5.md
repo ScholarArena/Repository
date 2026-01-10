@@ -40,6 +40,7 @@ Optional flags:
 - `--log-every 5000` progress by issue count
 - `--sample-failures 20` unresolved sample prints
 - `--no-snippet` avoid storing snippets to reduce output size
+- `paper_span.status` is set to `resolved`, `unresolved`, or `not_required`, with `paper_span.reason` describing why grounding is skipped.
 
 ### 3) Cluster issues and assign issue_type
 
@@ -174,4 +175,56 @@ Output:
 [summary] multi_role_issues=20 unknown_role_issues=0
 [summary] roles: Area Chair:14, Author:26083, Reviewer:24912
 [summary] intents(top12): Clarify_Misunderstanding:1906, Expose_Methodological_Weakness:1688, Defend_Novelty_Against_Prior_Work:1068, Concede_Minor_Point_To_Win_Major:649, Establish_Theoretical_Grounding:608, Shift_Burden_Of_Proof:442, Defend_Methodological_Choice:340, Request_Clarification:183, Improve_Presentation:152, Challenge_Novelty:145, Demonstrate_Responsiveness:145, Trap_With_Definition_Request:140
+```
+
+## Run Log (link_grounding_ref)
+
+Command:
+```
+python foundry/issue_mining/link_grounding_ref.py \
+  --in data/interim/mining_flat.jsonl \
+  --papers data/raw/papers_md \
+  --out data/interim/grounded_issues.jsonl \
+  --no-snippet
+```
+
+Output:
+```
+[link] 5000/50991 issues | resolved=4275
+[link] 10000/50991 issues | resolved=8667
+[link] 15000/50991 issues | resolved=12832
+[link] 20000/50991 issues | resolved=17192
+[link] 25000/50991 issues | resolved=21434
+[link] 30000/50991 issues | resolved=25642
+[link] 35000/50991 issues | resolved=29845
+[link] 40000/50991 issues | resolved=34249
+[link] 45000/50991 issues | resolved=38604
+[link] 50000/50991 issues | resolved=42815
+[summary] issues=50991 resolved=43689 resolved_rate=0.857 missing_docs=0
+[summary] refs.abstract: total=2394 matched=2394 rate=1.000
+[summary] refs.appendix: total=7463 matched=2837 rate=0.380
+[summary] refs.figure: total=7537 matched=7270 rate=0.965 image_matched=3174
+[summary] refs.other: total=22687 matched=8758 rate=0.386
+[summary] refs.related_work: total=854 matched=698 rate=0.817
+[summary] refs.section: total=46938 matched=44635 rate=0.951
+[summary] refs.table: total=9303 matched=8650 rate=0.930
+[summary] unresolved_samples:
+  - {'issue_id': 'viNQSOadLg#0026', 'forum_id': 'viNQSOadLg', 'grounding_ref': "Author's response f1bXYRwmqc_com_1", 'doc_path': 'data\\\\raw\\\\papers_md\\\\viNQSOadLg\\\\auto\\\\viNQSOadLg.md'}
+  - {'issue_id': 'viNQSOadLg#0027', 'forum_id': 'viNQSOadLg', 'grounding_ref': "Author's response f1bXYRwmqc_com_6, f1bXYRwmqc_com_7", 'doc_path': 'data\\\\raw\\\\papers_md\\\\viNQSOadLg\\\\auto\\\\viNQSOadLg.md'}
+  - {'issue_id': 'TTrzgEZt9s#0010', 'forum_id': 'TTrzgEZt9s', 'grounding_ref': 'Appendix D (pages referenced)', 'doc_path': 'data\\\\raw\\\\papers_md\\\\TTrzgEZt9s\\\\auto\\\\TTrzgEZt9s.md'}
+  - {'issue_id': 'TTrzgEZt9s#0015', 'forum_id': 'TTrzgEZt9s', 'grounding_ref': 'Appendix E', 'doc_path': 'data\\\\raw\\\\papers_md\\\\TTrzgEZt9s\\\\auto\\\\TTrzgEZt9s.md'}
+  - {'issue_id': 'TTrzgEZt9s#0020', 'forum_id': 'TTrzgEZt9s', 'grounding_ref': 'Entire paper length', 'doc_path': 'data\\\\raw\\\\papers_md\\\\TTrzgEZt9s\\\\auto\\\\TTrzgEZt9s.md'}
+  - {'issue_id': 'TTrzgEZt9s#0028', 'forum_id': 'TTrzgEZt9s', 'grounding_ref': 'Appendix D', 'doc_path': 'data\\\\raw\\\\papers_md\\\\TTrzgEZt9s\\\\auto\\\\TTrzgEZt9s.md'}
+  - {'issue_id': 'TTrzgEZt9s#0031', 'forum_id': 'TTrzgEZt9s', 'grounding_ref': 'Appendix E', 'doc_path': 'data\\\\raw\\\\papers_md\\\\TTrzgEZt9s\\\\auto\\\\TTrzgEZt9s.md'}
+  - {'issue_id': 'TTrzgEZt9s#0032', 'forum_id': 'TTrzgEZt9s', 'grounding_ref': 'Appendix length', 'doc_path': 'data\\\\raw\\\\papers_md\\\\TTrzgEZt9s\\\\auto\\\\TTrzgEZt9s.md'}
+  - {'issue_id': 'TTrzgEZt9s#0034', 'forum_id': 'TTrzgEZt9s', 'grounding_ref': 'Appendix B, Appendix C', 'doc_path': 'data\\\\raw\\\\papers_md\\\\TTrzgEZt9s\\\\auto\\\\TTrzgEZt9s.md'}
+  - {'issue_id': 'TTrzgEZt9s#0036', 'forum_id': 'TTrzgEZt9s', 'grounding_ref': 'Appendix E', 'doc_path': 'data\\\\raw\\\\papers_md\\\\TTrzgEZt9s\\\\auto\\\\TTrzgEZt9s.md'}
+  - {'issue_id': 'TTrzgEZt9s#0037', 'forum_id': 'TTrzgEZt9s', 'grounding_ref': 'Page 33 (Appendix D.5.2)', 'doc_path': 'data\\\\raw\\\\papers_md\\\\TTrzgEZt9s\\\\auto\\\\TTrzgEZt9s.md'}
+  - {'issue_id': 'TTrzgEZt9s#0040', 'forum_id': 'TTrzgEZt9s', 'grounding_ref': 'Revision note', 'doc_path': 'data\\\\raw\\\\papers_md\\\\TTrzgEZt9s\\\\auto\\\\TTrzgEZt9s.md'}
+  - {'issue_id': 'jUNSBetmAo#0005', 'forum_id': 'jUNSBetmAo', 'grounding_ref': 'N/A', 'doc_path': 'data\\\\raw\\\\papers_md\\\\jUNSBetmAo\\\\auto\\\\jUNSBetmAo.md'}
+  - {'issue_id': 'jUNSBetmAo#0006', 'forum_id': 'jUNSBetmAo', 'grounding_ref': 'N/A', 'doc_path': 'data\\\\raw\\\\papers_md\\\\jUNSBetmAo\\\\auto\\\\jUNSBetmAo.md'}
+  - {'issue_id': 'jUNSBetmAo#0010', 'forum_id': 'jUNSBetmAo', 'grounding_ref': 'N/A', 'doc_path': 'data\\\\raw\\\\papers_md\\\\jUNSBetmAo\\\\auto\\\\jUNSBetmAo.md'}
+  - {'issue_id': 'jUNSBetmAo#0011', 'forum_id': 'jUNSBetmAo', 'grounding_ref': 'N/A', 'doc_path': 'data\\\\raw\\\\papers_md\\\\jUNSBetmAo\\\\auto\\\\jUNSBetmAo.md'}
+  - {'issue_id': 'jUNSBetmAo#0013', 'forum_id': 'jUNSBetmAo', 'grounding_ref': 'Appendix C', 'doc_path': 'data\\\\raw\\\\papers_md\\\\jUNSBetmAo\\\\auto\\\\jUNSBetmAo.md'}
+  - {'issue_id': 'jUNSBetmAo#0015', 'forum_id': 'jUNSBetmAo', 'grounding_ref': 'N/A', 'doc_path': 'data\\\\raw\\\\papers_md\\\\jUNSBetmAo\\\\auto\\\\jUNSBetmAo.md'}
 ```

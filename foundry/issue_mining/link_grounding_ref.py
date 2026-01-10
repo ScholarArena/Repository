@@ -11,6 +11,31 @@ from foundry.utils import read_json_or_jsonl, write_jsonl
 
 TEXT_EXTS = {".txt", ".md", ".tex"}
 IMAGE_RE = re.compile(r"!\[[^\]]*\]\(([^)]+)\)")
+NO_REF_PATTERNS = [
+    (re.compile(r"^\s*(n/?a|none|unknown)\s*$", re.IGNORECASE), "na"),
+    (re.compile(r"\bauthor'?s response\b", re.IGNORECASE), "author_response"),
+    (re.compile(r"\brebuttal\b", re.IGNORECASE), "rebuttal"),
+    (re.compile(r"\brevision note\b", re.IGNORECASE), "revision_note"),
+    (re.compile(r"\b(entire|whole|full)\s+paper\b", re.IGNORECASE), "global_scope"),
+    (re.compile(r"\bpaper length\b", re.IGNORECASE), "global_scope"),
+    (re.compile(r"\bthroughout\b", re.IGNORECASE), "global_scope"),
+]
+PAGE_ONLY_RE = re.compile(r"\bpages?\b", re.IGNORECASE)
+STRUCTURED_REF_RE = re.compile(r"\b(sec|section|fig|figure|table|appendix|abstract|related work)\b", re.IGNORECASE)
+NO_REF_TOOL_CATEGORIES = {
+    "Cognitive_Synthesis",
+    "Textual_Analysis",
+    "Conceptual_Clarification",
+    "Terminology_Clarification",
+    "Textual_Correction",
+    "Literature_Expansion",
+}
+NO_REF_INTENTS = {
+    "Establish_Baseline_Understanding",
+    "Improve_Presentation",
+    "Demonstrate_Responsiveness",
+    "Concede_Minor_Point_To_Win_Major",
+}
 
 
 def parse_args():
@@ -218,12 +243,28 @@ def classify_ref(ref):
     return "other"
 
 
+def not_required_reason(grounding_ref, strategic_intent, tool_calls):
+    if grounding_ref:
+        for pattern, reason in NO_REF_PATTERNS:
+            if pattern.search(grounding_ref):
+                return reason
+        if PAGE_ONLY_RE.search(grounding_ref) and not STRUCTURED_REF_RE.search(grounding_ref):
+            return "page_only"
+    else:
+        tool_categories = {call.get("tool_category") for call in tool_calls or [] if call.get("tool_category")}
+        if strategic_intent in NO_REF_INTENTS or tool_categories.intersection(NO_REF_TOOL_CATEGORIES):
+            return "no_ref_intent_or_tool"
+    return None
+
+
 def main():
     args = parse_args()
     records = read_json_or_jsonl(args.input_path)
     cache = {}
     total_issues = len(records)
     resolved_issues = 0
+    not_required_issues = 0
+    required_unresolved = 0
     missing_docs = 0
     ref_type_counts = Counter()
     ref_type_matched = Counter()
@@ -246,11 +287,20 @@ def main():
             }
         doc = cache[forum_id]
         text = doc["text"]
+        tool_calls = rec.get("latent_tool_calls") or []
+        intent = rec.get("strategic_intent")
+        not_required = not_required_reason(grounding_ref, intent, tool_calls)
         matches = match_refs(text, refs, doc["image_refs"], include_snippet=not args.no_snippet)
         if not doc["path"]:
             missing_docs += 1
-        if matches:
+        status = "resolved" if matches else "unresolved"
+        if not_required:
+            status = "not_required"
+            not_required_issues += 1
+        elif matches:
             resolved_issues += 1
+        else:
+            required_unresolved += 1
         matched_refs = {match["ref"] for match in matches}
         image_matched_refs = {match["ref"] for match in matches if match.get("image_ref")}
         for ref in refs:
@@ -260,7 +310,7 @@ def main():
                 ref_type_matched[ref_type] += 1
             if ref_type == "figure" and ref in image_matched_refs:
                 figure_with_image += 1
-        if not matches and len(samples) < args.sample_failures:
+        if status == "unresolved" and len(samples) < args.sample_failures:
             samples.append(
                 {
                     "issue_id": rec.get("issue_id"),
@@ -277,6 +327,8 @@ def main():
             "images_dir": str(doc["images_dir"]) if doc["images_dir"] else None,
             "matches": matches,
             "resolved": bool(matches),
+            "status": status,
+            "reason": not_required,
         }
         out.append(rec)
         if not args.quiet and args.log_every > 0 and idx_issue % args.log_every == 0:
@@ -286,10 +338,12 @@ def main():
             )
     write_jsonl(args.output_path, out)
     if not args.quiet:
-        resolved_rate = (resolved_issues / total_issues) if total_issues else 0
+        effective_total = max(total_issues - not_required_issues, 0)
+        resolved_rate = (resolved_issues / effective_total) if effective_total else 0
         print(
             f"[summary] issues={total_issues} resolved={resolved_issues} "
-            f"resolved_rate={resolved_rate:.3f} missing_docs={missing_docs}",
+            f"resolved_rate={resolved_rate:.3f} not_required={not_required_issues} "
+            f"required_unresolved={required_unresolved} missing_docs={missing_docs}",
             file=sys.stderr,
         )
         for ref_type in sorted(ref_type_counts.keys()):
