@@ -76,6 +76,11 @@ python foundry/issue_mining/cluster_issues.py \
 
 Embedding text (default `tool_calls`): `tool_category | operation | target_type | outcome=...` with optional `grounding_ref` appended unless `paper_span.status=not_required`. Use `--no-embed-outcome` or `--no-embed-grounding-ref` to disable.
 
+Concurrency and resume:
+- `--embed-workers 4` concurrent requests
+- `--resume` resume from existing `embeddings.npy` and `embeddings.npy.progress.json`
+- `--overwrite-embeddings` regenerate from scratch
+
 ### 4) Build ontology summaries
 
 - Script: `foundry/ontology/build_ontology.py`

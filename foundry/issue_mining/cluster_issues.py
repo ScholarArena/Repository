@@ -4,6 +4,7 @@ import math
 import os
 import sys
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from collections import Counter
 from pathlib import Path
 from urllib import error as url_error
@@ -33,10 +34,26 @@ def parse_args():
         default=os.environ.get("DMX_API_KEY") or os.environ.get("OPENAI_API_KEY") or "",
         help="Embedding API key (DMX_API_KEY or OPENAI_API_KEY)",
     )
-    parser.add_argument("--embed-batch-size", type=int, default=128, help="Embedding batch size")
-    parser.add_argument("--embed-timeout", type=int, default=60, help="Embedding API timeout (seconds)")
+    parser.add_argument("--embed-batch-size", type=int, default=256, help="Embedding batch size")
+    parser.add_argument("--embed-workers", type=int, default=4, help="Concurrent embedding requests")
+    parser.add_argument("--embed-timeout", type=int, default=360, help="Embedding API timeout (seconds)")
     parser.add_argument("--embed-max-retries", type=int, default=3, help="Embedding API retries")
     parser.add_argument("--embed-retry-sleep", type=float, default=2.0, help="Retry backoff base (seconds)")
+    parser.add_argument(
+        "--resume",
+        action="store_true",
+        help="Resume embedding generation if embeddings/progress files exist",
+    )
+    parser.add_argument(
+        "--overwrite-embeddings",
+        action="store_true",
+        help="Overwrite existing embeddings and progress files",
+    )
+    parser.add_argument(
+        "--progress-path",
+        default="",
+        help="Optional progress JSON path (default: embeddings.npy.progress.json)",
+    )
     parser.add_argument(
         "--embed-input-mode",
         choices=["tool_calls", "intent_action"],
@@ -219,10 +236,50 @@ def generate_embeddings(records, args):
 
     out_path = Path(args.embeddings)
     out_path.parent.mkdir(parents=True, exist_ok=True)
+    progress_path = Path(args.progress_path) if args.progress_path else out_path.with_suffix(out_path.suffix + ".progress.json")
+
+    if args.overwrite_embeddings and out_path.exists():
+        out_path.unlink()
+    if args.overwrite_embeddings and progress_path.exists():
+        progress_path.unlink()
+
     memmap = None
     dim = None
-    for start in range(0, total, args.embed_batch_size):
-        end = min(total, start + args.embed_batch_size)
+    completed_ranges = set()
+    completed_rows = 0
+
+    if out_path.exists():
+        if not args.resume and not args.overwrite_embeddings and not args.quiet:
+            print("[embed] embeddings file exists; resuming by default", file=sys.stderr)
+        memmap = np.load(out_path, mmap_mode="r+")
+        if memmap.ndim != 2 or memmap.shape[0] != total:
+            raise ValueError(
+                f"Existing embeddings shape {memmap.shape} does not match records {total}. "
+                "Use --overwrite-embeddings to regenerate."
+            )
+        dim = memmap.shape[1]
+
+    if progress_path.exists() and (args.resume or out_path.exists()):
+        try:
+            progress = json.loads(progress_path.read_text(encoding="utf-8"))
+            for start, end in progress.get("completed", []):
+                completed_ranges.add((int(start), int(end)))
+            completed_rows = sum(end - start for start, end in completed_ranges)
+        except Exception:
+            completed_ranges = set()
+            completed_rows = 0
+
+    batches = [(start, min(total, start + args.embed_batch_size)) for start in range(0, total, args.embed_batch_size)]
+    pending = [batch for batch in batches if batch not in completed_ranges]
+    if not args.quiet and completed_rows:
+        print(f"[embed] resume completed_rows={completed_rows}", file=sys.stderr)
+
+    if not pending:
+        if memmap is None:
+            raise RuntimeError("No embeddings to resume and embeddings file missing.")
+        return memmap
+
+    def fetch_batch(start, end):
         batch = texts[start:end]
         embeddings = embed_with_retries(
             batch,
@@ -236,12 +293,46 @@ def generate_embeddings(records, args):
         )
         if len(embeddings) != len(batch):
             raise RuntimeError(f"Embedding batch mismatch: got {len(embeddings)} expected {len(batch)}")
-        if memmap is None:
-            dim = len(embeddings[0])
-            memmap = np.lib.format.open_memmap(out_path, mode="w+", dtype="float32", shape=(total, dim))
-        memmap[start:end] = np.asarray(embeddings, dtype=np.float32)
-        if not args.quiet and args.log_every > 0 and end % args.log_every == 0:
-            print(f"[embed] {end}/{total} texts", file=sys.stderr)
+        return start, end, embeddings
+
+    with ThreadPoolExecutor(max_workers=max(1, args.embed_workers)) as executor:
+        batch_iter = iter(pending)
+        futures = {}
+        for _ in range(min(args.embed_workers, len(pending))):
+            start, end = next(batch_iter)
+            futures[executor.submit(fetch_batch, start, end)] = (start, end)
+
+        while futures:
+            future = next(as_completed(futures))
+            batch_start, batch_end, embeddings = future.result()
+            if memmap is None:
+                dim = len(embeddings[0])
+                memmap = np.lib.format.open_memmap(out_path, mode="w+", dtype="float32", shape=(total, dim))
+            memmap[batch_start:batch_end] = np.asarray(embeddings, dtype=np.float32)
+            completed_ranges.add((batch_start, batch_end))
+            completed_rows += batch_end - batch_start
+            progress_path.write_text(
+                json.dumps(
+                    {
+                        "total": total,
+                        "batch_size": args.embed_batch_size,
+                        "completed": sorted(list(completed_ranges)),
+                    },
+                    ensure_ascii=True,
+                    sort_keys=True,
+                    indent=2,
+                ),
+                encoding="utf-8",
+            )
+            if not args.quiet and args.log_every > 0 and completed_rows % args.log_every == 0:
+                print(f"[embed] {completed_rows}/{total} texts", file=sys.stderr)
+
+            try:
+                start, end = next(batch_iter)
+                futures[executor.submit(fetch_batch, start, end)] = (start, end)
+            except StopIteration:
+                pass
+
     if memmap is None:
         raise RuntimeError("No embeddings generated.")
     memmap.flush()
