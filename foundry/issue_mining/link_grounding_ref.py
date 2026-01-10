@@ -12,13 +12,22 @@ from foundry.utils import read_json_or_jsonl, write_jsonl
 TEXT_EXTS = {".txt", ".md", ".tex"}
 IMAGE_RE = re.compile(r"!\[[^\]]*\]\(([^)]+)\)")
 NO_REF_PATTERNS = [
-    (re.compile(r"^\s*(n/?a|none|unknown)\s*$", re.IGNORECASE), "na"),
-    (re.compile(r"\bauthor'?s response\b", re.IGNORECASE), "author_response"),
+    (re.compile(r"^\s*n/?a\b", re.IGNORECASE), "na"),
+    (re.compile(r"\bno\s+ref(?:erence)?\b", re.IGNORECASE), "no_ref"),
+    (re.compile(r"\bauthor(?:'s)?\s+response\b", re.IGNORECASE), "author_response"),
+    (re.compile(r"\bauthor\s+reply\b", re.IGNORECASE), "author_response"),
     (re.compile(r"\brebuttal\b", re.IGNORECASE), "rebuttal"),
     (re.compile(r"\brevision note\b", re.IGNORECASE), "revision_note"),
+    (re.compile(r"\breviewer[_\s-]*comments?\b", re.IGNORECASE), "reviewer_comments"),
+    (re.compile(r"\bcomment[_\s-]*id\b", re.IGNORECASE), "reviewer_comments"),
     (re.compile(r"\b(entire|whole|full)\s+paper\b", re.IGNORECASE), "global_scope"),
     (re.compile(r"\bpaper length\b", re.IGNORECASE), "global_scope"),
+    (re.compile(r"\bappendix\s+length\b", re.IGNORECASE), "global_scope"),
     (re.compile(r"\bthroughout\b", re.IGNORECASE), "global_scope"),
+    (re.compile(r"^\s*figures?\s*$", re.IGNORECASE), "generic_figure"),
+    (re.compile(r"^\s*tables?\s*$", re.IGNORECASE), "generic_table"),
+    (re.compile(r"^\s*appendix\s*$", re.IGNORECASE), "generic_appendix"),
+    (re.compile(r"^\s*appendices\s*$", re.IGNORECASE), "generic_appendix"),
 ]
 PAGE_ONLY_RE = re.compile(r"\bpages?\b", re.IGNORECASE)
 STRUCTURED_REF_RE = re.compile(r"\b(sec|section|fig|figure|table|appendix|abstract|related work)\b", re.IGNORECASE)
@@ -243,17 +252,53 @@ def classify_ref(ref):
     return "other"
 
 
-def not_required_reason(grounding_ref, strategic_intent, tool_calls):
+def is_structured_specific(ref):
+    if not ref:
+        return False
+    lower = ref.lower()
+    if "abstract" in lower or "related work" in lower:
+        return True
+    if extract_section_number(ref):
+        return True
+    if extract_appendix_letter(ref):
+        return True
+    if extract_number(ref, "fig(?:ure)?"):
+        return True
+    if extract_number(ref, "table"):
+        return True
+    return False
+
+
+def match_no_ref_reason(ref):
+    if not ref:
+        return "no_ref"
+    for pattern, reason in NO_REF_PATTERNS:
+        if pattern.search(ref):
+            return reason
+    if PAGE_ONLY_RE.search(ref) and not STRUCTURED_REF_RE.search(ref):
+        return "page_only"
+    return None
+
+
+def not_required_reason(grounding_ref, refs, strategic_intent, tool_calls):
+    if refs:
+        reasons = []
+        for ref in refs:
+            if is_structured_specific(ref):
+                return None
+            reason = match_no_ref_reason(ref)
+            if not reason:
+                return None
+            reasons.append(reason)
+        if reasons:
+            return reasons[0]
+    tool_categories = {call.get("tool_category") for call in tool_calls or [] if call.get("tool_category")}
+    if strategic_intent in NO_REF_INTENTS or tool_categories.intersection(NO_REF_TOOL_CATEGORIES):
+        return "no_ref_intent_or_tool"
     if grounding_ref:
-        for pattern, reason in NO_REF_PATTERNS:
-            if pattern.search(grounding_ref):
-                return reason
-        if PAGE_ONLY_RE.search(grounding_ref) and not STRUCTURED_REF_RE.search(grounding_ref):
-            return "page_only"
-    else:
-        tool_categories = {call.get("tool_category") for call in tool_calls or [] if call.get("tool_category")}
-        if strategic_intent in NO_REF_INTENTS or tool_categories.intersection(NO_REF_TOOL_CATEGORIES):
-            return "no_ref_intent_or_tool"
+        reason = match_no_ref_reason(grounding_ref)
+        if reason:
+            return reason
     return None
 
 
@@ -289,7 +334,7 @@ def main():
         text = doc["text"]
         tool_calls = rec.get("latent_tool_calls") or []
         intent = rec.get("strategic_intent")
-        not_required = not_required_reason(grounding_ref, intent, tool_calls)
+        not_required = not_required_reason(grounding_ref, refs, intent, tool_calls)
         matches = match_refs(text, refs, doc["image_refs"], include_snippet=not args.no_snippet)
         if not doc["path"]:
             missing_docs += 1
