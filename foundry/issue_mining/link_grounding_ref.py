@@ -1,6 +1,7 @@
 import argparse
 import re
 import sys
+from collections import Counter
 from pathlib import Path
 
 sys.path.append(str(Path(__file__).resolve().parents[2]))
@@ -17,6 +18,10 @@ def parse_args():
     parser.add_argument("--in", dest="input_path", required=True, help="Input JSONL")
     parser.add_argument("--papers", dest="papers_dir", required=True, help="Directory with paper text files")
     parser.add_argument("--out", dest="output_path", required=True, help="Output JSONL")
+    parser.add_argument("--log-every", type=int, default=5000, help="Progress log interval (issues)")
+    parser.add_argument("--quiet", action="store_true", help="Disable progress and summary logs")
+    parser.add_argument("--sample-failures", type=int, default=20, help="Number of unresolved samples to print")
+    parser.add_argument("--no-snippet", action="store_true", help="Disable snippet extraction to reduce output size")
     return parser.parse_args()
 
 
@@ -78,7 +83,9 @@ def extract_image_refs(text, doc_path, images_dir):
     return refs
 
 
-def make_snippet(text, start, end, window=80):
+def make_snippet(text, start, end, window=80, include=True):
+    if not include:
+        return None
     left = max(0, start - window)
     right = min(len(text), end + window)
     snippet = text[left:right].replace("\n", " ").strip()
@@ -107,7 +114,7 @@ def extract_number(ref, label):
     return match.group(1) if match else None
 
 
-def regex_matches(text, regex, ref, match_type, image_refs):
+def regex_matches(text, regex, ref, match_type, image_refs, include_snippet):
     matches = []
     for match in regex.finditer(text):
         start, end = match.start(), match.end()
@@ -116,7 +123,7 @@ def regex_matches(text, regex, ref, match_type, image_refs):
             "match_type": match_type,
             "start": start,
             "end": end,
-            "snippet": make_snippet(text, start, end),
+            "snippet": make_snippet(text, start, end, include=include_snippet),
         }
         if match_type == "figure":
             image = find_nearest_image(image_refs, start)
@@ -126,7 +133,7 @@ def regex_matches(text, regex, ref, match_type, image_refs):
     return matches
 
 
-def match_ref(text, ref, image_refs):
+def match_ref(text, ref, image_refs, include_snippet):
     if not text or not ref:
         return []
     lower = ref.lower()
@@ -134,38 +141,38 @@ def match_ref(text, ref, image_refs):
         sec_num = extract_section_number(ref)
         if sec_num:
             regex = re.compile(rf"^#+\s*{re.escape(sec_num)}(\s|\.|$)", re.IGNORECASE | re.MULTILINE)
-            matches = regex_matches(text, regex, ref, "section", image_refs)
+            matches = regex_matches(text, regex, ref, "section", image_refs, include_snippet)
             if matches:
                 return matches
     if "abstract" in lower:
         regex = re.compile(r"^#+\s*abstract\b", re.IGNORECASE | re.MULTILINE)
-        matches = regex_matches(text, regex, ref, "section", image_refs)
+        matches = regex_matches(text, regex, ref, "section", image_refs, include_snippet)
         if matches:
             return matches
     if "related work" in lower:
         regex = re.compile(r"^#+\s*related work(s)?\b", re.IGNORECASE | re.MULTILINE)
-        matches = regex_matches(text, regex, ref, "section", image_refs)
+        matches = regex_matches(text, regex, ref, "section", image_refs, include_snippet)
         if matches:
             return matches
     if "appendix" in lower:
         appendix = extract_appendix_letter(ref)
         if appendix:
             regex = re.compile(rf"^#+\s*appendix\s*{appendix}\b", re.IGNORECASE | re.MULTILINE)
-            matches = regex_matches(text, regex, ref, "appendix", image_refs)
+            matches = regex_matches(text, regex, ref, "appendix", image_refs, include_snippet)
             if matches:
                 return matches
     if "fig" in lower or "figure" in lower:
         fig_num = extract_number(ref, "fig(?:ure)?")
         if fig_num:
             regex = re.compile(rf"(fig(?:ure)?\.?\s*{fig_num})", re.IGNORECASE)
-            matches = regex_matches(text, regex, ref, "figure", image_refs)
+            matches = regex_matches(text, regex, ref, "figure", image_refs, include_snippet)
             if matches:
                 return matches
     if "table" in lower:
         table_num = extract_number(ref, "table")
         if table_num:
             regex = re.compile(rf"(table\.?\s*{table_num})", re.IGNORECASE)
-            matches = regex_matches(text, regex, ref, "table", image_refs)
+            matches = regex_matches(text, regex, ref, "table", image_refs, include_snippet)
             if matches:
                 return matches
     lower_text = text.lower()
@@ -177,27 +184,53 @@ def match_ref(text, ref, image_refs):
                 "match_type": "substring",
                 "start": idx,
                 "end": idx + len(ref),
-                "snippet": make_snippet(text, idx, idx + len(ref)),
+                "snippet": make_snippet(text, idx, idx + len(ref), include=include_snippet),
             }
         ]
     return []
 
 
-def match_refs(text, refs, image_refs):
+def match_refs(text, refs, image_refs, include_snippet):
     matches = []
     if not text:
         return matches
     for ref in refs:
-        matches.extend(match_ref(text, ref, image_refs))
+        matches.extend(match_ref(text, ref, image_refs, include_snippet))
     return matches
+
+
+def classify_ref(ref):
+    if not ref:
+        return "unknown"
+    lower = ref.lower()
+    if "fig" in lower or "figure" in lower:
+        return "figure"
+    if "table" in lower:
+        return "table"
+    if "appendix" in lower:
+        return "appendix"
+    if "abstract" in lower:
+        return "abstract"
+    if "related work" in lower:
+        return "related_work"
+    if "sec" in lower or "section" in lower:
+        return "section"
+    return "other"
 
 
 def main():
     args = parse_args()
     records = read_json_or_jsonl(args.input_path)
     cache = {}
+    total_issues = len(records)
+    resolved_issues = 0
+    missing_docs = 0
+    ref_type_counts = Counter()
+    ref_type_matched = Counter()
+    figure_with_image = 0
+    samples = []
     out = []
-    for rec in records:
+    for idx_issue, rec in enumerate(records, start=1):
         forum_id = rec.get("forum_id") or "UNKNOWN"
         grounding_ref = rec.get("grounding_ref")
         refs = split_refs(grounding_ref)
@@ -213,7 +246,29 @@ def main():
             }
         doc = cache[forum_id]
         text = doc["text"]
-        matches = match_refs(text, refs, doc["image_refs"])
+        matches = match_refs(text, refs, doc["image_refs"], include_snippet=not args.no_snippet)
+        if not doc["path"]:
+            missing_docs += 1
+        if matches:
+            resolved_issues += 1
+        matched_refs = {match["ref"] for match in matches}
+        image_matched_refs = {match["ref"] for match in matches if match.get("image_ref")}
+        for ref in refs:
+            ref_type = classify_ref(ref)
+            ref_type_counts[ref_type] += 1
+            if ref in matched_refs:
+                ref_type_matched[ref_type] += 1
+            if ref_type == "figure" and ref in image_matched_refs:
+                figure_with_image += 1
+        if not matches and len(samples) < args.sample_failures:
+            samples.append(
+                {
+                    "issue_id": rec.get("issue_id"),
+                    "forum_id": forum_id,
+                    "grounding_ref": grounding_ref,
+                    "doc_path": str(doc["path"]) if doc["path"] else None,
+                }
+            )
         rec["paper_span"] = {
             "raw": grounding_ref,
             "refs": refs,
@@ -224,7 +279,34 @@ def main():
             "resolved": bool(matches),
         }
         out.append(rec)
+        if not args.quiet and args.log_every > 0 and idx_issue % args.log_every == 0:
+            print(
+                f"[link] {idx_issue}/{total_issues} issues | resolved={resolved_issues}",
+                file=sys.stderr,
+            )
     write_jsonl(args.output_path, out)
+    if not args.quiet:
+        resolved_rate = (resolved_issues / total_issues) if total_issues else 0
+        print(
+            f"[summary] issues={total_issues} resolved={resolved_issues} "
+            f"resolved_rate={resolved_rate:.3f} missing_docs={missing_docs}",
+            file=sys.stderr,
+        )
+        for ref_type in sorted(ref_type_counts.keys()):
+            total = ref_type_counts[ref_type]
+            matched = ref_type_matched.get(ref_type, 0)
+            rate = matched / total if total else 0
+            extra = ""
+            if ref_type == "figure":
+                extra = f" image_matched={figure_with_image}"
+            print(
+                f"[summary] refs.{ref_type}: total={total} matched={matched} rate={rate:.3f}{extra}",
+                file=sys.stderr,
+            )
+        if samples:
+            print("[summary] unresolved_samples:", file=sys.stderr)
+            for sample in samples:
+                print(f"  - {sample}", file=sys.stderr)
 
 
 if __name__ == "__main__":

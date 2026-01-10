@@ -1,6 +1,59 @@
 # Abstract 
 大型语言模型（LLMs）在使用多智能体系统自动解决任务方面实现了显著的进步。然而，大多数现有的基于LLM的多智能体方法依赖于预定义的智能体来处理简单任务，限制了多智能体协作对不同场景的适应性。因此，我们引入了AutoAgents，这是一种创新框架，能够根据不同的任务自适应地生成和协调多个专门的智能体以构建AI团队。具体来说，AutoAgents通过根据任务内容动态生成所需的多个智能体以及基于生成的专家智能体为当前任务规划解决方案，耦合了任务与角色之间的关系。多个专门的智能体相互协作以高效完成任务。同时，该框架中加入了一个观察者角色，用于反思指定的计划和智能体的响应，并对其进行改进。我们在各种基准测试上的实验表明，AutoAgents比现有的多智能体方法生成更连贯和准确的解决方案。这强调了为不同任务分配不同角色以及团队合作的重要性，为应对复杂任务提供了新的视角。该项目的存储库可访问 https://github.com/Link-AGI/AutoAgents。
 
+1. **任务抽象**：在不完全信息的多方交互中，若将“可执行观测”作为策略行为的门控条件（evidence gating），则系统能显著降低 *unsupported claims*，并在相同可读性下提高主张的可验证性、覆盖度及深刻性；若用一个小而稳定的“交互语义本体”（intent ontology + evidence type ontology）把策略分解为 **Intent（为何说/做）** 与 **Skill（如何产生观测）**，则在更换工具库/领域即策略具体执行方法时，高层意图策略的迁移性能下降更小（只需替换技能库映射）；若把多轮交互压缩为“争点级状态”（issue state + evidence summary），则在保持决策一致性的同时显著降低决策输入长度与认知负担，并提升对低质量/被操控文本的鲁棒性。
+2. **方法一句话**：Evidence-Conditioned Strategic Acts；Intent–Skill Factorization with Ontology；Issue-State Aggregation。
+3. **Case study**：在 ICLR peer review/rebuttal 上实例化，显著降低 unsupported claims、提高 evidence coverage，并在多争点聚合上提升决策一致性/效率/深度。
+4. **贡献三点**：方法论 + Data/Benchmark + 开源和在线运行。
+
+（动机里可一笔带过现实风险：审稿中LLM滥用政策与“隐藏提示/注入”事件凸显“外部证据约束”的必要性。ICLR对LLM使用政策与安全担忧可作为现实支撑。 ([ResearchGate][1])）
+
+
+## 2) IJCAI 风格 Teaser：跨领域科学问题 + 审稿是关键试验场
+
+### 2.1 统一科学问题（需要学术的表述）
+
+> **研究问题：在文本主导的多方交互与决策场景中（同行评议、法庭辩论、应急响应、对抗评估等），如何学习“受可执行外部观测约束”的策略性言语行为（strategic speech acts），使模型输出在语用上可读、在证据上可验证，并能在更换工具/技能库即执行方法时保持高层策略可迁移？**
+
+核心挑战不是“生成像人的文本”，而是经典的 **words–deeds inconsistency**：模型能说得很像，但其关键主张缺乏任何外部可执行观测支撑；多轮交互中这种不一致会累积放大，尤其在工具使用、检索与推理链条被 prompt injection 影响时更严重。近期已经有针对“在同行评议/文档分析链条里用隐藏指令操控 AI 评审”的系统性研究与公开事件，凸显“可执行证据约束”的必要性。([卫报][1])
+
+与此同时，工具学习方向（Toolformer / ToolBench / API-Bank / ToolLLM 等）证明了 LLM 能学会“何时调用什么工具”，但多数工作默认工具集合已知，且主要优化任务完成率，并未把“**观测—主张一致性**”作为中心目标，也未给出面向多方交互的结构化决策压缩。([arXiv][2])
+
+### 2.2 为什么用 ICLR 同行评议做 case study（现实紧迫 + 数据可复现）
+
+* ICLR 官方在 2025 年明确回应了 LLM 生成论文与 LLM 审稿质量/治理问题，并讨论了如何处理相关风险。([ICLR 博客][3])
+* 近期还出现“隐藏 prompt 操控 AI 辅助评审/评阅”的新闻与论文，说明如果没有“可执行证据门控”，系统会被低成本攻击放大。([The Washington Post][4])
+* 同时也有大规模实证研究/随机实验在探索 LLM 在评审流程中如何“辅助而非替代”，为你“负责任辅助”的定位提供现实依据（但你论文要把它写成 *evidence-grounded strategy learning* 的科学问题）。([adam.holter.com][5])
+
+---
+
+## 3) 三个科学靶点：先抽象成可检验命题，再落到科学交流的例子
+
+为避免“太口语/太绝对”，我把靶点写成 **可检验的研究命题**（IJCAI 喜欢）。
+
+### T1：Evidence-Conditioned Strategic Acts（证据条件化策略行为）
+
+**命题**：在不完全信息的多方交互中，若将“可执行观测”作为策略行为的门控条件（evidence gating），则系统能显著降低 *unsupported claims*，并在相同可读性下提高主张的可验证性、覆盖度及深刻性。
+
+* 审稿实例：强质疑（“公式错误/实验不显著/引用缺失”）必须绑定可执行观测（符号化简/统计检验/引用解析），否则只能退化为“请求澄清”。
+* 指标（可量化）：Unsupported-Claim Rate、Evidence Precision、Evidence Coverage、Claim–Observation Consistency。
+
+### T2：Intent–Skill Factorization with Ontology（语义本体约束的意图—技能因子分解）
+
+**命题**：若用一个小而稳定的“交互语义本体”（intent ontology + evidence type ontology）把策略分解为 **Intent（为何说/做）** 与 **Skill（如何产生观测）**，则在更换工具库/领域即策略具体执行方法时，高层意图策略的迁移性能下降更小（只需替换技能库映射）。
+
+* 审稿实例：同一 intent（检验显著性）在不同论文上只替换数据抽取与统计技能；intent policy 不需要重学 prompt。
+* 指标：Cross-domain transfer drop（只换技能库/证据原语，不换 intent policy）；intent calibration（intent 与证据类型的匹配准确率）。
+
+### T3：Issue-State Aggregation（争点状态汇聚的决策压缩）
+
+**命题**：若把多轮交互压缩为“争点级状态”（issue state + evidence summary），则在保持决策一致性的同时显著降低决策输入长度与认知负担，并提升对低质量/被操控文本的鲁棒性。
+
+* 审稿实例：Area Chair/Editor 不读全对话，只读每个 issue 的状态（Supported/Refuted/Inconclusive）、证据摘要、严重性。
+* 指标：Decision consistency（与真实 meta-review/decision 的一致性）、Time/Token cost、Robustness under adversarial text（含隐藏 prompt/注入）。
+
+
+
 # 1Introduction 
 大型语言模型（LLM）作为多功能任务解决代理，展现出了惊人的能力，具备丰富的知识和技能。然而，它们在处理需要密集知识和推理的各种任务时仍然面临困难[Qin et al.,2023; Achiam et al., 2023; Bubeck et al.,2O23]，例如避免幻觉[Maynez et al., 202ol, 采用慢思考策略[Sloman,1996]，确保可信度[Wang et al., 2023al, 以及结合不同领域的知识和长期规划。相比之下，人类经常利用协作解决问题的好处，这使他们能够有效地合作解决各个领域中的非例行问题，并通过在专业之间分配工作量并应用多样化的视角和专业知识来提高解决方案的质量和可靠性[Nelson,2013; Roschelle and Teasley,1995;Barron,2000l。
 

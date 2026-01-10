@@ -34,7 +34,12 @@ python foundry/issue_mining/link_grounding_ref.py \
   --out data/interim/grounded_issues.jsonl
 ```
 
-MinerU layout is supported by default: `data/raw/papers_md/<forum_id>/auto/<forum_id>.md`, with `images/` alongside the markdown. The resolver stores `doc_path`, `images_dir`, and simple matches/snippets for `grounding_ref` items (sections, figures, tables).
+MinerU layout is supported by default: `data/raw/papers_md/<forum_id>/auto/<forum_id>.md`, with `images/` alongside the markdown. The resolver stores `doc_path`, `images_dir`, and simple matches (sections, figures, tables) with character offsets; snippets can be disabled via `--no-snippet`.
+
+Optional flags:
+- `--log-every 5000` progress by issue count
+- `--sample-failures 20` unresolved sample prints
+- `--no-snippet` avoid storing snippets to reduce output size
 
 ### 3) Cluster issues and assign issue_type
 
@@ -132,3 +137,41 @@ python foundry/curation/curate_trajectories.py \
 - The current skill implementations are stubs and return `status=not_implemented` by default.
 - All outputs are JSONL with ASCII-safe serialization for reproducibility.
 - The pipeline is deterministic and can be extended with real executables later.
+
+## Run Log (parse_mining_results)
+
+Command:
+```
+python foundry/issue_mining/parse_mining_results.py \
+  --in data/raw/mining_results.jsonl \
+  --out data/interim/mining_flat.jsonl \
+  --log-every 100
+```
+
+Output:
+```
+[parse] 100/2011 papers | issues=2723
+[parse] 200/2011 papers | issues=5070
+[parse] 300/2011 papers | issues=6389
+[parse] 400/2011 papers | issues=8422
+[parse] 500/2011 papers | issues=11007
+[parse] 600/2011 papers | issues=13336
+[parse] 700/2011 papers | issues=15562
+[parse] 800/2011 papers | issues=18383
+[parse] 900/2011 papers | issues=20995
+[parse] 1000/2011 papers | issues=23846
+[parse] 1100/2011 papers | issues=26369
+[parse] 1200/2011 papers | issues=28752
+[parse] 1300/2011 papers | issues=31428
+[parse] 1400/2011 papers | issues=34220
+[parse] 1500/2011 papers | issues=36714
+[parse] 1600/2011 papers | issues=39789
+[parse] 1700/2011 papers | issues=42741
+[parse] 1800/2011 papers | issues=45305
+[parse] 1900/2011 papers | issues=47891
+[parse] 2000/2011 papers | issues=50647
+[summary] papers=2011 issues=50991 empty_mining=2 missing_forum_id=0 with_tool_calls=50901 with_grounding_ref=50459
+[summary] multi_role_issues=20 unknown_role_issues=0
+[summary] roles: Area Chair:14, Author:26083, Reviewer:24912
+[summary] intents(top12): Clarify_Misunderstanding:1906, Expose_Methodological_Weakness:1688, Defend_Novelty_Against_Prior_Work:1068, Concede_Minor_Point_To_Win_Major:649, Establish_Theoretical_Grounding:608, Shift_Burden_Of_Proof:442, Defend_Methodological_Choice:340, Request_Clarification:183, Improve_Presentation:152, Challenge_Novelty:145, Demonstrate_Responsiveness:145, Trap_With_Definition_Request:140
+```
