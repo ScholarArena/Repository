@@ -4,7 +4,7 @@ import math
 import os
 import sys
 import time
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 from collections import Counter
 from pathlib import Path
 from urllib import error as url_error
@@ -303,35 +303,37 @@ def generate_embeddings(records, args):
             futures[executor.submit(fetch_batch, start, end)] = (start, end)
 
         while futures:
-            future = next(as_completed(futures))
-            batch_start, batch_end, embeddings = future.result()
-            if memmap is None:
-                dim = len(embeddings[0])
-                memmap = np.lib.format.open_memmap(out_path, mode="w+", dtype="float32", shape=(total, dim))
-            memmap[batch_start:batch_end] = np.asarray(embeddings, dtype=np.float32)
-            completed_ranges.add((batch_start, batch_end))
-            completed_rows += batch_end - batch_start
-            progress_path.write_text(
-                json.dumps(
-                    {
-                        "total": total,
-                        "batch_size": args.embed_batch_size,
-                        "completed": sorted(list(completed_ranges)),
-                    },
-                    ensure_ascii=True,
-                    sort_keys=True,
-                    indent=2,
-                ),
-                encoding="utf-8",
-            )
-            if not args.quiet and args.log_every > 0 and completed_rows % args.log_every == 0:
-                print(f"[embed] {completed_rows}/{total} texts", file=sys.stderr)
+            done, _ = wait(futures, return_when=FIRST_COMPLETED)
+            for future in done:
+                futures.pop(future, None)
+                batch_start, batch_end, embeddings = future.result()
+                if memmap is None:
+                    dim = len(embeddings[0])
+                    memmap = np.lib.format.open_memmap(out_path, mode="w+", dtype="float32", shape=(total, dim))
+                memmap[batch_start:batch_end] = np.asarray(embeddings, dtype=np.float32)
+                completed_ranges.add((batch_start, batch_end))
+                completed_rows += batch_end - batch_start
+                progress_path.write_text(
+                    json.dumps(
+                        {
+                            "total": total,
+                            "batch_size": args.embed_batch_size,
+                            "completed": sorted(list(completed_ranges)),
+                        },
+                        ensure_ascii=True,
+                        sort_keys=True,
+                        indent=2,
+                    ),
+                    encoding="utf-8",
+                )
+                if not args.quiet and args.log_every > 0 and completed_rows % args.log_every == 0:
+                    print(f"[embed] {completed_rows}/{total} texts", file=sys.stderr)
 
-            try:
-                start, end = next(batch_iter)
-                futures[executor.submit(fetch_batch, start, end)] = (start, end)
-            except StopIteration:
-                pass
+                try:
+                    start, end = next(batch_iter)
+                    futures[executor.submit(fetch_batch, start, end)] = (start, end)
+                except StopIteration:
+                    pass
 
     if memmap is None:
         raise RuntimeError("No embeddings generated.")
