@@ -43,6 +43,20 @@ def parse_args():
         default="tool_calls",
         help="How to build embedding input text",
     )
+    parser.add_argument(
+        "--no-embed-outcome",
+        dest="embed_outcome",
+        action="store_false",
+        help="Disable including outcome in tool_calls embedding text",
+    )
+    parser.set_defaults(embed_outcome=True)
+    parser.add_argument(
+        "--no-embed-grounding-ref",
+        dest="embed_grounding_ref",
+        action="store_false",
+        help="Disable including grounding_ref in embedding text",
+    )
+    parser.set_defaults(embed_grounding_ref=True)
     parser.add_argument("--num-clusters", type=int, default=0, help="Number of clusters (0 = heuristic)")
     parser.add_argument(
         "--method",
@@ -94,7 +108,7 @@ def heuristic_k(n):
     return int(max(10, min(2000, round(math.sqrt(n)))))
 
 
-def build_embedding_text(issue, mode):
+def build_embedding_text(issue, mode, include_outcome, include_grounding_ref):
     if mode == "intent_action":
         intent = issue.get("strategic_intent") or ""
         action = issue.get("action") or ""
@@ -107,12 +121,23 @@ def build_embedding_text(issue, mode):
         tool_category = call.get("tool_category") or ""
         operation = call.get("operation") or ""
         target_type = call.get("target_type") or ""
-        segment = " | ".join([part for part in [tool_category, operation, target_type] if part])
+        outcome = call.get("outcome") or ""
+        segment_parts = [tool_category, operation, target_type]
+        if include_outcome and outcome:
+            segment_parts.append(f"outcome={outcome}")
+        segment = " | ".join([part for part in segment_parts if part])
         if segment:
             parts.append(segment)
     if parts:
-        return " || ".join(parts)
-    return build_embedding_text(issue, "intent_action")
+        text = " || ".join(parts)
+        if include_grounding_ref:
+            span = issue.get("paper_span") or {}
+            if span.get("status") != "not_required":
+                grounding_ref = issue.get("grounding_ref") or ""
+                if grounding_ref:
+                    text = f"{text} || grounding_ref: {grounding_ref}"
+        return text
+    return build_embedding_text(issue, "intent_action", include_outcome, include_grounding_ref)
 
 
 def request_embeddings(texts, model, api_key, base_url, timeout):
@@ -151,7 +176,10 @@ def embed_with_retries(texts, model, api_key, base_url, timeout, max_retries, re
 
 
 def generate_embeddings(records, args):
-    texts = [build_embedding_text(rec, args.embed_input_mode) for rec in records]
+    texts = [
+        build_embedding_text(rec, args.embed_input_mode, args.embed_outcome, args.embed_grounding_ref)
+        for rec in records
+    ]
     total = len(texts)
     if not args.quiet:
         print(f"[embed] total={total} model={args.embed_model}", file=sys.stderr)

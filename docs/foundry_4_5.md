@@ -74,6 +74,8 @@ python foundry/issue_mining/cluster_issues.py \
   --out data/processed/issues.jsonl
 ```
 
+Embedding text (default `tool_calls`): `tool_category | operation | target_type | outcome=...` with optional `grounding_ref` appended unless `paper_span.status=not_required`. Use `--no-embed-outcome` or `--no-embed-grounding-ref` to disable.
+
 ### 4) Build ontology summaries
 
 - Script: `foundry/ontology/build_ontology.py`
