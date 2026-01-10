@@ -45,16 +45,23 @@ Optional flags:
 ### 3) Cluster issues and assign issue_type
 
 - Script: `foundry/issue_mining/cluster_issues.py`
-- Input: `data/interim/grounded_issues.jsonl`
+- Input: `data/interim/grounded_issues.jsonl` + `data/raw/embeddings.npy`
 - Output: `data/processed/issues.jsonl`
 
 ```
 python foundry/issue_mining/cluster_issues.py \
   --in data/interim/grounded_issues.jsonl \
+  --embeddings data/raw/embeddings.npy \
   --out data/processed/issues.jsonl
 ```
 
-Clustering uses a stable hash over `(operation, target_type, outcome)` (or intent/action fallback).
+Clustering uses embedding vectors aligned with `data/interim/mining_flat.jsonl`. The input JSONL must preserve the same order and length (e.g., `grounded_issues.jsonl` produced by the resolver without filtering).
+
+Common flags:
+- `--num-clusters 0` (heuristic) or a fixed K
+- `--method auto|minibatch|kmeans`
+- `--log-every 5000` and `--log-every-iter 10`
+- `--stats-out data/processed/cluster_stats.json`
 
 ### 4) Build ontology summaries
 
@@ -190,17 +197,17 @@ python foundry/issue_mining/link_grounding_ref.py \
 
 Output:
 ```
-[link] 5000/50991 issues | resolved=4275
-[link] 10000/50991 issues | resolved=8667
-[link] 15000/50991 issues | resolved=12832
-[link] 20000/50991 issues | resolved=17192
-[link] 25000/50991 issues | resolved=21434
-[link] 30000/50991 issues | resolved=25642
-[link] 35000/50991 issues | resolved=29845
-[link] 40000/50991 issues | resolved=34249
-[link] 45000/50991 issues | resolved=38604
-[link] 50000/50991 issues | resolved=42815
-[summary] issues=50991 resolved=43689 resolved_rate=0.857 missing_docs=0
+[link] 5000/50991 issues | resolved=4267
+[link] 10000/50991 issues | resolved=8652
+[link] 15000/50991 issues | resolved=12803
+[link] 20000/50991 issues | resolved=17156
+[link] 25000/50991 issues | resolved=21385
+[link] 30000/50991 issues | resolved=25585
+[link] 35000/50991 issues | resolved=29788
+[link] 40000/50991 issues | resolved=34185
+[link] 45000/50991 issues | resolved=38536
+[link] 50000/50991 issues | resolved=42743
+[summary] issues=50991 resolved=43617 resolved_rate=0.889 not_required=1942 required_unresolved=5432 missing_docs=0
 [summary] refs.abstract: total=2394 matched=2394 rate=1.000
 [summary] refs.appendix: total=7463 matched=2837 rate=0.380
 [summary] refs.figure: total=7537 matched=7270 rate=0.965 image_matched=3174
@@ -209,22 +216,24 @@ Output:
 [summary] refs.section: total=46938 matched=44635 rate=0.951
 [summary] refs.table: total=9303 matched=8650 rate=0.930
 [summary] unresolved_samples:
-  - {'issue_id': 'viNQSOadLg#0026', 'forum_id': 'viNQSOadLg', 'grounding_ref': "Author's response f1bXYRwmqc_com_1", 'doc_path': 'data\\\\raw\\\\papers_md\\\\viNQSOadLg\\\\auto\\\\viNQSOadLg.md'}
-  - {'issue_id': 'viNQSOadLg#0027', 'forum_id': 'viNQSOadLg', 'grounding_ref': "Author's response f1bXYRwmqc_com_6, f1bXYRwmqc_com_7", 'doc_path': 'data\\\\raw\\\\papers_md\\\\viNQSOadLg\\\\auto\\\\viNQSOadLg.md'}
-  - {'issue_id': 'TTrzgEZt9s#0010', 'forum_id': 'TTrzgEZt9s', 'grounding_ref': 'Appendix D (pages referenced)', 'doc_path': 'data\\\\raw\\\\papers_md\\\\TTrzgEZt9s\\\\auto\\\\TTrzgEZt9s.md'}
-  - {'issue_id': 'TTrzgEZt9s#0015', 'forum_id': 'TTrzgEZt9s', 'grounding_ref': 'Appendix E', 'doc_path': 'data\\\\raw\\\\papers_md\\\\TTrzgEZt9s\\\\auto\\\\TTrzgEZt9s.md'}
-  - {'issue_id': 'TTrzgEZt9s#0020', 'forum_id': 'TTrzgEZt9s', 'grounding_ref': 'Entire paper length', 'doc_path': 'data\\\\raw\\\\papers_md\\\\TTrzgEZt9s\\\\auto\\\\TTrzgEZt9s.md'}
-  - {'issue_id': 'TTrzgEZt9s#0028', 'forum_id': 'TTrzgEZt9s', 'grounding_ref': 'Appendix D', 'doc_path': 'data\\\\raw\\\\papers_md\\\\TTrzgEZt9s\\\\auto\\\\TTrzgEZt9s.md'}
-  - {'issue_id': 'TTrzgEZt9s#0031', 'forum_id': 'TTrzgEZt9s', 'grounding_ref': 'Appendix E', 'doc_path': 'data\\\\raw\\\\papers_md\\\\TTrzgEZt9s\\\\auto\\\\TTrzgEZt9s.md'}
-  - {'issue_id': 'TTrzgEZt9s#0032', 'forum_id': 'TTrzgEZt9s', 'grounding_ref': 'Appendix length', 'doc_path': 'data\\\\raw\\\\papers_md\\\\TTrzgEZt9s\\\\auto\\\\TTrzgEZt9s.md'}
-  - {'issue_id': 'TTrzgEZt9s#0034', 'forum_id': 'TTrzgEZt9s', 'grounding_ref': 'Appendix B, Appendix C', 'doc_path': 'data\\\\raw\\\\papers_md\\\\TTrzgEZt9s\\\\auto\\\\TTrzgEZt9s.md'}
-  - {'issue_id': 'TTrzgEZt9s#0036', 'forum_id': 'TTrzgEZt9s', 'grounding_ref': 'Appendix E', 'doc_path': 'data\\\\raw\\\\papers_md\\\\TTrzgEZt9s\\\\auto\\\\TTrzgEZt9s.md'}
-  - {'issue_id': 'TTrzgEZt9s#0037', 'forum_id': 'TTrzgEZt9s', 'grounding_ref': 'Page 33 (Appendix D.5.2)', 'doc_path': 'data\\\\raw\\\\papers_md\\\\TTrzgEZt9s\\\\auto\\\\TTrzgEZt9s.md'}
-  - {'issue_id': 'TTrzgEZt9s#0040', 'forum_id': 'TTrzgEZt9s', 'grounding_ref': 'Revision note', 'doc_path': 'data\\\\raw\\\\papers_md\\\\TTrzgEZt9s\\\\auto\\\\TTrzgEZt9s.md'}
-  - {'issue_id': 'jUNSBetmAo#0005', 'forum_id': 'jUNSBetmAo', 'grounding_ref': 'N/A', 'doc_path': 'data\\\\raw\\\\papers_md\\\\jUNSBetmAo\\\\auto\\\\jUNSBetmAo.md'}
-  - {'issue_id': 'jUNSBetmAo#0006', 'forum_id': 'jUNSBetmAo', 'grounding_ref': 'N/A', 'doc_path': 'data\\\\raw\\\\papers_md\\\\jUNSBetmAo\\\\auto\\\\jUNSBetmAo.md'}
-  - {'issue_id': 'jUNSBetmAo#0010', 'forum_id': 'jUNSBetmAo', 'grounding_ref': 'N/A', 'doc_path': 'data\\\\raw\\\\papers_md\\\\jUNSBetmAo\\\\auto\\\\jUNSBetmAo.md'}
-  - {'issue_id': 'jUNSBetmAo#0011', 'forum_id': 'jUNSBetmAo', 'grounding_ref': 'N/A', 'doc_path': 'data\\\\raw\\\\papers_md\\\\jUNSBetmAo\\\\auto\\\\jUNSBetmAo.md'}
-  - {'issue_id': 'jUNSBetmAo#0013', 'forum_id': 'jUNSBetmAo', 'grounding_ref': 'Appendix C', 'doc_path': 'data\\\\raw\\\\papers_md\\\\jUNSBetmAo\\\\auto\\\\jUNSBetmAo.md'}
-  - {'issue_id': 'jUNSBetmAo#0015', 'forum_id': 'jUNSBetmAo', 'grounding_ref': 'N/A', 'doc_path': 'data\\\\raw\\\\papers_md\\\\jUNSBetmAo\\\\auto\\\\jUNSBetmAo.md'}
+  - {'issue_id': 'viNQSOadLg#0027', 'forum_id': 'viNQSOadLg', 'grounding_ref': "Author's response f1bXYRwmqc_com_6, f1bXYRwmqc_com_7", 'doc_path': 'data\\raw\\papers_md\\viNQSOadLg\\auto\\viNQSOadLg.md'}
+  - {'issue_id': 'TTrzgEZt9s#0010', 'forum_id': 'TTrzgEZt9s', 'grounding_ref': 'Appendix D (pages referenced)', 'doc_path': 'data\\raw\\papers_md\\TTrzgEZt9s\\auto\\TTrzgEZt9s.md'}
+  - {'issue_id': 'TTrzgEZt9s#0015', 'forum_id': 'TTrzgEZt9s', 'grounding_ref': 'Appendix E', 'doc_path': 'data\\raw\\papers_md\\TTrzgEZt9s\\auto\\TTrzgEZt9s.md'}
+  - {'issue_id': 'TTrzgEZt9s#0028', 'forum_id': 'TTrzgEZt9s', 'grounding_ref': 'Appendix D', 'doc_path': 'data\\raw\\papers_md\\TTrzgEZt9s\\auto\\TTrzgEZt9s.md'}
+  - {'issue_id': 'TTrzgEZt9s#0031', 'forum_id': 'TTrzgEZt9s', 'grounding_ref': 'Appendix E', 'doc_path': 'data\\raw\\papers_md\\TTrzgEZt9s\\auto\\TTrzgEZt9s.md'}
+  - {'issue_id': 'TTrzgEZt9s#0032', 'forum_id': 'TTrzgEZt9s', 'grounding_ref': 'Appendix length', 'doc_path': 'data\\raw\\papers_md\\TTrzgEZt9s\\auto\\TTrzgEZt9s.md'}
+  - {'issue_id': 'TTrzgEZt9s#0034', 'forum_id': 'TTrzgEZt9s', 'grounding_ref': 'Appendix B, Appendix C', 'doc_path': 'data\\raw\\papers_md\\TTrzgEZt9s\\auto\\TTrzgEZt9s.md'}   
+  - {'issue_id': 'TTrzgEZt9s#0036', 'forum_id': 'TTrzgEZt9s', 'grounding_ref': 'Appendix E', 'doc_path': 'data\\raw\\papers_md\\TTrzgEZt9s\\auto\\TTrzgEZt9s.md'}
+  - {'issue_id': 'TTrzgEZt9s#0037', 'forum_id': 'TTrzgEZt9s', 'grounding_ref': 'Page 33 (Appendix D.5.2)', 'doc_path': 'data\\raw\\papers_md\\TTrzgEZt9s\\auto\\TTrzgEZt9s.md'} 
+  - {'issue_id': 'jUNSBetmAo#0013', 'forum_id': 'jUNSBetmAo', 'grounding_ref': 'Appendix C', 'doc_path': 'data\\raw\\papers_md\\jUNSBetmAo\\auto\\jUNSBetmAo.md'}
+  - {'issue_id': '9ceadCJY4B#0015', 'forum_id': '9ceadCJY4B', 'grounding_ref': 'Sec 4 (Mitigation Methods)', 'doc_path': 'data\\raw\\papers_md\\9ceadCJY4B\\auto\\9ceadCJY4B.md'}
+  - {'issue_id': 'jFiFmHrIfD#0030', 'forum_id': 'jFiFmHrIfD', 'grounding_ref': 'Appendix B', 'doc_path': 'data\\raw\\papers_md\\jFiFmHrIfD\\auto\\jFiFmHrIfD.md'}
+  - {'issue_id': 'jFiFmHrIfD#0031', 'forum_id': 'jFiFmHrIfD', 'grounding_ref': 'Appendix D', 'doc_path': 'data\\raw\\papers_md\\jFiFmHrIfD\\auto\\jFiFmHrIfD.md'}
+  - {'issue_id': 'qBL04XXex6#0005', 'forum_id': 'qBL04XXex6', 'grounding_ref': 'Appendix Sec E (Influence of Bad Feedback)', 'doc_path': 'data\\raw\\papers_md\\qBL04XXex6\\auto\\qBL04XXex6.md'}
+  - {'issue_id': 'B0wJ5oCPdB#0018', 'forum_id': 'B0wJ5oCPdB', 'grounding_ref': 'Reviewer_Comments_tveC_c5jB_LjHX', 'doc_path': 'data\\raw\\papers_md\\B0wJ5oCPdB\\auto\\B0wJ5oCPdB.md'}
+  - {'issue_id': 'B0wJ5oCPdB#0021', 'forum_id': 'B0wJ5oCPdB', 'grounding_ref': 'Reviewer_Comments_Doc8_tveC', 'doc_path': 'data\\raw\\papers_md\\B0wJ5oCPdB\\auto\\B0wJ5oCPdB.md'}
+  - {'issue_id': 'B0wJ5oCPdB#0026', 'forum_id': 'B0wJ5oCPdB', 'grounding_ref': 'BBH_Benchmark', 'doc_path': 'data\\raw\\papers_md\\B0wJ5oCPdB\\auto\\B0wJ5oCPdB.md'}
+  - {'issue_id': '6ARlSgun7J#0005', 'forum_id': '6ARlSgun7J', 'grounding_ref': 'Eq. (9)', 'doc_path': 'data\\raw\\papers_md\\6ARlSgun7J\\auto\\6ARlSgun7J.md'}
+  - {'issue_id': 'M11LONBkx1#0008', 'forum_id': 'M11LONBkx1', 'grounding_ref': 'Appendix C.4 (to be added)', 'doc_path': 'data\\raw\\papers_md\\M11LONBkx1\\auto\\M11LONBkx1.md'}
+  - {'issue_id': 'M11LONBkx1#0012', 'forum_id': 'M11LONBkx1', 'grounding_ref': 'Appendix C.3, Appendix C.4', 'doc_path': 'data\\raw\\papers_md\\M11LONBkx1\\auto\\M11LONBkx1.md'}
 ```
