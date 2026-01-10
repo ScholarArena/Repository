@@ -24,17 +24,17 @@ python foundry/issue_mining/parse_mining_results.py \
 ### 2) Resolve grounding_ref to paper_span
 
 - Script: `foundry/issue_mining/link_grounding_ref.py`
-- Input: `data/interim/mining_flat.jsonl` + `data/raw/papers/`
+- Input: `data/interim/mining_flat.jsonl` + `data/raw/papers_md/`
 - Output: `data/interim/grounded_issues.jsonl`
 
 ```
 python foundry/issue_mining/link_grounding_ref.py \
   --in data/interim/mining_flat.jsonl \
-  --papers data/raw/papers \
+  --papers data/raw/papers_md \
   --out data/interim/grounded_issues.jsonl
 ```
 
-Resolution is lightweight: it stores `refs` and optional string matches against a text file named by `forum_id`.
+MinerU layout is supported by default: `data/raw/papers_md/<forum_id>/auto/<forum_id>.md`, with `images/` alongside the markdown. The resolver stores `doc_path`, `images_dir`, and simple matches/snippets for `grounding_ref` items (sections, figures, tables).
 
 ### 3) Cluster issues and assign issue_type
 
