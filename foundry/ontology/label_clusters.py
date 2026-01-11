@@ -25,8 +25,8 @@ def parse_args():
         help="OpenAI-compatible base URL",
     )
     parser.add_argument("--api-key", default="", help="API key")
-    parser.add_argument("--per-cluster", type=int, default=10, help="Samples per cluster")
-    parser.add_argument("--max-clusters", type=int, default=200, help="Max clusters to label")
+    parser.add_argument("--per-cluster", type=int, default=20, help="Samples per cluster")
+    parser.add_argument("--max-clusters", type=int, default=400, help="Max clusters to label")
     parser.add_argument("--min-count", type=int, default=30, help="Min cluster size")
     parser.add_argument("--seed", type=int, default=42, help="Random seed")
     parser.add_argument("--sleep", type=float, default=0.5, help="Sleep between requests")

@@ -10,50 +10,6 @@ from urllib import request as url_request
 from foundry.utils import now_iso, read_json_or_jsonl
 
 
-DEFAULT_INTENTS = [
-    {
-        "name": "Challenge_Claim",
-        "definition": "Dispute validity/novelty/correctness of a claim or result.",
-    },
-    {
-        "name": "Request_Evidence",
-        "definition": "Ask for additional evidence, experiments, or justification.",
-    },
-    {
-        "name": "Request_Clarification",
-        "definition": "Ask to clarify ambiguous statements or definitions.",
-    },
-    {
-        "name": "Defend_Claim",
-        "definition": "Justify or defend an existing claim or method.",
-    },
-    {
-        "name": "Concede_and_Patch",
-        "definition": "Accept a critique and propose a fix or revision.",
-    },
-    {
-        "name": "Suggest_Experiment",
-        "definition": "Recommend additional experiments or analyses.",
-    },
-    {
-        "name": "Improve_Presentation",
-        "definition": "Focus on writing, clarity, formatting, or presentation issues.",
-    },
-    {
-        "name": "Summarize",
-        "definition": "Summarize the work or synthesize key contributions.",
-    },
-    {
-        "name": "Establish_Context",
-        "definition": "Set context, background, or baseline understanding.",
-    },
-    {
-        "name": "Decide",
-        "definition": "Make or recommend an accept/reject or meta-level decision.",
-    },
-]
-
-
 def parse_args():
     parser = argparse.ArgumentParser(description="Label raw strategic intents with a canonical ontology.")
     parser.add_argument("--in", dest="input_path", required=True, help="Input issues JSONL")
@@ -62,6 +18,8 @@ def parse_args():
     parser.add_argument("--base-url", default="https://www.dmxapi.cn/v1/", help="OpenAI-compatible base URL")
     parser.add_argument("--api-key", default="", help="API key")
     parser.add_argument("--per-intent", type=int, default=2, help="Examples per raw intent")
+    parser.add_argument("--min-canonical", type=int, default=8, help="Minimum canonical intents to induce")
+    parser.add_argument("--max-canonical", type=int, default=12, help="Maximum canonical intents to induce")
     parser.add_argument("--sleep", type=float, default=0.5, help="Sleep between requests")
     parser.add_argument("--max-retries", type=int, default=3, help="Retries for failed requests")
     parser.add_argument("--max-intents", type=int, default=0, help="Optional cap on number of raw intents")
@@ -90,20 +48,31 @@ def call_chat(messages, model, api_key, base_url, max_retries):
     raise last_exc
 
 
-def build_prompt(canonical, raw_items):
+def build_prompt(raw_items, min_canonical, max_canonical):
     return [
         {
             "role": "system",
             "content": (
-                "You map noisy intent labels from peer-review discourse to a canonical intent ontology. "
-                "Choose exactly one canonical intent for each raw_intent. "
-                "Return JSON with key 'items' as a list of {raw_intent, mapped_intent, rationale}."
+                "You induce a canonical intent ontology from raw intent labels in peer-review discourse. "
+                "Return valid JSON only with keys: canonical_intents, items. "
+                "canonical_intents is a list of {name, definition}. "
+                "items is a list of {raw_intent, mapped_intent, rationale}. "
+                "Constraints: use Title_Case_with_underscores for intent names; "
+                "create between MIN_CANONICAL and MAX_CANONICAL intents; "
+                "each raw_intent must map to exactly one canonical intent; "
+                "mapped_intent must appear in canonical_intents; "
+                "definitions are one sentence; avoid paper-specific terms. "
+                "If a raw_intent is already generic, you may reuse it as a canonical intent."
             ),
         },
         {
             "role": "user",
             "content": json.dumps(
-                {"canonical_intents": canonical, "raw_intents": raw_items},
+                {
+                    "min_canonical": min_canonical,
+                    "max_canonical": max_canonical,
+                    "raw_intents": raw_items,
+                },
                 ensure_ascii=True,
             ),
         },
@@ -139,17 +108,20 @@ def main():
     if args.max_intents and len(raw_items) > args.max_intents:
         raw_items = raw_items[: args.max_intents]
 
-    messages = build_prompt(DEFAULT_INTENTS, raw_items)
+    messages = build_prompt(raw_items, args.min_canonical, args.max_canonical)
     content = call_chat(messages, args.model, api_key, args.base_url, args.max_retries)
 
     output = {
         "generated_at": now_iso(),
-        "canonical_intents": DEFAULT_INTENTS,
+        "canonical_intents": [],
         "items": [],
         "raw_response": content,
     }
     try:
         parsed = json.loads(content)
+        canonical_intents = parsed.get("canonical_intents") or []
+        if isinstance(canonical_intents, list):
+            output["canonical_intents"] = canonical_intents
         for item in parsed.get("items", []):
             raw_intent = item.get("raw_intent") or item.get("name")
             mapped_intent = item.get("mapped_intent") or item.get("canonical_intent")
