@@ -1,11 +1,14 @@
 import argparse
 import json
 import os
+import sys
 import time
 from collections import defaultdict
 from pathlib import Path
 from urllib import error as url_error
 from urllib import request as url_request
+
+sys.path.append(str(Path(__file__).resolve().parents[2]))
 
 from foundry.utils import now_iso, read_json_or_jsonl
 
