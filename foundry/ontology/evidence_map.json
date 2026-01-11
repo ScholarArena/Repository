@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
   "evidence_types": [
     "Citation",
@@ -1242,4 +1243,1066 @@
       "response": "{\n  \"items\": [\n    {\n      \"key\": \"Results_Analysis::Compare_to_Random_Baseline\",\n      \"tool_category\": \"Results_Analysis\",\n      \"operation\": \"Compare_to_Random_Baseline\",\n      \"evidence_type\": \"Statistical\",\n      \"rationale\": \"This operation involves comparing model performance metrics against a random baseline, which typically requires statistical analysis.\"\n    },\n    {\n      \"key\": \"Results_Analysis::Identify_Key_Performance_Strengths\",\n      \"tool_category\": \"Results_Analysis\",\n      \"operation\": \"Identify_Key_Performance_Strengths\",\n      \"evidence_type\": \"Table\",\n      \"rationale\": \"Identifying key performance strengths often relies on data presented in tables, such as results in Table 1.\"\n    },\n    {\n      \"key\": \"Results_Analysis::Reframe_Results_Aspect\",\n      \"tool_category\": \"Results_Analysis\",\n      \"operation\": \"Reframe_Results_Aspect\",\n      \"evidence_type\": \"Document\",\n      \"rationale\": \"Reframing results typically involves narrative validation and contextualization found in the document.\"\n    },\n    {\n      \"key\": \"Results_Analysis::Spotlight_Disproportionate_Gain\",\n      \"tool_category\": \"Results_Analysis\",\n      \"operation\": \"Spotlight_Disproportionate_Gain\",\n      \"evidence_type\": \"Statistical\",\n      \"rationale\": \"Spotlighting disproportionate gains is often based on statistical analysis of evaluation metrics.\"\n    },\n    {\n      \"key\": \"Results_Analysis::Verify_Synergistic_Effect\",\n      \"tool_category\": \"Results_Analysis\",\n      \"operation\": \"Verify_Synergistic_Effect\",\n      \"evidence_type\": \"Statistical\",\n      \"rationale\": \"Verifying synergistic effects typically involves statistical analysis of performance metrics.\"\n    },\n    {\n      \"key\": \"Strategic_Positioning::Acknowledge_Praise_and_Set_Agenda\",\n      \"tool_category\": \"Strategic_Positioning\",\n      \"operation\": \"Acknowledge_Praise_and_Set_Agenda\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"This operation involves narrative elements that are often found in the text of a rebuttal structure.\"\n    },\n    {\n      \"key\": \"Strategic_Positioning::Assess_Contribution_Scope\",\n      \"tool_category\": \"Strategic_Positioning\",\n      \"operation\": \"Assess_Contribution_Scope\",\n      \"evidence_type\": \"Document\",\n      \"rationale\": \"Assessing the contribution scope requires a detailed examination of application domains within the document.\"\n    },\n    {\n      \"key\": \"Strategic_Positioning::Leverage_Positive_Feedback\",\n      \"tool_category\": \"Strategic_Positioning\",\n      \"operation\": \"Leverage_Positive_Feedback\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"Leveraging positive feedback is often articulated in the text, such as reviewer ratings.\"\n    },\n    {\n      \"key\": \"Strategic_Positioning::Reframe_Evaluation_Criteria\",\n      \"tool_category\": \"Strategic_Positioning\",\n      \"operation\": \"Reframe_Evaluation_Criteria\",\n      \"evidence_type\": \"Document\",\n      \"rationale\": \"Reframing evaluation criteria involves narrative validation found in the document.\"\n    },\n    {\n      \"key\": \"Strategic_Positioning::Synthesize_Contribution_Flow\",\n      \"tool_category\": \"Strategic_Positioning\",\n      \"operation\": \"Synthesize_Contribution_Flow\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"Synthesizing contribution flow is typically a narrative process that is documented in the paper narrative.\"\n    },\n    {\n      \"key\": \"Strategic_Positioning::Synthesize_Positive_Feedback\",\n      \"tool_category\": \"Strategic_Positioning\",\n      \"operation\": \"Synthesize_Positive_Feedback\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"This operation involves synthesizing feedback that is often expressed in the text of the paper.\"\n    },\n    {\n      \"key\": \"Strategic_Positioning::Synthesize_Research_Challenge\",\n      \"tool_category\": \"Strategic_Positioning\",\n      \"operation\": \"Synthesize_Research_Challenge\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"Synthesizing research challenges typically involves narrative elements found in the text.\"\n    },\n    {\n      \"key\": \"Strategic_Reframing::Contrast_Method_Capabilities\",\n      \"tool_category\": \"Strategic_Reframing\",\n      \"operation\": \"Contrast_Method_Capabilities\",\n      \"evidence_type\": \"Document\",\n      \"rationale\": \"Contrasting method capabilities requires a detailed examination of the document.\"\n    },\n    {\n      \"key\": \"Strategic_Reframing::De-Emphasize_Claim\",\n      \"tool_category\": \"Strategic_Reframing\",\n      \"operation\": \"De-Emphasize_Claim\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"De-emphasizing a claim involves narrative adjustments typically found in the text.\"\n    },\n    {\n      \"key\": \"Strategic_Reframing::Define_Applicability_Domain\",\n      \"tool_category\": \"Strategic_Reframing\",\n      \"operation\": \"Define_Applicability_Domain\",\n      \"evidence_type\": \"Document\",\n      \"rationale\": \"Defining applicability domains requires a thorough examination of the document.\"\n    },\n    {\n      \"key\": \"Strategic_Reframing::Recontextualize_Research_Goal\",\n      \"tool_category\": \"Strategic_Reframing\",\n      \"operation\": \"Recontextualize_Research_Goal\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"Recontextualizing research goals typically involves narrative elements found in the text.\"\n    },\n    {\n      \"key\": \"Strategic_Reframing::Redefine_Task_Scope\",\n      \"tool_category\": \"Strategic_Reframing\",\n      \"operation\": \"Redefine_Task_Scope\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"Redefining task scope involves narrative adjustments typically found in the text.\"\n    },\n    {\n      \"key\": \"Theoretical_Analysis::Contrast_ELBO_Derivations\",\n      \"tool_category\": \"Theoretical_Analysis\",\n      \"operation\": \"Contrast_ELBO_Derivations\",\n      \"evidence_type\": \"Symbolic\",\n      \"rationale\": \"Contrasting ELBO derivations involves mathematical analysis and symbolic reasoning.\"\n    },\n    {\n      \"key\": \"Theoretical_Analysis::Contrast_with_Prior_Work\",\n      \"tool_category\": \"Theoretical_Analysis\",\n      \"operation\": \"Contrast_with_Prior_Work\",\n      \"evidence_type\": \"Citation\",\n      \"rationale\": \"Contrasting with prior work requires citation of previous studies and claims.\"\n    },\n    {\n      \"key\": \"Theoretical_Analysis::Explain_Definition_Components\",\n      \"tool_category\": \"Theoretical_Analysis\",\n      \"operation\": \"Explain_Definition_Components\",\n      \"evidence_type\": \"Document\",\n      \"rationale\": \"Explaining definition components requires detailed narrative validation found in the document.\"\n    },\n    {\n      \"key\": \"Theoretical_Analysis::Extend_Theory\",\n      \"tool_category\": \"Theoretical_Analysis\",\n      \"operation\": \"Extend_Theory\",\n      \"evidence_type\": \"Document\",\n      \"rationale\": \"Extending theory typically involves narrative elements found in the document.\"\n    },\n    {\n      \"key\": \"Theoretical_Analysis::Probe_Approximation_Limits\",\n      \"tool_category\": \"Theoretical_Analysis\",\n      \"operation\": \"Probe_Approximation_Limits\",\n      \"evidence_type\": \"Symbolic\",\n      \"rationale\": \"Probing approximation limits involves mathematical analysis and symbolic reasoning.\"\n    },\n    {\n      \"key\": \"Theoretical_Analysis::Probe_Reasoning_Capability\",\n      \"tool_category\": \"Theoretical_Analysis\",\n      \"operation\": \"Probe_Reasoning_Capability\",\n      \"evidence_type\": \"Symbolic\",\n      \"rationale\": \"Probing reasoning capability involves mathematical analysis and symbolic reasoning.\"\n    },\n    {\n      \"key\": \"Theoretical_Analysis::Provide_Practical_Verification_Methods\",\n      \"tool_category\": \"Theoretical_Analysis\",\n      \"operation\": \"Provide_Practical_Verification_Methods\",\n      \"evidence_type\": \"Symbolic\",\n      \"rationale\": \"Providing practical verification methods often involves symbolic reasoning.\"\n    },\n    {\n      \"key\": \"Theoretical_Analysis::Question_Unjustified_Assumption\",\n      \"tool_category\": \"Theoretical_Analysis\",\n      \"operation\": \"Question_Unjustified_Assumption\",\n      \"evidence_type\": \"Logical\",\n      \"rationale\": \"Questioning unjustified assumptions involves logical reasoning and analysis.\"\n    }\n  ]\n}"
     }
   ]
+=======
+{
+  "evidence_types": [
+    "Citation",
+    "Statistical",
+    "Figure",
+    "Table",
+    "Document",
+    "Text",
+    "Symbolic",
+    "Logical",
+    "Implementation",
+    "Unknown"
+  ],
+  "generated_at": "2026-01-11T16:47:23Z",
+  "items": [
+    {
+      "evidence_type": "Text",
+      "key": "Contextual_Clarification::Define_Parameter",
+      "operation": "Define_Parameter",
+      "rationale": "Defining parameters involves textual explanations and clarifications.",
+      "tool_category": "Contextual_Clarification"
+    },
+    {
+      "evidence_type": "Citation",
+      "key": "Literature_Cross_Check::Assess_Novelty",
+      "operation": "Assess_Novelty",
+      "rationale": "Assessing novelty requires referencing prior works to establish uniqueness.",
+      "tool_category": "Literature_Cross_Check"
+    },
+    {
+      "evidence_type": "Citation",
+      "key": "Literature_Cross_Check::Contrast_Baseline",
+      "operation": "Contrast_Baseline",
+      "rationale": "Contrasting with baseline methods involves citing existing literature.",
+      "tool_category": "Literature_Cross_Check"
+    },
+    {
+      "evidence_type": "Citation",
+      "key": "Literature_Cross_Check::Contrast_With_Prior_Work",
+      "operation": "Contrast_With_Prior_Work",
+      "rationale": "This operation requires referencing previous studies for comparison.",
+      "tool_category": "Literature_Cross_Check"
+    },
+    {
+      "evidence_type": "Citation",
+      "key": "Literature_Cross_Check::Identify_Missing_Baseline",
+      "operation": "Identify_Missing_Baseline",
+      "rationale": "Identifying missing baselines involves checking against existing literature.",
+      "tool_category": "Literature_Cross_Check"
+    },
+    {
+      "evidence_type": "Citation",
+      "key": "Literature_Cross_Check::Identify_Missing_Baselines",
+      "operation": "Identify_Missing_Baselines",
+      "rationale": "This requires referencing prior works to find gaps in the literature.",
+      "tool_category": "Literature_Cross_Check"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Contextual_Clarification::Clarify_Experimental_Setup",
+      "operation": "Clarify_Experimental_Setup",
+      "rationale": "Clarifying experimental setups typically involves descriptive text.",
+      "tool_category": "Contextual_Clarification"
+    },
+    {
+      "evidence_type": "Table",
+      "key": "Experimental_Design_Check::Assess_Comparison_Fairness",
+      "operation": "Assess_Comparison_Fairness",
+      "rationale": "Assessing fairness often involves analyzing data presented in tables.",
+      "tool_category": "Experimental_Design_Check"
+    },
+    {
+      "evidence_type": "Citation",
+      "key": "Experimental_Design_Check::Identify_Missing_Baselines",
+      "operation": "Identify_Missing_Baselines",
+      "rationale": "This requires checking against existing methodologies in literature.",
+      "tool_category": "Experimental_Design_Check"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Experimental_Design_Check::Request_Additional_Metrics",
+      "operation": "Request_Additional_Metrics",
+      "rationale": "Requesting metrics involves textual clarification of needed information.",
+      "tool_category": "Experimental_Design_Check"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Experimental_Design_Check::Suggest_Additional_Analysis",
+      "operation": "Suggest_Additional_Analysis",
+      "rationale": "Suggestions for analysis are typically conveyed through text.",
+      "tool_category": "Experimental_Design_Check"
+    },
+    {
+      "evidence_type": "Citation",
+      "key": "Literature_Cross_Check::Identify_Missing_Reference",
+      "operation": "Identify_Missing_Reference",
+      "rationale": "Identifying missing references involves checking existing literature.",
+      "tool_category": "Literature_Cross_Check"
+    },
+    {
+      "evidence_type": "Document",
+      "key": "Algorithmic_Analysis::Contrast_With_Baseline_Modifications",
+      "operation": "Contrast_With_Baseline_Modifications",
+      "rationale": "Contrasting modifications often requires detailed documentation.",
+      "tool_category": "Algorithmic_Analysis"
+    },
+    {
+      "evidence_type": "Logical",
+      "key": "Algorithmic_Analysis::Detect_Logical_Inconsistency",
+      "operation": "Detect_Logical_Inconsistency",
+      "rationale": "Detecting inconsistencies involves logical reasoning and proofs.",
+      "tool_category": "Algorithmic_Analysis"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Algorithmic_Analysis::Explain_Rank_Adjustment_Mechanism",
+      "operation": "Explain_Rank_Adjustment_Mechanism",
+      "rationale": "Explaining mechanisms is typically done through textual descriptions.",
+      "tool_category": "Algorithmic_Analysis"
+    },
+    {
+      "evidence_type": "Statistical",
+      "key": "Algorithmic_Analysis::Identify_Efficiency_Gap",
+      "operation": "Identify_Efficiency_Gap",
+      "rationale": "Identifying gaps in efficiency often requires statistical analysis.",
+      "tool_category": "Algorithmic_Analysis"
+    },
+    {
+      "evidence_type": "Logical",
+      "key": "Algorithmic_Analysis::Identify_Greedy_Optimization_Flaw",
+      "operation": "Identify_Greedy_Optimization_Flaw",
+      "rationale": "Identifying flaws in optimization involves logical reasoning.",
+      "tool_category": "Algorithmic_Analysis"
+    },
+    {
+      "evidence_type": "Statistical",
+      "key": "Algorithmic_Analysis::Interpret_Sample_Complexity_Rate",
+      "operation": "Interpret_Sample_Complexity_Rate",
+      "rationale": "Interpreting complexity rates typically involves statistical metrics.",
+      "tool_category": "Algorithmic_Analysis"
+    },
+    {
+      "evidence_type": "Statistical",
+      "key": "Comparative_Analysis::Benchmark_Against_SOTA",
+      "operation": "Benchmark_Against_SOTA",
+      "rationale": "Benchmarking requires statistical comparisons against state-of-the-art.",
+      "tool_category": "Comparative_Analysis"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Comparative_Analysis::Contextualize_Performance_Gap",
+      "operation": "Contextualize_Performance_Gap",
+      "rationale": "Contextualizing gaps is typically done through narrative explanations.",
+      "tool_category": "Comparative_Analysis"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Comparative_Analysis::Explain_Baseline_Incomparability",
+      "operation": "Explain_Baseline_Incomparability",
+      "rationale": "Explaining incomparability involves textual clarification.",
+      "tool_category": "Comparative_Analysis"
+    },
+    {
+      "evidence_type": "Statistical",
+      "key": "Comparative_Analysis::Identify_Minimal_Difference",
+      "operation": "Identify_Minimal_Difference",
+      "rationale": "Identifying differences often requires statistical analysis.",
+      "tool_category": "Comparative_Analysis"
+    },
+    {
+      "evidence_type": "Statistical",
+      "key": "Comparative_Analysis::Quantify_Parameter_Scalability",
+      "operation": "Quantify_Parameter_Scalability",
+      "rationale": "Quantifying scalability involves statistical metrics.",
+      "tool_category": "Comparative_Analysis"
+    },
+    {
+      "evidence_type": "Citation",
+      "key": "Comparative_Analysis::Reference_Diffusion_Comparison",
+      "operation": "Reference_Diffusion_Comparison",
+      "rationale": "Comparing diffusion methods requires referencing prior works.",
+      "tool_category": "Comparative_Analysis"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Conceptual_Clarification::Accept_and_Implement_Terminology_Change",
+      "operation": "Accept_and_Implement_Terminology_Change",
+      "rationale": "Implementing terminology changes involves textual documentation.",
+      "tool_category": "Conceptual_Clarification"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Conceptual_Clarification::Differentiate_Problem_Settings",
+      "operation": "Differentiate_Problem_Settings",
+      "rationale": "This operation involves clarifying concepts and definitions, which typically requires narrative validation.",
+      "tool_category": "Conceptual_Clarification"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Conceptual_Clarification::Distinguish_Guidance_vs_Search",
+      "operation": "Distinguish_Guidance_vs_Search",
+      "rationale": "This operation involves clarifying concepts and definitions, which typically requires narrative validation.",
+      "tool_category": "Conceptual_Clarification"
+    },
+    {
+      "evidence_type": "Symbolic",
+      "key": "Conceptual_Clarification::Explain_Mathematical_Definition",
+      "operation": "Explain_Mathematical_Definition",
+      "rationale": "This operation involves mathematical definitions, which require symbolic evidence.",
+      "tool_category": "Conceptual_Clarification"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Conceptual_Clarification::Justify_Data_Augmentation",
+      "operation": "Justify_Data_Augmentation",
+      "rationale": "This operation involves providing justification, which typically requires narrative validation.",
+      "tool_category": "Conceptual_Clarification"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Conceptual_Clarification::Justify_Practicality",
+      "operation": "Justify_Practicality",
+      "rationale": "This operation involves providing justification, which typically requires narrative validation.",
+      "tool_category": "Conceptual_Clarification"
+    },
+    {
+      "evidence_type": "Document",
+      "key": "Contextual_Clarification::Acknowledge_Feedback",
+      "operation": "Acknowledge_Feedback",
+      "rationale": "This operation involves addressing feedback, which is often documented in peer reviews.",
+      "tool_category": "Contextual_Clarification"
+    },
+    {
+      "evidence_type": "Citation",
+      "key": "Contextual_Clarification::Correct_Attribution",
+      "operation": "Correct_Attribution",
+      "rationale": "This operation involves ensuring proper attribution to prior work, which requires citation.",
+      "tool_category": "Contextual_Clarification"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Contextual_Clarification::Explain_Utility_Trace",
+      "operation": "Explain_Utility_Trace",
+      "rationale": "This operation involves explaining a concept, which typically requires narrative validation.",
+      "tool_category": "Contextual_Clarification"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Contextual_Clarification::Question_Dataset_Composition",
+      "operation": "Question_Dataset_Composition",
+      "rationale": "This operation involves questioning dataset composition, which typically requires narrative validation.",
+      "tool_category": "Contextual_Clarification"
+    },
+    {
+      "evidence_type": "Statistical",
+      "key": "Empirical_Validation::Cross_Reference_Performance_Data",
+      "operation": "Cross_Reference_Performance_Data",
+      "rationale": "This operation involves validating performance data, which typically requires statistical evidence.",
+      "tool_category": "Empirical_Validation"
+    },
+    {
+      "evidence_type": "Statistical",
+      "key": "Empirical_Validation::Measure_Training_Time",
+      "operation": "Measure_Training_Time",
+      "rationale": "This operation involves measuring training time, which is a quantitative metric.",
+      "tool_category": "Empirical_Validation"
+    },
+    {
+      "evidence_type": "Statistical",
+      "key": "Empirical_Validation::Present_Ablation_Results",
+      "operation": "Present_Ablation_Results",
+      "rationale": "This operation involves presenting results from ablation studies, which typically require statistical evidence.",
+      "tool_category": "Empirical_Validation"
+    },
+    {
+      "evidence_type": "Citation",
+      "key": "Empirical_Validation::Reference_Ablation_Studies",
+      "operation": "Reference_Ablation_Studies",
+      "rationale": "This operation involves referencing prior ablation studies, which requires citation.",
+      "tool_category": "Empirical_Validation"
+    },
+    {
+      "evidence_type": "Statistical",
+      "key": "Empirical_Validation::Validate_Finite_K_Choice",
+      "operation": "Validate_Finite_K_Choice",
+      "rationale": "This operation involves validating a choice related to finite K, which typically requires statistical evidence.",
+      "tool_category": "Empirical_Validation"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Error_Analysis::Diagnose_Model_Failure_Cause",
+      "operation": "Diagnose_Model_Failure_Cause",
+      "rationale": "This operation involves diagnosing failure causes, which typically requires narrative validation.",
+      "tool_category": "Error_Analysis"
+    },
+    {
+      "evidence_type": "Document",
+      "key": "Error_Analysis::Document_Semantic_Drift",
+      "operation": "Document_Semantic_Drift",
+      "rationale": "This operation involves documenting semantic drift, which is often recorded in documents.",
+      "tool_category": "Error_Analysis"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Error_Analysis::Explain_Performance_Gap",
+      "operation": "Explain_Performance_Gap",
+      "rationale": "This operation involves explaining performance gaps, which typically requires narrative validation.",
+      "tool_category": "Error_Analysis"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Error_Analysis::Identify_Missing_Analysis",
+      "operation": "Identify_Missing_Analysis",
+      "rationale": "This operation involves identifying missing analyses, which typically requires narrative validation.",
+      "tool_category": "Error_Analysis"
+    },
+    {
+      "evidence_type": "Document",
+      "key": "Error_Analysis::Identify_and_Document_Failure_Cases",
+      "operation": "Identify_and_Document_Failure_Cases",
+      "rationale": "This operation involves identifying and documenting failure cases, which is often recorded in documents.",
+      "tool_category": "Error_Analysis"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Experimental_Design_Check::Identify_Missing_Baseline",
+      "operation": "Identify_Missing_Baseline",
+      "rationale": "This operation involves identifying missing baselines, which typically requires narrative validation.",
+      "tool_category": "Experimental_Design_Check"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Experimental_Design_Check::Suggest_Additional_Baseline",
+      "operation": "Suggest_Additional_Baseline",
+      "rationale": "This operation involves suggesting additional baselines, which typically requires narrative validation.",
+      "tool_category": "Experimental_Design_Check"
+    },
+    {
+      "evidence_type": "Statistical",
+      "key": "Experimental_Validation::Add_Dataset_Results",
+      "operation": "Add_Dataset_Results",
+      "rationale": "This operation involves adding results from datasets, which typically requires statistical evidence.",
+      "tool_category": "Experimental_Validation"
+    },
+    {
+      "evidence_type": "Statistical",
+      "key": "Experimental_Validation::Contrast_Performance",
+      "operation": "Contrast_Performance",
+      "rationale": "This operation involves contrasting performance, which typically requires statistical evidence.",
+      "tool_category": "Experimental_Validation"
+    },
+    {
+      "evidence_type": "Statistical",
+      "key": "Experimental_Validation::Demonstrate_Noise_Robustness",
+      "operation": "Demonstrate_Noise_Robustness",
+      "rationale": "This operation involves demonstrating robustness to noise, which typically requires statistical evidence.",
+      "tool_category": "Experimental_Validation"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Experimental_Validation::Extend_Architecture_Coverage",
+      "operation": "Extend_Architecture_Coverage",
+      "rationale": "This operation involves extending architecture coverage, which typically requires narrative validation.",
+      "tool_category": "Experimental_Validation"
+    },
+    {
+      "evidence_type": "Statistical",
+      "key": "Experimental_Validation::Relate_Synthetic_To_Real",
+      "operation": "Relate_Synthetic_To_Real",
+      "rationale": "This operation typically involves comparing synthetic data with real-world data, which requires statistical analysis.",
+      "tool_category": "Experimental_Validation"
+    },
+    {
+      "evidence_type": "Statistical",
+      "key": "Experimental_Validation::Run_Ablation_Experiment",
+      "operation": "Run_Ablation_Experiment",
+      "rationale": "Ablation experiments assess the impact of specific components, often using statistical methods to analyze results.",
+      "tool_category": "Experimental_Validation"
+    },
+    {
+      "evidence_type": "Statistical",
+      "key": "Hyperparameter_Analysis::Assess_Tuning_Complexity",
+      "operation": "Assess_Tuning_Complexity",
+      "rationale": "This involves analyzing the complexity of tuning hyperparameters, which is a quantitative assessment.",
+      "tool_category": "Hyperparameter_Analysis"
+    },
+    {
+      "evidence_type": "Statistical",
+      "key": "Hyperparameter_Analysis::Guide_K_Selection",
+      "operation": "Guide_K_Selection",
+      "rationale": "Guiding K selection typically involves statistical analysis of performance metrics.",
+      "tool_category": "Hyperparameter_Analysis"
+    },
+    {
+      "evidence_type": "Figure",
+      "key": "Hyperparameter_Analysis::Illustrate_Trade-off",
+      "operation": "Illustrate_Trade-off",
+      "rationale": "Illustrating trade-offs often requires visual representations of performance metrics.",
+      "tool_category": "Hyperparameter_Analysis"
+    },
+    {
+      "evidence_type": "Document",
+      "key": "Hyperparameter_Analysis::Probe_Rationale_Coverage",
+      "operation": "Probe_Rationale_Coverage",
+      "rationale": "This operation involves examining the rationale behind hyperparameter choices, which can be documented.",
+      "tool_category": "Hyperparameter_Analysis"
+    },
+    {
+      "evidence_type": "Document",
+      "key": "Hyperparameter_Analysis::Reference_Tuning_Procedure",
+      "operation": "Reference_Tuning_Procedure",
+      "rationale": "Referencing a tuning procedure involves documenting the steps and methods used.",
+      "tool_category": "Hyperparameter_Analysis"
+    },
+    {
+      "evidence_type": "Statistical",
+      "key": "Hyperparameter_Analysis::Sweep_Threshold_Parameter",
+      "operation": "Sweep_Threshold_Parameter",
+      "rationale": "Sweeping parameters involves statistical analysis of results across different thresholds.",
+      "tool_category": "Hyperparameter_Analysis"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Hypothesis_Testing::Contradictory_Evidence_Check",
+      "operation": "Contradictory_Evidence_Check",
+      "rationale": "Checking for contradictory evidence typically involves textual analysis of claims and supporting evidence.",
+      "tool_category": "Hypothesis_Testing"
+    },
+    {
+      "evidence_type": "Statistical",
+      "key": "Hypothesis_Testing::Demand_High-Stakes_Validation",
+      "operation": "Demand_High-Stakes_Validation",
+      "rationale": "High-stakes validation often requires rigorous statistical evidence to support claims.",
+      "tool_category": "Hypothesis_Testing"
+    },
+    {
+      "evidence_type": "Document",
+      "key": "Hypothesis_Testing::Explain_Alternative_Method_Results",
+      "operation": "Explain_Alternative_Method_Results",
+      "rationale": "Explaining results involves documenting the findings and interpretations of alternative methods.",
+      "tool_category": "Hypothesis_Testing"
+    },
+    {
+      "evidence_type": "Statistical",
+      "key": "Hypothesis_Testing::Propose_Ablation_Experiment",
+      "operation": "Propose_Ablation_Experiment",
+      "rationale": "Proposing an ablation experiment involves statistical reasoning about the effects of different components.",
+      "tool_category": "Hypothesis_Testing"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Hypothesis_Testing::Reframe_Methodological_Contribution",
+      "operation": "Reframe_Methodological_Contribution",
+      "rationale": "Reframing contributions typically involves textual analysis and narrative construction.",
+      "tool_category": "Hypothesis_Testing"
+    },
+    {
+      "evidence_type": "Statistical",
+      "key": "Hypothesis_Testing::Verify_Correlation_Claim",
+      "operation": "Verify_Correlation_Claim",
+      "rationale": "Verifying correlation claims requires statistical analysis of data to confirm relationships.",
+      "tool_category": "Hypothesis_Testing"
+    },
+    {
+      "evidence_type": "Logical",
+      "key": "Mathematical_Verification::Baseline_Suitability_Check",
+      "operation": "Baseline_Suitability_Check",
+      "rationale": "Checking the suitability of a baseline involves logical reasoning about the mathematical foundations.",
+      "tool_category": "Mathematical_Verification"
+    },
+    {
+      "evidence_type": "Symbolic",
+      "key": "Mathematical_Verification::Check_Differentiability_Requirement",
+      "operation": "Check_Differentiability_Requirement",
+      "rationale": "Checking differentiability involves symbolic analysis of mathematical functions.",
+      "tool_category": "Mathematical_Verification"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Mathematical_Verification::Clarify_Metric_Definition",
+      "operation": "Clarify_Metric_Definition",
+      "rationale": "Clarifying metric definitions typically involves textual explanations and definitions.",
+      "tool_category": "Mathematical_Verification"
+    },
+    {
+      "evidence_type": "Logical",
+      "key": "Mathematical_Verification::Identify_Definition_Inconsistency",
+      "operation": "Identify_Definition_Inconsistency",
+      "rationale": "Identifying inconsistencies in definitions involves logical reasoning.",
+      "tool_category": "Mathematical_Verification"
+    },
+    {
+      "evidence_type": "Symbolic",
+      "key": "Mathematical_Verification::Probe_Alternative_Derivations",
+      "operation": "Probe_Alternative_Derivations",
+      "rationale": "Probing alternative derivations involves symbolic manipulation and analysis.",
+      "tool_category": "Mathematical_Verification"
+    },
+    {
+      "evidence_type": "Statistical",
+      "key": "Mathematical_Verification::Quantify_Skill_Complexity",
+      "operation": "Quantify_Skill_Complexity",
+      "rationale": "Quantifying complexity typically involves statistical measures.",
+      "tool_category": "Mathematical_Verification"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Methodological_Analysis::Acknowledge_Innovative_Combination",
+      "operation": "Acknowledge_Innovative_Combination",
+      "rationale": "Acknowledging innovative combinations involves textual descriptions of methodologies.",
+      "tool_category": "Methodological_Analysis"
+    },
+    {
+      "evidence_type": "Logical",
+      "key": "Methodological_Analysis::Check_CTDE_Consistency",
+      "operation": "Check_CTDE_Consistency",
+      "rationale": "Checking consistency involves logical reasoning about the methodology.",
+      "tool_category": "Methodological_Analysis"
+    },
+    {
+      "evidence_type": "Document",
+      "key": "Methodological_Analysis::Clarify_Algorithm_Mechanics",
+      "operation": "Clarify_Algorithm_Mechanics",
+      "rationale": "Clarifying algorithm mechanics typically involves documentation of the algorithm's workings.",
+      "tool_category": "Methodological_Analysis"
+    },
+    {
+      "evidence_type": "Statistical",
+      "key": "Methodological_Analysis::Evaluate_Evidence_Strength",
+      "operation": "Evaluate_Evidence_Strength",
+      "rationale": "Evaluating evidence strength often requires statistical analysis of the evidence presented.",
+      "tool_category": "Methodological_Analysis"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Methodological_Analysis::Question_Design_Choice",
+      "operation": "Question_Design_Choice",
+      "rationale": "Questioning design choices involves textual analysis and justification.",
+      "tool_category": "Methodological_Analysis"
+    },
+    {
+      "evidence_type": "Document",
+      "key": "Methodological_Clarification::Explain_Robustness_Design",
+      "operation": "Explain_Robustness_Design",
+      "rationale": "This operation involves explaining the robustness design, which typically requires detailed documentation.",
+      "tool_category": "Methodological_Clarification"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Methodological_Clarification::Identify_Interface_Ambiguity",
+      "operation": "Identify_Interface_Ambiguity",
+      "rationale": "Identifying interface ambiguity often involves textual analysis of the system's description.",
+      "tool_category": "Methodological_Clarification"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Methodological_Clarification::Request_Explicit_Definition",
+      "operation": "Request_Explicit_Definition",
+      "rationale": "Requesting explicit definitions typically pertains to textual clarification.",
+      "tool_category": "Methodological_Clarification"
+    },
+    {
+      "evidence_type": "Document",
+      "key": "Methodological_Clarification::Request_Fine_Tuning_Details",
+      "operation": "Request_Fine_Tuning_Details",
+      "rationale": "Fine-tuning details are usually documented in the methodology section.",
+      "tool_category": "Methodological_Clarification"
+    },
+    {
+      "evidence_type": "Document",
+      "key": "Methodological_Clarification::Verify_Parameter_Sharing",
+      "operation": "Verify_Parameter_Sharing",
+      "rationale": "Verification of parameter sharing requires examination of documented methodologies.",
+      "tool_category": "Methodological_Clarification"
+    },
+    {
+      "evidence_type": "Document",
+      "key": "Methodological_Clarification::Verify_Training_Input",
+      "operation": "Verify_Training_Input",
+      "rationale": "Training input verification involves checking documented training setups.",
+      "tool_category": "Methodological_Clarification"
+    },
+    {
+      "evidence_type": "Statistical",
+      "key": "Methodological_Verification::Analyze_Score_Comparability",
+      "operation": "Analyze_Score_Comparability",
+      "rationale": "Analyzing score comparability typically involves statistical analysis of scores.",
+      "tool_category": "Methodological_Verification"
+    },
+    {
+      "evidence_type": "Document",
+      "key": "Methodological_Verification::Challenge_Data_Coverage_Assumption",
+      "operation": "Challenge_Data_Coverage_Assumption",
+      "rationale": "Challenging assumptions about data coverage requires examination of documented data sources.",
+      "tool_category": "Methodological_Verification"
+    },
+    {
+      "evidence_type": "Statistical",
+      "key": "Methodological_Verification::Evaluate_fMRI_Averaging_Window",
+      "operation": "Evaluate_fMRI_Averaging_Window",
+      "rationale": "Evaluation of fMRI averaging windows typically involves statistical analysis.",
+      "tool_category": "Methodological_Verification"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Methodological_Verification::Probe_Inference_Ambiguity",
+      "operation": "Probe_Inference_Ambiguity",
+      "rationale": "Probing inference ambiguity often requires textual analysis of inference processes.",
+      "tool_category": "Methodological_Verification"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Methodological_Verification::Request_Process_Clarification",
+      "operation": "Request_Process_Clarification",
+      "rationale": "Requesting clarification on processes typically involves textual explanations.",
+      "tool_category": "Methodological_Verification"
+    },
+    {
+      "evidence_type": "Statistical",
+      "key": "Methodological_Verification::Test_External_Validity_Assumption",
+      "operation": "Test_External_Validity_Assumption",
+      "rationale": "Testing external validity assumptions often requires statistical methods.",
+      "tool_category": "Methodological_Verification"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Novelty_Assessment::Articulate_Contributions",
+      "operation": "Articulate_Contributions",
+      "rationale": "Articulating contributions involves narrative descriptions of the research.",
+      "tool_category": "Novelty_Assessment"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Novelty_Assessment::Assess_Combination_Novelty",
+      "operation": "Assess_Combination_Novelty",
+      "rationale": "Assessing novelty in combinations typically requires textual analysis.",
+      "tool_category": "Novelty_Assessment"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Novelty_Assessment::Contrast_With_General_Methods",
+      "operation": "Contrast_With_General_Methods",
+      "rationale": "Contrasting with general methods involves textual comparisons.",
+      "tool_category": "Novelty_Assessment"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Novelty_Assessment::Evaluate_Component_Innovation",
+      "operation": "Evaluate_Component_Innovation",
+      "rationale": "Evaluating component innovation typically requires narrative descriptions.",
+      "tool_category": "Novelty_Assessment"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Novelty_Assessment::Highlight_Adaptations",
+      "operation": "Highlight_Adaptations",
+      "rationale": "Highlighting adaptations involves textual descriptions of changes.",
+      "tool_category": "Novelty_Assessment"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Novelty_Assessment::Identify_Novel_Component",
+      "operation": "Identify_Novel_Component",
+      "rationale": "Identifying novel components typically requires textual analysis.",
+      "tool_category": "Novelty_Assessment"
+    },
+    {
+      "evidence_type": "Document",
+      "key": "Presentation_Check::Acknowledge_Formatting_Correction",
+      "operation": "Acknowledge_Formatting_Correction",
+      "rationale": "Acknowledging formatting corrections involves reviewing documented formatting.",
+      "tool_category": "Presentation_Check"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Presentation_Check::Clarify_Algorithm_Notations",
+      "operation": "Clarify_Algorithm_Notations",
+      "rationale": "Clarifying algorithm notations typically requires textual explanations.",
+      "tool_category": "Presentation_Check"
+    },
+    {
+      "evidence_type": "Document",
+      "key": "Presentation_Check::Evaluate_Style_Consistency",
+      "operation": "Evaluate_Style_Consistency",
+      "rationale": "Evaluating style consistency involves reviewing documented styles.",
+      "tool_category": "Presentation_Check"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Presentation_Check::Identify_Inconsistencies",
+      "operation": "Identify_Inconsistencies",
+      "rationale": "Identifying inconsistencies typically requires textual analysis.",
+      "tool_category": "Presentation_Check"
+    },
+    {
+      "evidence_type": "Figure",
+      "key": "Presentation_Check::Identify_Quality_Issues_in_Visuals",
+      "operation": "Identify_Quality_Issues_in_Visuals",
+      "rationale": "Identifying quality issues in visuals involves examining figures.",
+      "tool_category": "Presentation_Check"
+    },
+    {
+      "evidence_type": "Figure",
+      "key": "Presentation_Check::Identify_Visual_Ambiguity",
+      "operation": "Identify_Visual_Ambiguity",
+      "rationale": "Identifying visual ambiguity typically involves analyzing figures.",
+      "tool_category": "Presentation_Check"
+    },
+    {
+      "evidence_type": "Statistical",
+      "key": "Reproducibility_Check::Assess_Hyperparameter_Sensitivity",
+      "operation": "Assess_Hyperparameter_Sensitivity",
+      "rationale": "Assessing hyperparameter sensitivity typically involves statistical analysis.",
+      "tool_category": "Reproducibility_Check"
+    },
+    {
+      "evidence_type": "Document",
+      "key": "Reproducibility_Check::Demand_Method_Details",
+      "operation": "Demand_Method_Details",
+      "rationale": "Method details are often documented in the paper.",
+      "tool_category": "Reproducibility_Check"
+    },
+    {
+      "evidence_type": "Document",
+      "key": "Reproducibility_Check::Inquire_About_Data_Release",
+      "operation": "Inquire_About_Data_Release",
+      "rationale": "Data release inquiries pertain to documentation of datasets.",
+      "tool_category": "Reproducibility_Check"
+    },
+    {
+      "evidence_type": "Document",
+      "key": "Reproducibility_Check::Probe_Architectural_Details",
+      "operation": "Probe_Architectural_Details",
+      "rationale": "Architectural details are typically described in the paper.",
+      "tool_category": "Reproducibility_Check"
+    },
+    {
+      "evidence_type": "Document",
+      "key": "Reproducibility_Check::Report_Replication_Failure",
+      "operation": "Report_Replication_Failure",
+      "rationale": "Replication failures are documented in research reports.",
+      "tool_category": "Reproducibility_Check"
+    },
+    {
+      "evidence_type": "Document",
+      "key": "Reproducibility_Check::Specify_Data_Source_and_Filtering",
+      "operation": "Specify_Data_Source_and_Filtering",
+      "rationale": "Data sources and filtering methods are usually detailed in the paper.",
+      "tool_category": "Reproducibility_Check"
+    },
+    {
+      "evidence_type": "Statistical",
+      "key": "Results_Analysis::Compare_to_Random_Baseline",
+      "operation": "Compare_to_Random_Baseline",
+      "rationale": "Comparative analysis often involves statistical evaluation.",
+      "tool_category": "Results_Analysis"
+    },
+    {
+      "evidence_type": "Table",
+      "key": "Results_Analysis::Identify_Key_Performance_Strengths",
+      "operation": "Identify_Key_Performance_Strengths",
+      "rationale": "Performance strengths are typically summarized in tables.",
+      "tool_category": "Results_Analysis"
+    },
+    {
+      "evidence_type": "Document",
+      "key": "Results_Analysis::Reframe_Results_Aspect",
+      "operation": "Reframe_Results_Aspect",
+      "rationale": "Reframing results involves narrative analysis found in the text.",
+      "tool_category": "Results_Analysis"
+    },
+    {
+      "evidence_type": "Statistical",
+      "key": "Results_Analysis::Spotlight_Disproportionate_Gain",
+      "operation": "Spotlight_Disproportionate_Gain",
+      "rationale": "Spotlighting gains typically requires statistical evidence.",
+      "tool_category": "Results_Analysis"
+    },
+    {
+      "evidence_type": "Statistical",
+      "key": "Results_Analysis::Verify_Synergistic_Effect",
+      "operation": "Verify_Synergistic_Effect",
+      "rationale": "Verifying effects often relies on statistical analysis.",
+      "tool_category": "Results_Analysis"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Strategic_Positioning::Acknowledge_Praise_and_Set_Agenda",
+      "operation": "Acknowledge_Praise_and_Set_Agenda",
+      "rationale": "Acknowledgment and agenda-setting are typically expressed in text.",
+      "tool_category": "Strategic_Positioning"
+    },
+    {
+      "evidence_type": "Document",
+      "key": "Strategic_Positioning::Assess_Contribution_Scope",
+      "operation": "Assess_Contribution_Scope",
+      "rationale": "Assessing contribution scope involves narrative analysis.",
+      "tool_category": "Strategic_Positioning"
+    },
+    {
+      "evidence_type": "Document",
+      "key": "Strategic_Positioning::Leverage_Positive_Feedback",
+      "operation": "Leverage_Positive_Feedback",
+      "rationale": "Leveraging feedback is often documented in reviewer comments.",
+      "tool_category": "Strategic_Positioning"
+    },
+    {
+      "evidence_type": "Document",
+      "key": "Strategic_Positioning::Reframe_Evaluation_Criteria",
+      "operation": "Reframe_Evaluation_Criteria",
+      "rationale": "Reframing evaluation criteria is typically discussed in the text.",
+      "tool_category": "Strategic_Positioning"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Strategic_Positioning::Synthesize_Contribution_Flow",
+      "operation": "Synthesize_Contribution_Flow",
+      "rationale": "Synthesizing contributions is often articulated in the narrative.",
+      "tool_category": "Strategic_Positioning"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Strategic_Positioning::Synthesize_Research_Challenge",
+      "operation": "Synthesize_Research_Challenge",
+      "rationale": "Research challenges are typically discussed in the text.",
+      "tool_category": "Strategic_Positioning"
+    },
+    {
+      "evidence_type": "Document",
+      "key": "Strategic_Reframing::Contrast_Method_Capabilities",
+      "operation": "Contrast_Method_Capabilities",
+      "rationale": "Contrasting capabilities is often detailed in the paper.",
+      "tool_category": "Strategic_Reframing"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Strategic_Reframing::De-Emphasize_Claim",
+      "operation": "De-Emphasize_Claim",
+      "rationale": "De-emphasizing claims is typically articulated in the narrative.",
+      "tool_category": "Strategic_Reframing"
+    },
+    {
+      "evidence_type": "Document",
+      "key": "Strategic_Reframing::Define_Applicability_Domain",
+      "operation": "Define_Applicability_Domain",
+      "rationale": "Defining applicability domains is often documented in the paper.",
+      "tool_category": "Strategic_Reframing"
+    },
+    {
+      "evidence_type": "Text",
+      "key": "Strategic_Reframing::Recontextualize_Research_Goal",
+      "operation": "Recontextualize_Research_Goal",
+      "rationale": "Recontextualizing goals is typically discussed in the text.",
+      "tool_category": "Strategic_Reframing"
+    },
+    {
+      "evidence_type": "Document",
+      "key": "Strategic_Reframing::Redefine_Task_Scope",
+      "operation": "Redefine_Task_Scope",
+      "rationale": "Redefining task scope is often detailed in the paper.",
+      "tool_category": "Strategic_Reframing"
+    },
+    {
+      "evidence_type": "Symbolic",
+      "key": "Theoretical_Analysis::Contrast_ELBO_Derivations",
+      "operation": "Contrast_ELBO_Derivations",
+      "rationale": "Contrasting derivations involves mathematical analysis.",
+      "tool_category": "Theoretical_Analysis"
+    },
+    {
+      "evidence_type": "Citation",
+      "key": "Theoretical_Analysis::Contrast_with_Prior_Work",
+      "operation": "Contrast_with_Prior_Work",
+      "rationale": "Contrasting with prior work involves citing previous research.",
+      "tool_category": "Theoretical_Analysis"
+    },
+    {
+      "evidence_type": "Document",
+      "key": "Theoretical_Analysis::Explain_Definition_Components",
+      "operation": "Explain_Definition_Components",
+      "rationale": "Explaining definitions is typically found in the text.",
+      "tool_category": "Theoretical_Analysis"
+    },
+    {
+      "evidence_type": "Document",
+      "key": "Theoretical_Analysis::Extend_Theory",
+      "operation": "Extend_Theory",
+      "rationale": "Extending theory is often documented in the paper.",
+      "tool_category": "Theoretical_Analysis"
+    },
+    {
+      "evidence_type": "Symbolic",
+      "key": "Theoretical_Analysis::Probe_Approximation_Limits",
+      "operation": "Probe_Approximation_Limits",
+      "rationale": "This operation likely involves mathematical analysis to determine the limits of approximation in a theoretical context.",
+      "tool_category": "Theoretical_Analysis"
+    },
+    {
+      "evidence_type": "Logical",
+      "key": "Theoretical_Analysis::Probe_Reasoning_Capability",
+      "operation": "Probe_Reasoning_Capability",
+      "rationale": "This operation assesses the logical reasoning capabilities, which typically requires logical proofs or reasoning frameworks.",
+      "tool_category": "Theoretical_Analysis"
+    }
+  ],
+  "mapping": {
+    "Algorithmic_Analysis::Contrast_With_Baseline_Modifications": "Document",
+    "Algorithmic_Analysis::Detect_Logical_Inconsistency": "Logical",
+    "Algorithmic_Analysis::Explain_Rank_Adjustment_Mechanism": "Text",
+    "Algorithmic_Analysis::Identify_Efficiency_Gap": "Statistical",
+    "Algorithmic_Analysis::Identify_Greedy_Optimization_Flaw": "Logical",
+    "Algorithmic_Analysis::Interpret_Sample_Complexity_Rate": "Statistical",
+    "Comparative_Analysis::Benchmark_Against_SOTA": "Statistical",
+    "Comparative_Analysis::Contextualize_Performance_Gap": "Text",
+    "Comparative_Analysis::Explain_Baseline_Incomparability": "Text",
+    "Comparative_Analysis::Identify_Minimal_Difference": "Statistical",
+    "Comparative_Analysis::Quantify_Parameter_Scalability": "Statistical",
+    "Comparative_Analysis::Reference_Diffusion_Comparison": "Citation",
+    "Conceptual_Clarification::Accept_and_Implement_Terminology_Change": "Text",
+    "Conceptual_Clarification::Differentiate_Problem_Settings": "Text",
+    "Conceptual_Clarification::Distinguish_Guidance_vs_Search": "Text",
+    "Conceptual_Clarification::Explain_Mathematical_Definition": "Symbolic",
+    "Conceptual_Clarification::Justify_Data_Augmentation": "Text",
+    "Conceptual_Clarification::Justify_Practicality": "Text",
+    "Contextual_Clarification::Acknowledge_Feedback": "Document",
+    "Contextual_Clarification::Clarify_Experimental_Setup": "Text",
+    "Contextual_Clarification::Correct_Attribution": "Citation",
+    "Contextual_Clarification::Define_Parameter": "Text",
+    "Contextual_Clarification::Explain_Utility_Trace": "Text",
+    "Contextual_Clarification::Question_Dataset_Composition": "Text",
+    "Empirical_Validation::Cross_Reference_Performance_Data": "Statistical",
+    "Empirical_Validation::Measure_Training_Time": "Statistical",
+    "Empirical_Validation::Present_Ablation_Results": "Statistical",
+    "Empirical_Validation::Reference_Ablation_Studies": "Citation",
+    "Empirical_Validation::Validate_Finite_K_Choice": "Statistical",
+    "Error_Analysis::Diagnose_Model_Failure_Cause": "Text",
+    "Error_Analysis::Document_Semantic_Drift": "Document",
+    "Error_Analysis::Explain_Performance_Gap": "Text",
+    "Error_Analysis::Identify_Missing_Analysis": "Text",
+    "Error_Analysis::Identify_and_Document_Failure_Cases": "Document",
+    "Experimental_Design_Check::Assess_Comparison_Fairness": "Table",
+    "Experimental_Design_Check::Identify_Missing_Baseline": "Text",
+    "Experimental_Design_Check::Identify_Missing_Baselines": "Citation",
+    "Experimental_Design_Check::Request_Additional_Metrics": "Text",
+    "Experimental_Design_Check::Suggest_Additional_Analysis": "Text",
+    "Experimental_Design_Check::Suggest_Additional_Baseline": "Text",
+    "Experimental_Validation::Add_Dataset_Results": "Statistical",
+    "Experimental_Validation::Contrast_Performance": "Statistical",
+    "Experimental_Validation::Demonstrate_Noise_Robustness": "Statistical",
+    "Experimental_Validation::Extend_Architecture_Coverage": "Text",
+    "Experimental_Validation::Relate_Synthetic_To_Real": "Statistical",
+    "Experimental_Validation::Run_Ablation_Experiment": "Statistical",
+    "Hyperparameter_Analysis::Assess_Tuning_Complexity": "Statistical",
+    "Hyperparameter_Analysis::Guide_K_Selection": "Statistical",
+    "Hyperparameter_Analysis::Illustrate_Trade-off": "Figure",
+    "Hyperparameter_Analysis::Probe_Rationale_Coverage": "Document",
+    "Hyperparameter_Analysis::Reference_Tuning_Procedure": "Document",
+    "Hyperparameter_Analysis::Sweep_Threshold_Parameter": "Statistical",
+    "Hypothesis_Testing::Contradictory_Evidence_Check": "Text",
+    "Hypothesis_Testing::Demand_High-Stakes_Validation": "Statistical",
+    "Hypothesis_Testing::Explain_Alternative_Method_Results": "Document",
+    "Hypothesis_Testing::Propose_Ablation_Experiment": "Statistical",
+    "Hypothesis_Testing::Reframe_Methodological_Contribution": "Text",
+    "Hypothesis_Testing::Verify_Correlation_Claim": "Statistical",
+    "Literature_Cross_Check::Assess_Novelty": "Citation",
+    "Literature_Cross_Check::Contrast_Baseline": "Citation",
+    "Literature_Cross_Check::Contrast_With_Prior_Work": "Citation",
+    "Literature_Cross_Check::Identify_Missing_Baseline": "Citation",
+    "Literature_Cross_Check::Identify_Missing_Baselines": "Citation",
+    "Literature_Cross_Check::Identify_Missing_Reference": "Citation",
+    "Mathematical_Verification::Baseline_Suitability_Check": "Logical",
+    "Mathematical_Verification::Check_Differentiability_Requirement": "Symbolic",
+    "Mathematical_Verification::Clarify_Metric_Definition": "Text",
+    "Mathematical_Verification::Identify_Definition_Inconsistency": "Logical",
+    "Mathematical_Verification::Probe_Alternative_Derivations": "Symbolic",
+    "Mathematical_Verification::Quantify_Skill_Complexity": "Statistical",
+    "Methodological_Analysis::Acknowledge_Innovative_Combination": "Text",
+    "Methodological_Analysis::Check_CTDE_Consistency": "Logical",
+    "Methodological_Analysis::Clarify_Algorithm_Mechanics": "Document",
+    "Methodological_Analysis::Evaluate_Evidence_Strength": "Statistical",
+    "Methodological_Analysis::Question_Design_Choice": "Text",
+    "Methodological_Clarification::Explain_Robustness_Design": "Document",
+    "Methodological_Clarification::Identify_Interface_Ambiguity": "Text",
+    "Methodological_Clarification::Request_Explicit_Definition": "Text",
+    "Methodological_Clarification::Request_Fine_Tuning_Details": "Document",
+    "Methodological_Clarification::Verify_Parameter_Sharing": "Document",
+    "Methodological_Clarification::Verify_Training_Input": "Document",
+    "Methodological_Verification::Analyze_Score_Comparability": "Statistical",
+    "Methodological_Verification::Challenge_Data_Coverage_Assumption": "Document",
+    "Methodological_Verification::Evaluate_fMRI_Averaging_Window": "Statistical",
+    "Methodological_Verification::Probe_Inference_Ambiguity": "Text",
+    "Methodological_Verification::Request_Process_Clarification": "Text",
+    "Methodological_Verification::Test_External_Validity_Assumption": "Statistical",
+    "Novelty_Assessment::Articulate_Contributions": "Text",
+    "Novelty_Assessment::Assess_Combination_Novelty": "Text",
+    "Novelty_Assessment::Contrast_With_General_Methods": "Text",
+    "Novelty_Assessment::Evaluate_Component_Innovation": "Text",
+    "Novelty_Assessment::Highlight_Adaptations": "Text",
+    "Novelty_Assessment::Identify_Novel_Component": "Text",
+    "Presentation_Check::Acknowledge_Formatting_Correction": "Document",
+    "Presentation_Check::Clarify_Algorithm_Notations": "Text",
+    "Presentation_Check::Evaluate_Style_Consistency": "Document",
+    "Presentation_Check::Identify_Inconsistencies": "Text",
+    "Presentation_Check::Identify_Quality_Issues_in_Visuals": "Figure",
+    "Presentation_Check::Identify_Visual_Ambiguity": "Figure",
+    "Reproducibility_Check::Assess_Hyperparameter_Sensitivity": "Statistical",
+    "Reproducibility_Check::Demand_Method_Details": "Document",
+    "Reproducibility_Check::Inquire_About_Data_Release": "Document",
+    "Reproducibility_Check::Probe_Architectural_Details": "Document",
+    "Reproducibility_Check::Report_Replication_Failure": "Document",
+    "Reproducibility_Check::Specify_Data_Source_and_Filtering": "Document",
+    "Results_Analysis::Compare_to_Random_Baseline": "Statistical",
+    "Results_Analysis::Identify_Key_Performance_Strengths": "Table",
+    "Results_Analysis::Reframe_Results_Aspect": "Document",
+    "Results_Analysis::Spotlight_Disproportionate_Gain": "Statistical",
+    "Results_Analysis::Verify_Synergistic_Effect": "Statistical",
+    "Strategic_Positioning::Acknowledge_Praise_and_Set_Agenda": "Text",
+    "Strategic_Positioning::Assess_Contribution_Scope": "Document",
+    "Strategic_Positioning::Leverage_Positive_Feedback": "Document",
+    "Strategic_Positioning::Reframe_Evaluation_Criteria": "Document",
+    "Strategic_Positioning::Synthesize_Contribution_Flow": "Text",
+    "Strategic_Positioning::Synthesize_Research_Challenge": "Text",
+    "Strategic_Reframing::Contrast_Method_Capabilities": "Document",
+    "Strategic_Reframing::De-Emphasize_Claim": "Text",
+    "Strategic_Reframing::Define_Applicability_Domain": "Document",
+    "Strategic_Reframing::Recontextualize_Research_Goal": "Text",
+    "Strategic_Reframing::Redefine_Task_Scope": "Document",
+    "Theoretical_Analysis::Contrast_ELBO_Derivations": "Symbolic",
+    "Theoretical_Analysis::Contrast_with_Prior_Work": "Citation",
+    "Theoretical_Analysis::Explain_Definition_Components": "Document",
+    "Theoretical_Analysis::Extend_Theory": "Document",
+    "Theoretical_Analysis::Probe_Approximation_Limits": "Symbolic",
+    "Theoretical_Analysis::Probe_Reasoning_Capability": "Logical"
+  },
+  "raw_responses": [
+    {
+      "chunk": 1,
+      "response": "{\n  \"items\": [\n    {\n      \"key\": \"Contextual_Clarification::Define_Parameter\",\n      \"tool_category\": \"Contextual_Clarification\",\n      \"operation\": \"Define_Parameter\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"Defining parameters involves textual explanations and clarifications.\"\n    },\n    {\n      \"key\": \"Literature_Cross_Check::Assess_Novelty\",\n      \"tool_category\": \"Literature_Cross_Check\",\n      \"operation\": \"Assess_Novelty\",\n      \"evidence_type\": \"Citation\",\n      \"rationale\": \"Assessing novelty requires referencing prior works to establish uniqueness.\"\n    },\n    {\n      \"key\": \"Literature_Cross_Check::Contrast_Baseline\",\n      \"tool_category\": \"Literature_Cross_Check\",\n      \"operation\": \"Contrast_Baseline\",\n      \"evidence_type\": \"Citation\",\n      \"rationale\": \"Contrasting with baseline methods involves citing existing literature.\"\n    },\n    {\n      \"key\": \"Literature_Cross_Check::Contrast_With_Prior_Work\",\n      \"tool_category\": \"Literature_Cross_Check\",\n      \"operation\": \"Contrast_With_Prior_Work\",\n      \"evidence_type\": \"Citation\",\n      \"rationale\": \"This operation requires referencing previous studies for comparison.\"\n    },\n    {\n      \"key\": \"Literature_Cross_Check::Identify_Missing_Baseline\",\n      \"tool_category\": \"Literature_Cross_Check\",\n      \"operation\": \"Identify_Missing_Baseline\",\n      \"evidence_type\": \"Citation\",\n      \"rationale\": \"Identifying missing baselines involves checking against existing literature.\"\n    },\n    {\n      \"key\": \"Literature_Cross_Check::Identify_Missing_Baselines\",\n      \"tool_category\": \"Literature_Cross_Check\",\n      \"operation\": \"Identify_Missing_Baselines\",\n      \"evidence_type\": \"Citation\",\n      \"rationale\": \"This requires referencing prior works to find gaps in the literature.\"\n    },\n    {\n      \"key\": \"Contextual_Clarification::Clarify_Experimental_Setup\",\n      \"tool_category\": \"Contextual_Clarification\",\n      \"operation\": \"Clarify_Experimental_Setup\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"Clarifying experimental setups typically involves descriptive text.\"\n    },\n    {\n      \"key\": \"Experimental_Design_Check::Assess_Comparison_Fairness\",\n      \"tool_category\": \"Experimental_Design_Check\",\n      \"operation\": \"Assess_Comparison_Fairness\",\n      \"evidence_type\": \"Table\",\n      \"rationale\": \"Assessing fairness often involves analyzing data presented in tables.\"\n    },\n    {\n      \"key\": \"Experimental_Design_Check::Identify_Missing_Baselines\",\n      \"tool_category\": \"Experimental_Design_Check\",\n      \"operation\": \"Identify_Missing_Baselines\",\n      \"evidence_type\": \"Citation\",\n      \"rationale\": \"This requires checking against existing methodologies in literature.\"\n    },\n    {\n      \"key\": \"Experimental_Design_Check::Request_Additional_Metrics\",\n      \"tool_category\": \"Experimental_Design_Check\",\n      \"operation\": \"Request_Additional_Metrics\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"Requesting metrics involves textual clarification of needed information.\"\n    },\n    {\n      \"key\": \"Experimental_Design_Check::Suggest_Additional_Analysis\",\n      \"tool_category\": \"Experimental_Design_Check\",\n      \"operation\": \"Suggest_Additional_Analysis\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"Suggestions for analysis are typically conveyed through text.\"\n    },\n    {\n      \"key\": \"Literature_Cross_Check::Identify_Missing_Reference\",\n      \"tool_category\": \"Literature_Cross_Check\",\n      \"operation\": \"Identify_Missing_Reference\",\n      \"evidence_type\": \"Citation\",\n      \"rationale\": \"Identifying missing references involves checking existing literature.\"\n    },\n    {\n      \"key\": \"Algorithmic_Analysis::Contrast_With_Baseline_Modifications\",\n      \"tool_category\": \"Algorithmic_Analysis\",\n      \"operation\": \"Contrast_With_Baseline_Modifications\",\n      \"evidence_type\": \"Document\",\n      \"rationale\": \"Contrasting modifications often requires detailed documentation.\"\n    },\n    {\n      \"key\": \"Algorithmic_Analysis::Detect_Logical_Inconsistency\",\n      \"tool_category\": \"Algorithmic_Analysis\",\n      \"operation\": \"Detect_Logical_Inconsistency\",\n      \"evidence_type\": \"Logical\",\n      \"rationale\": \"Detecting inconsistencies involves logical reasoning and proofs.\"\n    },\n    {\n      \"key\": \"Algorithmic_Analysis::Explain_Rank_Adjustment_Mechanism\",\n      \"tool_category\": \"Algorithmic_Analysis\",\n      \"operation\": \"Explain_Rank_Adjustment_Mechanism\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"Explaining mechanisms is typically done through textual descriptions.\"\n    },\n    {\n      \"key\": \"Algorithmic_Analysis::Identify_Efficiency_Gap\",\n      \"tool_category\": \"Algorithmic_Analysis\",\n      \"operation\": \"Identify_Efficiency_Gap\",\n      \"evidence_type\": \"Statistical\",\n      \"rationale\": \"Identifying gaps in efficiency often requires statistical analysis.\"\n    },\n    {\n      \"key\": \"Algorithmic_Analysis::Identify_Greedy_Optimization_Flaw\",\n      \"tool_category\": \"Algorithmic_Analysis\",\n      \"operation\": \"Identify_Greedy_Optimization_Flaw\",\n      \"evidence_type\": \"Logical\",\n      \"rationale\": \"Identifying flaws in optimization involves logical reasoning.\"\n    },\n    {\n      \"key\": \"Algorithmic_Analysis::Interpret_Sample_Complexity_Rate\",\n      \"tool_category\": \"Algorithmic_Analysis\",\n      \"operation\": \"Interpret_Sample_Complexity_Rate\",\n      \"evidence_type\": \"Statistical\",\n      \"rationale\": \"Interpreting complexity rates typically involves statistical metrics.\"\n    },\n    {\n      \"key\": \"Comparative_Analysis::Benchmark_Against_SOTA\",\n      \"tool_category\": \"Comparative_Analysis\",\n      \"operation\": \"Benchmark_Against_SOTA\",\n      \"evidence_type\": \"Statistical\",\n      \"rationale\": \"Benchmarking requires statistical comparisons against state-of-the-art.\"\n    },\n    {\n      \"key\": \"Comparative_Analysis::Contextualize_Performance_Gap\",\n      \"tool_category\": \"Comparative_Analysis\",\n      \"operation\": \"Contextualize_Performance_Gap\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"Contextualizing gaps is typically done through narrative explanations.\"\n    },\n    {\n      \"key\": \"Comparative_Analysis::Explain_Baseline_Incomparability\",\n      \"tool_category\": \"Comparative_Analysis\",\n      \"operation\": \"Explain_Baseline_Incomparability\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"Explaining incomparability involves textual clarification.\"\n    },\n    {\n      \"key\": \"Comparative_Analysis::Identify_Minimal_Difference\",\n      \"tool_category\": \"Comparative_Analysis\",\n      \"operation\": \"Identify_Minimal_Difference\",\n      \"evidence_type\": \"Statistical\",\n      \"rationale\": \"Identifying differences often requires statistical analysis.\"\n    },\n    {\n      \"key\": \"Comparative_Analysis::Quantify_Parameter_Scalability\",\n      \"tool_category\": \"Comparative_Analysis\",\n      \"operation\": \"Quantify_Parameter_Scalability\",\n      \"evidence_type\": \"Statistical\",\n      \"rationale\": \"Quantifying scalability involves statistical metrics.\"\n    },\n    {\n      \"key\": \"Comparative_Analysis::Reference_Diffusion_Comparison\",\n      \"tool_category\": \"Comparative_Analysis\",\n      \"operation\": \"Reference_Diffusion_Comparison\",\n      \"evidence_type\": \"Citation\",\n      \"rationale\": \"Comparing diffusion methods requires referencing prior works.\"\n    },\n    {\n      \"key\": \"Conceptual_Clarification::Accept_and_Implement_Terminology_Change\",\n      \"tool_category\": \"Conceptual_Clarification\",\n      \"operation\": \"Accept_and_Implement_Terminology_Change\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"Implementing terminology changes involves textual documentation.\"\n    }\n  ]\n}"
+    },
+    {
+      "chunk": 2,
+      "response": "{\n  \"items\": [\n    {\n      \"key\": \"Conceptual_Clarification::Differentiate_Problem_Settings\",\n      \"tool_category\": \"Conceptual_Clarification\",\n      \"operation\": \"Differentiate_Problem_Settings\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"This operation involves clarifying concepts and definitions, which typically requires narrative validation.\"\n    },\n    {\n      \"key\": \"Conceptual_Clarification::Distinguish_Guidance_vs_Search\",\n      \"tool_category\": \"Conceptual_Clarification\",\n      \"operation\": \"Distinguish_Guidance_vs_Search\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"This operation involves clarifying concepts and definitions, which typically requires narrative validation.\"\n    },\n    {\n      \"key\": \"Conceptual_Clarification::Explain_Mathematical_Definition\",\n      \"tool_category\": \"Conceptual_Clarification\",\n      \"operation\": \"Explain_Mathematical_Definition\",\n      \"evidence_type\": \"Symbolic\",\n      \"rationale\": \"This operation involves mathematical definitions, which require symbolic evidence.\"\n    },\n    {\n      \"key\": \"Conceptual_Clarification::Justify_Data_Augmentation\",\n      \"tool_category\": \"Conceptual_Clarification\",\n      \"operation\": \"Justify_Data_Augmentation\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"This operation involves providing justification, which typically requires narrative validation.\"\n    },\n    {\n      \"key\": \"Conceptual_Clarification::Justify_Practicality\",\n      \"tool_category\": \"Conceptual_Clarification\",\n      \"operation\": \"Justify_Practicality\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"This operation involves providing justification, which typically requires narrative validation.\"\n    },\n    {\n      \"key\": \"Contextual_Clarification::Acknowledge_Feedback\",\n      \"tool_category\": \"Contextual_Clarification\",\n      \"operation\": \"Acknowledge_Feedback\",\n      \"evidence_type\": \"Document\",\n      \"rationale\": \"This operation involves addressing feedback, which is often documented in peer reviews.\"\n    },\n    {\n      \"key\": \"Contextual_Clarification::Correct_Attribution\",\n      \"tool_category\": \"Contextual_Clarification\",\n      \"operation\": \"Correct_Attribution\",\n      \"evidence_type\": \"Citation\",\n      \"rationale\": \"This operation involves ensuring proper attribution to prior work, which requires citation.\"\n    },\n    {\n      \"key\": \"Contextual_Clarification::Explain_Utility_Trace\",\n      \"tool_category\": \"Contextual_Clarification\",\n      \"operation\": \"Explain_Utility_Trace\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"This operation involves explaining a concept, which typically requires narrative validation.\"\n    },\n    {\n      \"key\": \"Contextual_Clarification::Question_Dataset_Composition\",\n      \"tool_category\": \"Contextual_Clarification\",\n      \"operation\": \"Question_Dataset_Composition\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"This operation involves questioning dataset composition, which typically requires narrative validation.\"\n    },\n    {\n      \"key\": \"Empirical_Validation::Cross_Reference_Performance_Data\",\n      \"tool_category\": \"Empirical_Validation\",\n      \"operation\": \"Cross_Reference_Performance_Data\",\n      \"evidence_type\": \"Statistical\",\n      \"rationale\": \"This operation involves validating performance data, which typically requires statistical evidence.\"\n    },\n    {\n      \"key\": \"Empirical_Validation::Measure_Training_Time\",\n      \"tool_category\": \"Empirical_Validation\",\n      \"operation\": \"Measure_Training_Time\",\n      \"evidence_type\": \"Statistical\",\n      \"rationale\": \"This operation involves measuring training time, which is a quantitative metric.\"\n    },\n    {\n      \"key\": \"Empirical_Validation::Present_Ablation_Results\",\n      \"tool_category\": \"Empirical_Validation\",\n      \"operation\": \"Present_Ablation_Results\",\n      \"evidence_type\": \"Statistical\",\n      \"rationale\": \"This operation involves presenting results from ablation studies, which typically require statistical evidence.\"\n    },\n    {\n      \"key\": \"Empirical_Validation::Reference_Ablation_Studies\",\n      \"tool_category\": \"Empirical_Validation\",\n      \"operation\": \"Reference_Ablation_Studies\",\n      \"evidence_type\": \"Citation\",\n      \"rationale\": \"This operation involves referencing prior ablation studies, which requires citation.\"\n    },\n    {\n      \"key\": \"Empirical_Validation::Validate_Finite_K_Choice\",\n      \"tool_category\": \"Empirical_Validation\",\n      \"operation\": \"Validate_Finite_K_Choice\",\n      \"evidence_type\": \"Statistical\",\n      \"rationale\": \"This operation involves validating a choice related to finite K, which typically requires statistical evidence.\"\n    },\n    {\n      \"key\": \"Error_Analysis::Diagnose_Model_Failure_Cause\",\n      \"tool_category\": \"Error_Analysis\",\n      \"operation\": \"Diagnose_Model_Failure_Cause\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"This operation involves diagnosing failure causes, which typically requires narrative validation.\"\n    },\n    {\n      \"key\": \"Error_Analysis::Document_Semantic_Drift\",\n      \"tool_category\": \"Error_Analysis\",\n      \"operation\": \"Document_Semantic_Drift\",\n      \"evidence_type\": \"Document\",\n      \"rationale\": \"This operation involves documenting semantic drift, which is often recorded in documents.\"\n    },\n    {\n      \"key\": \"Error_Analysis::Explain_Performance_Gap\",\n      \"tool_category\": \"Error_Analysis\",\n      \"operation\": \"Explain_Performance_Gap\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"This operation involves explaining performance gaps, which typically requires narrative validation.\"\n    },\n    {\n      \"key\": \"Error_Analysis::Identify_Missing_Analysis\",\n      \"tool_category\": \"Error_Analysis\",\n      \"operation\": \"Identify_Missing_Analysis\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"This operation involves identifying missing analyses, which typically requires narrative validation.\"\n    },\n    {\n      \"key\": \"Error_Analysis::Identify_and_Document_Failure_Cases\",\n      \"tool_category\": \"Error_Analysis\",\n      \"operation\": \"Identify_and_Document_Failure_Cases\",\n      \"evidence_type\": \"Document\",\n      \"rationale\": \"This operation involves identifying and documenting failure cases, which is often recorded in documents.\"\n    },\n    {\n      \"key\": \"Experimental_Design_Check::Identify_Missing_Baseline\",\n      \"tool_category\": \"Experimental_Design_Check\",\n      \"operation\": \"Identify_Missing_Baseline\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"This operation involves identifying missing baselines, which typically requires narrative validation.\"\n    },\n    {\n      \"key\": \"Experimental_Design_Check::Suggest_Additional_Baseline\",\n      \"tool_category\": \"Experimental_Design_Check\",\n      \"operation\": \"Suggest_Additional_Baseline\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"This operation involves suggesting additional baselines, which typically requires narrative validation.\"\n    },\n    {\n      \"key\": \"Experimental_Validation::Add_Dataset_Results\",\n      \"tool_category\": \"Experimental_Validation\",\n      \"operation\": \"Add_Dataset_Results\",\n      \"evidence_type\": \"Statistical\",\n      \"rationale\": \"This operation involves adding results from datasets, which typically requires statistical evidence.\"\n    },\n    {\n      \"key\": \"Experimental_Validation::Contrast_Performance\",\n      \"tool_category\": \"Experimental_Validation\",\n      \"operation\": \"Contrast_Performance\",\n      \"evidence_type\": \"Statistical\",\n      \"rationale\": \"This operation involves contrasting performance, which typically requires statistical evidence.\"\n    },\n    {\n      \"key\": \"Experimental_Validation::Demonstrate_Noise_Robustness\",\n      \"tool_category\": \"Experimental_Validation\",\n      \"operation\": \"Demonstrate_Noise_Robustness\",\n      \"evidence_type\": \"Statistical\",\n      \"rationale\": \"This operation involves demonstrating robustness to noise, which typically requires statistical evidence.\"\n    },\n    {\n      \"key\": \"Experimental_Validation::Extend_Architecture_Coverage\",\n      \"tool_category\": \"Experimental_Validation\",\n      \"operation\": \"Extend_Architecture_Coverage\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"This operation involves extending architecture coverage, which typically requires narrative validation.\"\n    }\n  ]\n}"
+    },
+    {
+      "chunk": 3,
+      "response": "{\n  \"items\": [\n    {\n      \"key\": \"Experimental_Validation::Relate_Synthetic_To_Real\",\n      \"tool_category\": \"Experimental_Validation\",\n      \"operation\": \"Relate_Synthetic_To_Real\",\n      \"evidence_type\": \"Statistical\",\n      \"rationale\": \"This operation typically involves comparing synthetic data with real-world data, which requires statistical analysis.\"\n    },\n    {\n      \"key\": \"Experimental_Validation::Run_Ablation_Experiment\",\n      \"tool_category\": \"Experimental_Validation\",\n      \"operation\": \"Run_Ablation_Experiment\",\n      \"evidence_type\": \"Statistical\",\n      \"rationale\": \"Ablation experiments assess the impact of specific components, often using statistical methods to analyze results.\"\n    },\n    {\n      \"key\": \"Hyperparameter_Analysis::Assess_Tuning_Complexity\",\n      \"tool_category\": \"Hyperparameter_Analysis\",\n      \"operation\": \"Assess_Tuning_Complexity\",\n      \"evidence_type\": \"Statistical\",\n      \"rationale\": \"This involves analyzing the complexity of tuning hyperparameters, which is a quantitative assessment.\"\n    },\n    {\n      \"key\": \"Hyperparameter_Analysis::Guide_K_Selection\",\n      \"tool_category\": \"Hyperparameter_Analysis\",\n      \"operation\": \"Guide_K_Selection\",\n      \"evidence_type\": \"Statistical\",\n      \"rationale\": \"Guiding K selection typically involves statistical analysis of performance metrics.\"\n    },\n    {\n      \"key\": \"Hyperparameter_Analysis::Illustrate_Trade-off\",\n      \"tool_category\": \"Hyperparameter_Analysis\",\n      \"operation\": \"Illustrate_Trade-off\",\n      \"evidence_type\": \"Figure\",\n      \"rationale\": \"Illustrating trade-offs often requires visual representations of performance metrics.\"\n    },\n    {\n      \"key\": \"Hyperparameter_Analysis::Probe_Rationale_Coverage\",\n      \"tool_category\": \"Hyperparameter_Analysis\",\n      \"operation\": \"Probe_Rationale_Coverage\",\n      \"evidence_type\": \"Document\",\n      \"rationale\": \"This operation involves examining the rationale behind hyperparameter choices, which can be documented.\"\n    },\n    {\n      \"key\": \"Hyperparameter_Analysis::Reference_Tuning_Procedure\",\n      \"tool_category\": \"Hyperparameter_Analysis\",\n      \"operation\": \"Reference_Tuning_Procedure\",\n      \"evidence_type\": \"Document\",\n      \"rationale\": \"Referencing a tuning procedure involves documenting the steps and methods used.\"\n    },\n    {\n      \"key\": \"Hyperparameter_Analysis::Sweep_Threshold_Parameter\",\n      \"tool_category\": \"Hyperparameter_Analysis\",\n      \"operation\": \"Sweep_Threshold_Parameter\",\n      \"evidence_type\": \"Statistical\",\n      \"rationale\": \"Sweeping parameters involves statistical analysis of results across different thresholds.\"\n    },\n    {\n      \"key\": \"Hypothesis_Testing::Contradictory_Evidence_Check\",\n      \"tool_category\": \"Hypothesis_Testing\",\n      \"operation\": \"Contradictory_Evidence_Check\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"Checking for contradictory evidence typically involves textual analysis of claims and supporting evidence.\"\n    },\n    {\n      \"key\": \"Hypothesis_Testing::Demand_High-Stakes_Validation\",\n      \"tool_category\": \"Hypothesis_Testing\",\n      \"operation\": \"Demand_High-Stakes_Validation\",\n      \"evidence_type\": \"Statistical\",\n      \"rationale\": \"High-stakes validation often requires rigorous statistical evidence to support claims.\"\n    },\n    {\n      \"key\": \"Hypothesis_Testing::Explain_Alternative_Method_Results\",\n      \"tool_category\": \"Hypothesis_Testing\",\n      \"operation\": \"Explain_Alternative_Method_Results\",\n      \"evidence_type\": \"Document\",\n      \"rationale\": \"Explaining results involves documenting the findings and interpretations of alternative methods.\"\n    },\n    {\n      \"key\": \"Hypothesis_Testing::Propose_Ablation_Experiment\",\n      \"tool_category\": \"Hypothesis_Testing\",\n      \"operation\": \"Propose_Ablation_Experiment\",\n      \"evidence_type\": \"Statistical\",\n      \"rationale\": \"Proposing an ablation experiment involves statistical reasoning about the effects of different components.\"\n    },\n    {\n      \"key\": \"Hypothesis_Testing::Reframe_Methodological_Contribution\",\n      \"tool_category\": \"Hypothesis_Testing\",\n      \"operation\": \"Reframe_Methodological_Contribution\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"Reframing contributions typically involves textual analysis and narrative construction.\"\n    },\n    {\n      \"key\": \"Hypothesis_Testing::Verify_Correlation_Claim\",\n      \"tool_category\": \"Hypothesis_Testing\",\n      \"operation\": \"Verify_Correlation_Claim\",\n      \"evidence_type\": \"Statistical\",\n      \"rationale\": \"Verifying correlation claims requires statistical analysis of data to confirm relationships.\"\n    },\n    {\n      \"key\": \"Mathematical_Verification::Baseline_Suitability_Check\",\n      \"tool_category\": \"Mathematical_Verification\",\n      \"operation\": \"Baseline_Suitability_Check\",\n      \"evidence_type\": \"Logical\",\n      \"rationale\": \"Checking the suitability of a baseline involves logical reasoning about the mathematical foundations.\"\n    },\n    {\n      \"key\": \"Mathematical_Verification::Check_Differentiability_Requirement\",\n      \"tool_category\": \"Mathematical_Verification\",\n      \"operation\": \"Check_Differentiability_Requirement\",\n      \"evidence_type\": \"Symbolic\",\n      \"rationale\": \"Checking differentiability involves symbolic analysis of mathematical functions.\"\n    },\n    {\n      \"key\": \"Mathematical_Verification::Clarify_Metric_Definition\",\n      \"tool_category\": \"Mathematical_Verification\",\n      \"operation\": \"Clarify_Metric_Definition\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"Clarifying metric definitions typically involves textual explanations and definitions.\"\n    },\n    {\n      \"key\": \"Mathematical_Verification::Identify_Definition_Inconsistency\",\n      \"tool_category\": \"Mathematical_Verification\",\n      \"operation\": \"Identify_Definition_Inconsistency\",\n      \"evidence_type\": \"Logical\",\n      \"rationale\": \"Identifying inconsistencies in definitions involves logical reasoning.\"\n    },\n    {\n      \"key\": \"Mathematical_Verification::Probe_Alternative_Derivations\",\n      \"tool_category\": \"Mathematical_Verification\",\n      \"operation\": \"Probe_Alternative_Derivations\",\n      \"evidence_type\": \"Symbolic\",\n      \"rationale\": \"Probing alternative derivations involves symbolic manipulation and analysis.\"\n    },\n    {\n      \"key\": \"Mathematical_Verification::Quantify_Skill_Complexity\",\n      \"tool_category\": \"Mathematical_Verification\",\n      \"operation\": \"Quantify_Skill_Complexity\",\n      \"evidence_type\": \"Statistical\",\n      \"rationale\": \"Quantifying complexity typically involves statistical measures.\"\n    },\n    {\n      \"key\": \"Methodological_Analysis::Acknowledge_Innovative_Combination\",\n      \"tool_category\": \"Methodological_Analysis\",\n      \"operation\": \"Acknowledge_Innovative_Combination\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"Acknowledging innovative combinations involves textual descriptions of methodologies.\"\n    },\n    {\n      \"key\": \"Methodological_Analysis::Check_CTDE_Consistency\",\n      \"tool_category\": \"Methodological_Analysis\",\n      \"operation\": \"Check_CTDE_Consistency\",\n      \"evidence_type\": \"Logical\",\n      \"rationale\": \"Checking consistency involves logical reasoning about the methodology.\"\n    },\n    {\n      \"key\": \"Methodological_Analysis::Clarify_Algorithm_Mechanics\",\n      \"tool_category\": \"Methodological_Analysis\",\n      \"operation\": \"Clarify_Algorithm_Mechanics\",\n      \"evidence_type\": \"Document\",\n      \"rationale\": \"Clarifying algorithm mechanics typically involves documentation of the algorithm's workings.\"\n    },\n    {\n      \"key\": \"Methodological_Analysis::Evaluate_Evidence_Strength\",\n      \"tool_category\": \"Methodological_Analysis\",\n      \"operation\": \"Evaluate_Evidence_Strength\",\n      \"evidence_type\": \"Statistical\",\n      \"rationale\": \"Evaluating evidence strength often requires statistical analysis of the evidence presented.\"\n    },\n    {\n      \"key\": \"Methodological_Analysis::Question_Design_Choice\",\n      \"tool_category\": \"Methodological_Analysis\",\n      \"operation\": \"Question_Design_Choice\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"Questioning design choices involves textual analysis and justification.\"\n    }\n  ]\n}"
+    },
+    {
+      "chunk": 4,
+      "response": "{\n  \"items\": [\n    {\n      \"key\": \"Methodological_Clarification::Explain_Robustness_Design\",\n      \"tool_category\": \"Methodological_Clarification\",\n      \"operation\": \"Explain_Robustness_Design\",\n      \"evidence_type\": \"Document\",\n      \"rationale\": \"This operation involves explaining the robustness design, which typically requires detailed documentation.\"\n    },\n    {\n      \"key\": \"Methodological_Clarification::Identify_Interface_Ambiguity\",\n      \"tool_category\": \"Methodological_Clarification\",\n      \"operation\": \"Identify_Interface_Ambiguity\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"Identifying interface ambiguity often involves textual analysis of the system's description.\"\n    },\n    {\n      \"key\": \"Methodological_Clarification::Request_Explicit_Definition\",\n      \"tool_category\": \"Methodological_Clarification\",\n      \"operation\": \"Request_Explicit_Definition\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"Requesting explicit definitions typically pertains to textual clarification.\"\n    },\n    {\n      \"key\": \"Methodological_Clarification::Request_Fine_Tuning_Details\",\n      \"tool_category\": \"Methodological_Clarification\",\n      \"operation\": \"Request_Fine_Tuning_Details\",\n      \"evidence_type\": \"Document\",\n      \"rationale\": \"Fine-tuning details are usually documented in the methodology section.\"\n    },\n    {\n      \"key\": \"Methodological_Clarification::Verify_Parameter_Sharing\",\n      \"tool_category\": \"Methodological_Clarification\",\n      \"operation\": \"Verify_Parameter_Sharing\",\n      \"evidence_type\": \"Document\",\n      \"rationale\": \"Verification of parameter sharing requires examination of documented methodologies.\"\n    },\n    {\n      \"key\": \"Methodological_Clarification::Verify_Training_Input\",\n      \"tool_category\": \"Methodological_Clarification\",\n      \"operation\": \"Verify_Training_Input\",\n      \"evidence_type\": \"Document\",\n      \"rationale\": \"Training input verification involves checking documented training setups.\"\n    },\n    {\n      \"key\": \"Methodological_Verification::Analyze_Score_Comparability\",\n      \"tool_category\": \"Methodological_Verification\",\n      \"operation\": \"Analyze_Score_Comparability\",\n      \"evidence_type\": \"Statistical\",\n      \"rationale\": \"Analyzing score comparability typically involves statistical analysis of scores.\"\n    },\n    {\n      \"key\": \"Methodological_Verification::Challenge_Data_Coverage_Assumption\",\n      \"tool_category\": \"Methodological_Verification\",\n      \"operation\": \"Challenge_Data_Coverage_Assumption\",\n      \"evidence_type\": \"Document\",\n      \"rationale\": \"Challenging assumptions about data coverage requires examination of documented data sources.\"\n    },\n    {\n      \"key\": \"Methodological_Verification::Evaluate_fMRI_Averaging_Window\",\n      \"tool_category\": \"Methodological_Verification\",\n      \"operation\": \"Evaluate_fMRI_Averaging_Window\",\n      \"evidence_type\": \"Statistical\",\n      \"rationale\": \"Evaluation of fMRI averaging windows typically involves statistical analysis.\"\n    },\n    {\n      \"key\": \"Methodological_Verification::Probe_Inference_Ambiguity\",\n      \"tool_category\": \"Methodological_Verification\",\n      \"operation\": \"Probe_Inference_Ambiguity\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"Probing inference ambiguity often requires textual analysis of inference processes.\"\n    },\n    {\n      \"key\": \"Methodological_Verification::Request_Process_Clarification\",\n      \"tool_category\": \"Methodological_Verification\",\n      \"operation\": \"Request_Process_Clarification\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"Requesting clarification on processes typically involves textual explanations.\"\n    },\n    {\n      \"key\": \"Methodological_Verification::Test_External_Validity_Assumption\",\n      \"tool_category\": \"Methodological_Verification\",\n      \"operation\": \"Test_External_Validity_Assumption\",\n      \"evidence_type\": \"Statistical\",\n      \"rationale\": \"Testing external validity assumptions often requires statistical methods.\"\n    },\n    {\n      \"key\": \"Novelty_Assessment::Articulate_Contributions\",\n      \"tool_category\": \"Novelty_Assessment\",\n      \"operation\": \"Articulate_Contributions\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"Articulating contributions involves narrative descriptions of the research.\"\n    },\n    {\n      \"key\": \"Novelty_Assessment::Assess_Combination_Novelty\",\n      \"tool_category\": \"Novelty_Assessment\",\n      \"operation\": \"Assess_Combination_Novelty\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"Assessing novelty in combinations typically requires textual analysis.\"\n    },\n    {\n      \"key\": \"Novelty_Assessment::Contrast_With_General_Methods\",\n      \"tool_category\": \"Novelty_Assessment\",\n      \"operation\": \"Contrast_With_General_Methods\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"Contrasting with general methods involves textual comparisons.\"\n    },\n    {\n      \"key\": \"Novelty_Assessment::Evaluate_Component_Innovation\",\n      \"tool_category\": \"Novelty_Assessment\",\n      \"operation\": \"Evaluate_Component_Innovation\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"Evaluating component innovation typically requires narrative descriptions.\"\n    },\n    {\n      \"key\": \"Novelty_Assessment::Highlight_Adaptations\",\n      \"tool_category\": \"Novelty_Assessment\",\n      \"operation\": \"Highlight_Adaptations\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"Highlighting adaptations involves textual descriptions of changes.\"\n    },\n    {\n      \"key\": \"Novelty_Assessment::Identify_Novel_Component\",\n      \"tool_category\": \"Novelty_Assessment\",\n      \"operation\": \"Identify_Novel_Component\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"Identifying novel components typically requires textual analysis.\"\n    },\n    {\n      \"key\": \"Presentation_Check::Acknowledge_Formatting_Correction\",\n      \"tool_category\": \"Presentation_Check\",\n      \"operation\": \"Acknowledge_Formatting_Correction\",\n      \"evidence_type\": \"Document\",\n      \"rationale\": \"Acknowledging formatting corrections involves reviewing documented formatting.\"\n    },\n    {\n      \"key\": \"Presentation_Check::Clarify_Algorithm_Notations\",\n      \"tool_category\": \"Presentation_Check\",\n      \"operation\": \"Clarify_Algorithm_Notations\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"Clarifying algorithm notations typically requires textual explanations.\"\n    },\n    {\n      \"key\": \"Presentation_Check::Evaluate_Style_Consistency\",\n      \"tool_category\": \"Presentation_Check\",\n      \"operation\": \"Evaluate_Style_Consistency\",\n      \"evidence_type\": \"Document\",\n      \"rationale\": \"Evaluating style consistency involves reviewing documented styles.\"\n    },\n    {\n      \"key\": \"Presentation_Check::Identify_Inconsistencies\",\n      \"tool_category\": \"Presentation_Check\",\n      \"operation\": \"Identify_Inconsistencies\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"Identifying inconsistencies typically requires textual analysis.\"\n    },\n    {\n      \"key\": \"Presentation_Check::Identify_Quality_Issues_in_Visuals\",\n      \"tool_category\": \"Presentation_Check\",\n      \"operation\": \"Identify_Quality_Issues_in_Visuals\",\n      \"evidence_type\": \"Figure\",\n      \"rationale\": \"Identifying quality issues in visuals involves examining figures.\"\n    },\n    {\n      \"key\": \"Presentation_Check::Identify_Visual_Ambiguity\",\n      \"tool_category\": \"Presentation_Check\",\n      \"operation\": \"Identify_Visual_Ambiguity\",\n      \"evidence_type\": \"Figure\",\n      \"rationale\": \"Identifying visual ambiguity typically involves analyzing figures.\"\n    },\n    {\n      \"key\": \"Reproducibility_Check::Assess_Hyperparameter_Sensitivity\",\n      \"tool_category\": \"Reproducibility_Check\",\n      \"operation\": \"Assess_Hyperparameter_Sensitivity\",\n      \"evidence_type\": \"Statistical\",\n      \"rationale\": \"Assessing hyperparameter sensitivity typically involves statistical analysis.\"\n    }\n  ]\n}"
+    },
+    {
+      "chunk": 5,
+      "response": "{\n  \"items\": [\n    {\n      \"key\": \"Reproducibility_Check::Demand_Method_Details\",\n      \"tool_category\": \"Reproducibility_Check\",\n      \"operation\": \"Demand_Method_Details\",\n      \"evidence_type\": \"Document\",\n      \"rationale\": \"Method details are often documented in the paper.\"\n    },\n    {\n      \"key\": \"Reproducibility_Check::Inquire_About_Data_Release\",\n      \"tool_category\": \"Reproducibility_Check\",\n      \"operation\": \"Inquire_About_Data_Release\",\n      \"evidence_type\": \"Document\",\n      \"rationale\": \"Data release inquiries pertain to documentation of datasets.\"\n    },\n    {\n      \"key\": \"Reproducibility_Check::Probe_Architectural_Details\",\n      \"tool_category\": \"Reproducibility_Check\",\n      \"operation\": \"Probe_Architectural_Details\",\n      \"evidence_type\": \"Document\",\n      \"rationale\": \"Architectural details are typically described in the paper.\"\n    },\n    {\n      \"key\": \"Reproducibility_Check::Report_Replication_Failure\",\n      \"tool_category\": \"Reproducibility_Check\",\n      \"operation\": \"Report_Replication_Failure\",\n      \"evidence_type\": \"Document\",\n      \"rationale\": \"Replication failures are documented in research reports.\"\n    },\n    {\n      \"key\": \"Reproducibility_Check::Specify_Data_Source_and_Filtering\",\n      \"tool_category\": \"Reproducibility_Check\",\n      \"operation\": \"Specify_Data_Source_and_Filtering\",\n      \"evidence_type\": \"Document\",\n      \"rationale\": \"Data sources and filtering methods are usually detailed in the paper.\"\n    },\n    {\n      \"key\": \"Results_Analysis::Compare_to_Random_Baseline\",\n      \"tool_category\": \"Results_Analysis\",\n      \"operation\": \"Compare_to_Random_Baseline\",\n      \"evidence_type\": \"Statistical\",\n      \"rationale\": \"Comparative analysis often involves statistical evaluation.\"\n    },\n    {\n      \"key\": \"Results_Analysis::Identify_Key_Performance_Strengths\",\n      \"tool_category\": \"Results_Analysis\",\n      \"operation\": \"Identify_Key_Performance_Strengths\",\n      \"evidence_type\": \"Table\",\n      \"rationale\": \"Performance strengths are typically summarized in tables.\"\n    },\n    {\n      \"key\": \"Results_Analysis::Reframe_Results_Aspect\",\n      \"tool_category\": \"Results_Analysis\",\n      \"operation\": \"Reframe_Results_Aspect\",\n      \"evidence_type\": \"Document\",\n      \"rationale\": \"Reframing results involves narrative analysis found in the text.\"\n    },\n    {\n      \"key\": \"Results_Analysis::Spotlight_Disproportionate_Gain\",\n      \"tool_category\": \"Results_Analysis\",\n      \"operation\": \"Spotlight_Disproportionate_Gain\",\n      \"evidence_type\": \"Statistical\",\n      \"rationale\": \"Spotlighting gains typically requires statistical evidence.\"\n    },\n    {\n      \"key\": \"Results_Analysis::Verify_Synergistic_Effect\",\n      \"tool_category\": \"Results_Analysis\",\n      \"operation\": \"Verify_Synergistic_Effect\",\n      \"evidence_type\": \"Statistical\",\n      \"rationale\": \"Verifying effects often relies on statistical analysis.\"\n    },\n    {\n      \"key\": \"Strategic_Positioning::Acknowledge_Praise_and_Set_Agenda\",\n      \"tool_category\": \"Strategic_Positioning\",\n      \"operation\": \"Acknowledge_Praise_and_Set_Agenda\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"Acknowledgment and agenda-setting are typically expressed in text.\"\n    },\n    {\n      \"key\": \"Strategic_Positioning::Assess_Contribution_Scope\",\n      \"tool_category\": \"Strategic_Positioning\",\n      \"operation\": \"Assess_Contribution_Scope\",\n      \"evidence_type\": \"Document\",\n      \"rationale\": \"Assessing contribution scope involves narrative analysis.\"\n    },\n    {\n      \"key\": \"Strategic_Positioning::Leverage_Positive_Feedback\",\n      \"tool_category\": \"Strategic_Positioning\",\n      \"operation\": \"Leverage_Positive_Feedback\",\n      \"evidence_type\": \"Document\",\n      \"rationale\": \"Leveraging feedback is often documented in reviewer comments.\"\n    },\n    {\n      \"key\": \"Strategic_Positioning::Reframe_Evaluation_Criteria\",\n      \"tool_category\": \"Strategic_Positioning\",\n      \"operation\": \"Reframe_Evaluation_Criteria\",\n      \"evidence_type\": \"Document\",\n      \"rationale\": \"Reframing evaluation criteria is typically discussed in the text.\"\n    },\n    {\n      \"key\": \"Strategic_Positioning::Synthesize_Contribution_Flow\",\n      \"tool_category\": \"Strategic_Positioning\",\n      \"operation\": \"Synthesize_Contribution_Flow\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"Synthesizing contributions is often articulated in the narrative.\"\n    },\n    {\n      \"key\": \"Strategic_Positioning::Synthesize_Research_Challenge\",\n      \"tool_category\": \"Strategic_Positioning\",\n      \"operation\": \"Synthesize_Research_Challenge\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"Research challenges are typically discussed in the text.\"\n    },\n    {\n      \"key\": \"Strategic_Reframing::Contrast_Method_Capabilities\",\n      \"tool_category\": \"Strategic_Reframing\",\n      \"operation\": \"Contrast_Method_Capabilities\",\n      \"evidence_type\": \"Document\",\n      \"rationale\": \"Contrasting capabilities is often detailed in the paper.\"\n    },\n    {\n      \"key\": \"Strategic_Reframing::De-Emphasize_Claim\",\n      \"tool_category\": \"Strategic_Reframing\",\n      \"operation\": \"De-Emphasize_Claim\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"De-emphasizing claims is typically articulated in the narrative.\"\n    },\n    {\n      \"key\": \"Strategic_Reframing::Define_Applicability_Domain\",\n      \"tool_category\": \"Strategic_Reframing\",\n      \"operation\": \"Define_Applicability_Domain\",\n      \"evidence_type\": \"Document\",\n      \"rationale\": \"Defining applicability domains is often documented in the paper.\"\n    },\n    {\n      \"key\": \"Strategic_Reframing::Recontextualize_Research_Goal\",\n      \"tool_category\": \"Strategic_Reframing\",\n      \"operation\": \"Recontextualize_Research_Goal\",\n      \"evidence_type\": \"Text\",\n      \"rationale\": \"Recontextualizing goals is typically discussed in the text.\"\n    },\n    {\n      \"key\": \"Strategic_Reframing::Redefine_Task_Scope\",\n      \"tool_category\": \"Strategic_Reframing\",\n      \"operation\": \"Redefine_Task_Scope\",\n      \"evidence_type\": \"Document\",\n      \"rationale\": \"Redefining task scope is often detailed in the paper.\"\n    },\n    {\n      \"key\": \"Theoretical_Analysis::Contrast_ELBO_Derivations\",\n      \"tool_category\": \"Theoretical_Analysis\",\n      \"operation\": \"Contrast_ELBO_Derivations\",\n      \"evidence_type\": \"Symbolic\",\n      \"rationale\": \"Contrasting derivations involves mathematical analysis.\"\n    },\n    {\n      \"key\": \"Theoretical_Analysis::Contrast_with_Prior_Work\",\n      \"tool_category\": \"Theoretical_Analysis\",\n      \"operation\": \"Contrast_with_Prior_Work\",\n      \"evidence_type\": \"Citation\",\n      \"rationale\": \"Contrasting with prior work involves citing previous research.\"\n    },\n    {\n      \"key\": \"Theoretical_Analysis::Explain_Definition_Components\",\n      \"tool_category\": \"Theoretical_Analysis\",\n      \"operation\": \"Explain_Definition_Components\",\n      \"evidence_type\": \"Document\",\n      \"rationale\": \"Explaining definitions is typically found in the text.\"\n    },\n    {\n      \"key\": \"Theoretical_Analysis::Extend_Theory\",\n      \"tool_category\": \"Theoretical_Analysis\",\n      \"operation\": \"Extend_Theory\",\n      \"evidence_type\": \"Document\",\n      \"rationale\": \"Extending theory is often documented in the paper.\"\n    }\n  ]\n}"
+    },
+    {
+      "chunk": 6,
+      "response": "{\n  \"items\": [\n    {\n      \"key\": \"Theoretical_Analysis::Probe_Approximation_Limits\",\n      \"tool_category\": \"Theoretical_Analysis\",\n      \"operation\": \"Probe_Approximation_Limits\",\n      \"evidence_type\": \"Symbolic\",\n      \"rationale\": \"This operation likely involves mathematical analysis to determine the limits of approximation in a theoretical context.\"\n    },\n    {\n      \"key\": \"Theoretical_Analysis::Probe_Reasoning_Capability\",\n      \"tool_category\": \"Theoretical_Analysis\",\n      \"operation\": \"Probe_Reasoning_Capability\",\n      \"evidence_type\": \"Logical\",\n      \"rationale\": \"This operation assesses the logical reasoning capabilities, which typically requires logical proofs or reasoning frameworks.\"\n    }\n  ]\n}"
+    }
+  ]
+>>>>>>> 89584f1fd1820b4b43c73457062a897440d5d4cb
 }
