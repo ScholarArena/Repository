@@ -93,11 +93,14 @@ Concurrency and resume:
 ```
 python foundry/issue_mining/build_issue_threads.py \
   --in data/processed/issues.jsonl \
+  --labels foundry/ontology/cluster_labels.jsonl \
   --out-threads data/processed/threads.jsonl \
   --out-index data/processed/thread_index.jsonl
 ```
 
-Threads group semantic acts by `(forum_id, issue_cluster_id, target_key)` to approximate multi-round issue conversations.
+Threads group semantic acts by issue ontology (default `thread-by=ontology`), i.e., `(forum_id, issue_type/issue_cluster_id)`.
+Use `--labels foundry/ontology/cluster_labels.jsonl` to map clusters into `issue_type` before threading.
+For finer splitting, use `--thread-by ontology_target` to include `target_key`.
 Use `--out-issues` to attach `thread_id` back into the issue records.
 
 ### 5) Optional: Label clusters with a teacher LLM

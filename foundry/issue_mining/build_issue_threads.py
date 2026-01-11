@@ -18,6 +18,17 @@ def parse_args():
     parser.add_argument("--out-threads", required=True, help="Output threads JSONL")
     parser.add_argument("--out-index", required=True, help="Output act->thread index JSONL")
     parser.add_argument(
+        "--labels",
+        default="",
+        help="Optional cluster labels JSONL to map issue_type (from label_clusters.py)",
+    )
+    parser.add_argument(
+        "--thread-by",
+        choices=["ontology", "cluster", "ontology_target", "cluster_target"],
+        default="ontology",
+        help="Thread grouping key",
+    )
+    parser.add_argument(
         "--out-issues",
         default="",
         help="Optional output issues JSONL with thread_id attached",
@@ -58,27 +69,58 @@ def derive_target_key(issue):
     return normalize_target_from_ref(grounding_ref)
 
 
+def load_labels(path):
+    if not path:
+        return {}
+    records = read_json_or_jsonl(path)
+    labels = {}
+    for rec in records:
+        cluster_id = rec.get("cluster_id") or rec.get("issue_cluster_id")
+        if not cluster_id:
+            continue
+        labels[cluster_id] = rec
+    return labels
+
+
+def resolve_issue_ontology(issue, labels):
+    cluster_id = issue.get("issue_cluster_id") or issue.get("cluster_id") or "unclustered"
+    issue_type = issue.get("issue_type")
+    if not issue_type and cluster_id in labels:
+        issue_type = labels[cluster_id].get("issue_type") or labels[cluster_id].get("label")
+    issue_ontology_id = issue_type or cluster_id
+    ontology_key = slugify(issue_ontology_id)[:40]
+    return cluster_id, issue_type, issue_ontology_id, ontology_key
+
+
 def main():
     args = parse_args()
     records = read_json_or_jsonl(args.input_path)
+    labels = load_labels(args.labels)
 
     threads = defaultdict(list)
     thread_meta = {}
 
     for rec in records:
         forum_id = rec.get("forum_id") or "UNKNOWN"
-        cluster_id = rec.get("issue_cluster_id") or rec.get("cluster_id") or "unclustered"
+        cluster_id, issue_type, issue_ontology_id, ontology_key = resolve_issue_ontology(rec, labels)
         target_key = derive_target_key(rec)
-        thread_key = f"{forum_id}|{cluster_id}|{target_key}"
+        if args.thread_by in {"ontology", "ontology_target"}:
+            base_key = ontology_key
+        else:
+            base_key = cluster_id
+        if args.thread_by in {"ontology_target", "cluster_target"}:
+            thread_key = f"{forum_id}|{base_key}|{target_key}"
+        else:
+            thread_key = f"{forum_id}|{base_key}"
         thread_id = f"th_{stable_hash(thread_key, length=12)}"
-        rec_id = rec.get("act_id") or rec.get("issue_id")
-
         threads[thread_id].append(rec)
         thread_meta[thread_id] = {
             "thread_id": thread_id,
             "forum_id": forum_id,
             "issue_cluster_id": cluster_id,
-            "target_key": target_key,
+            "issue_type": issue_type,
+            "issue_ontology_id": issue_ontology_id,
+            "target_key": target_key if "target" in args.thread_by else None,
         }
 
     thread_records = []
@@ -97,8 +139,10 @@ def main():
                     "act_id": act.get("act_id") or act.get("issue_id"),
                     "thread_id": thread_id,
                     "issue_cluster_id": meta["issue_cluster_id"],
+                    "issue_ontology_id": meta.get("issue_ontology_id"),
+                    "issue_type": meta.get("issue_type"),
                     "forum_id": meta["forum_id"],
-                    "target_key": meta["target_key"],
+                    "target_key": meta.get("target_key"),
                 }
             )
 
@@ -119,9 +163,13 @@ def main():
         updated = []
         for rec in records:
             act_id = rec.get("act_id") or rec.get("issue_id")
+            cluster_id, issue_type, issue_ontology_id, _ = resolve_issue_ontology(rec, labels)
             if act_id and act_id in thread_by_act:
                 rec = dict(rec)
                 rec["thread_id"] = thread_by_act[act_id]
+                if issue_type and not rec.get("issue_type"):
+                    rec["issue_type"] = issue_type
+                rec["issue_ontology_id"] = issue_ontology_id
             updated.append(rec)
         write_jsonl(args.out_issues, updated)
 

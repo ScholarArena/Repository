@@ -81,8 +81,14 @@ def build_prompt(cluster_id, samples):
             "role": "system",
             "content": (
                 "You label issue clusters for scientific peer review. "
-                "Return JSON with keys: issue_type, definition, evidence_types, intent_patterns. "
-                "Keep issue_type short (2-5 words). evidence_types is a list."
+                "Infer a domain-agnostic issue type from the samples (no paper-specific names). "
+                "Return valid JSON only with keys: issue_type, definition, evidence_types, intent_patterns. "
+                "Constraints: issue_type is 2-5 words using underscores, definition is one sentence, "
+                "evidence_types is a list (1-4 items) chosen from "
+                "[Citation, Statistical, Figure, Table, Document, Text, Symbolic, Logical, Implementation, Unknown], "
+                "intent_patterns is a list (2-4 items) summarizing common strategic intents or interaction patterns "
+                "seen in the samples (use raw intent labels if present). "
+                "If the cluster is mixed or unclear, set issue_type to Mixed_or_Unclear and evidence_types to [Unknown]."
             ),
         },
         {
