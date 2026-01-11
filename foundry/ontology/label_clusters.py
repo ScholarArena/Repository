@@ -2,11 +2,14 @@ import argparse
 import json
 import os
 import random
+import sys
 import time
 from collections import defaultdict
 from pathlib import Path
 from urllib import error as url_error
 from urllib import request as url_request
+
+sys.path.append(str(Path(__file__).resolve().parents[2]))
 
 from foundry.utils import normalize_tool_calls, read_json_or_jsonl
 
