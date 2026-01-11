@@ -75,6 +75,31 @@ def normalize_tool_calls(value):
     return [str(value)]
 
 
+INTENT_SPLIT_RE = re.compile(r"\s*(?:;|/|,|\||\band\b|&)\s*", re.IGNORECASE)
+
+
+def split_intents(value):
+    if value is None:
+        return []
+    items = []
+    if isinstance(value, (list, tuple, set)):
+        items.extend(value)
+    else:
+        items.append(value)
+    tokens = []
+    for item in items:
+        if item is None:
+            continue
+        if isinstance(item, dict):
+            item = item.get("intent") or item.get("strategic_intent") or str(item)
+        text = str(item).strip()
+        if not text:
+            continue
+        parts = INTENT_SPLIT_RE.split(text)
+        tokens.extend([part.strip() for part in parts if part and part.strip()])
+    return tokens
+
+
 def map_evidence_type(tool_category, operation):
     mapping = {
         "Literature_Cross_Check": "Citation",

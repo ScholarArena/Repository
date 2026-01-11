@@ -1,0 +1,3286 @@
+{
+  "generated_at": "2026-01-11T12:43:03Z",
+  "items": [
+    {
+      "count": 44,
+      "name": "Expose_Methodological_Weakness"
+    },
+    {
+      "count": 39,
+      "name": "Clarify_Misunderstanding"
+    },
+    {
+      "count": 23,
+      "name": "Defend_Novelty_Against_Prior_Work"
+    },
+    {
+      "count": 13,
+      "name": "Establish_Theoretical_Grounding"
+    },
+    {
+      "count": 9,
+      "name": "Concede_Minor_Point_To_Win_Major"
+    },
+    {
+      "count": 7,
+      "name": "Shift_Burden_Of_Proof"
+    },
+    {
+      "count": 6,
+      "name": "Defend_Methodological_Choice"
+    },
+    {
+      "count": 6,
+      "name": "Trap_With_Definition_Request"
+    },
+    {
+      "count": 5,
+      "name": "Defend_Experimental_Design"
+    },
+    {
+      "count": 4,
+      "name": "Demonstrate_Responsiveness"
+    },
+    {
+      "count": 3,
+      "name": "Request_Deeper_Analysis"
+    },
+    {
+      "count": 2,
+      "name": "Challenge_Novelty"
+    },
+    {
+      "count": 2,
+      "name": "Demand_Stronger_Evidence"
+    },
+    {
+      "count": 2,
+      "name": "Request_Clarification"
+    },
+    {
+      "count": 2,
+      "name": "Probe_Methodological_Robustness"
+    },
+    {
+      "count": 2,
+      "name": "Clarify_Terminology"
+    },
+    {
+      "count": 2,
+      "name": "Probe_Methodological_Rigor"
+    },
+    {
+      "count": 2,
+      "name": "Clarify_Method_Details"
+    },
+    {
+      "count": 2,
+      "name": "Expose_Presentation_Weakness"
+    },
+    {
+      "count": 2,
+      "name": "Enforce_Methodological_Rigor"
+    },
+    {
+      "count": 2,
+      "name": "Clarify_Experimental_Setup"
+    },
+    {
+      "count": 2,
+      "name": "Highlight_Positive_Aspects"
+    },
+    {
+      "count": 2,
+      "name": "Defend_Novelty"
+    },
+    {
+      "count": 2,
+      "name": "Clarify_Methodology"
+    },
+    {
+      "count": 2,
+      "name": "Defend_Architectural_Choice"
+    },
+    {
+      "count": 2,
+      "name": "Defend_Experimental_Rigor"
+    },
+    {
+      "count": 2,
+      "name": "Expose_Theoretical_Flaw"
+    },
+    {
+      "count": 2,
+      "name": "Bridge_Theory_Practice_Gap"
+    },
+    {
+      "count": 2,
+      "name": "Correct_Misinterpretation"
+    },
+    {
+      "count": 2,
+      "name": "Enforce_Rigor_Standards"
+    },
+    {
+      "count": 2,
+      "name": "Maintain_Position"
+    },
+    {
+      "count": 2,
+      "name": "Establish_Common_Ground"
+    },
+    {
+      "count": 2,
+      "name": "Resolve_Terminology_Confusion"
+    },
+    {
+      "count": 2,
+      "name": "Request_Theoretical_Grounding"
+    },
+    {
+      "count": 2,
+      "name": "Polish_Presentation"
+    },
+    {
+      "count": 2,
+      "name": "Address_Presentation_Feedback"
+    },
+    {
+      "count": 2,
+      "name": "Enforce_Presentation_Standards"
+    },
+    {
+      "count": 2,
+      "name": "Improve_Presentation"
+    },
+    {
+      "count": 2,
+      "name": "Defend_Methodological_Rigor"
+    },
+    {
+      "count": 2,
+      "name": "Reframe_Narrative"
+    },
+    {
+      "count": 2,
+      "name": "Establish_Organized_Defense"
+    },
+    {
+      "count": 2,
+      "name": "Solicit_Future_Directions"
+    },
+    {
+      "count": 2,
+      "name": "Clarify_Methodological_Detail"
+    },
+    {
+      "count": 1,
+      "name": "Request_Proof_Completeness"
+    },
+    {
+      "count": 1,
+      "name": "Specify_Verification_Requirements"
+    },
+    {
+      "count": 1,
+      "name": "Efficiently_Address_Recurring_Concern"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Critical_Experimental_Weakness"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Generalizability"
+    },
+    {
+      "count": 1,
+      "name": "Address_Trade_Off_With_Data"
+    },
+    {
+      "count": 1,
+      "name": "Optimize_Training_Paradigm"
+    },
+    {
+      "count": 1,
+      "name": "Establish_Premise"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Baseline_Weakness"
+    },
+    {
+      "count": 1,
+      "name": "Enforce_Scientific_Rigor"
+    },
+    {
+      "count": 1,
+      "name": "Demand_Rigor"
+    },
+    {
+      "count": 1,
+      "name": "Force_Disclosure_Of_Details"
+    },
+    {
+      "count": 1,
+      "name": "Elaborate_On_DA"
+    },
+    {
+      "count": 1,
+      "name": "Probe_Realism"
+    },
+    {
+      "count": 1,
+      "name": "Acknowledge_Empirical_Support"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Contradiction"
+    },
+    {
+      "count": 1,
+      "name": "Acknowledge_Merit"
+    },
+    {
+      "count": 1,
+      "name": "Address_Reviewer_Concern"
+    },
+    {
+      "count": 1,
+      "name": "Address_Scale_Critique_With_New_Evidence"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Contribution_Novelty"
+    },
+    {
+      "count": 1,
+      "name": "Enforce_Completeness"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Method_Detail"
+    },
+    {
+      "count": 1,
+      "name": "Present_Empirical_Evidence"
+    },
+    {
+      "count": 1,
+      "name": "Demonstrate_Decision_Impact"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Presentation_Choice"
+    },
+    {
+      "count": 1,
+      "name": "Justify_Architecture_Choice"
+    },
+    {
+      "count": 1,
+      "name": "Establish_Problem_Difficulty"
+    },
+    {
+      "count": 1,
+      "name": "Update_Evaluation"
+    },
+    {
+      "count": 1,
+      "name": "Maintain_Open_Dialogue"
+    },
+    {
+      "count": 1,
+      "name": "Justify_Modeling_Simplifications"
+    },
+    {
+      "count": 1,
+      "name": "Address_Gender_Bias_Gap"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Comparison_Asymmetry"
+    },
+    {
+      "count": 1,
+      "name": "Broaden_Utility_Scope"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Novelty_Substantiation"
+    },
+    {
+      "count": 1,
+      "name": "Ensure_Mathematical_Clarity"
+    },
+    {
+      "count": 1,
+      "name": "Request_Expanded_Baselines"
+    },
+    {
+      "count": 1,
+      "name": "Address_Method_Limitation"
+    },
+    {
+      "count": 1,
+      "name": "Establish_Goodwill_And_Future_Potential"
+    },
+    {
+      "count": 1,
+      "name": "Counter_Feature_Selection_Concern"
+    },
+    {
+      "count": 1,
+      "name": "Suggest_Venue_Or_Expansion"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Theoretical_Gap"
+    },
+    {
+      "count": 1,
+      "name": "Neutralize_Efficiency_Claim"
+    },
+    {
+      "count": 1,
+      "name": "Praise_While_Requesting_Improvements"
+    },
+    {
+      "count": 1,
+      "name": "Articulate_Unique_Contributions"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Literature_Gap"
+    },
+    {
+      "count": 1,
+      "name": "Support_Argument"
+    },
+    {
+      "count": 1,
+      "name": "Ensure_Proper_Citation"
+    },
+    {
+      "count": 1,
+      "name": "Establish_Reviewer_Understanding_And_Context"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Contribution_Beyond_Accuracy"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Practical_Utility"
+    },
+    {
+      "count": 1,
+      "name": "Endorse_Clarity"
+    },
+    {
+      "count": 1,
+      "name": "Validate_Conceptual_Novelty"
+    },
+    {
+      "count": 1,
+      "name": "Differentiate_From_CAMEL_On_Conceptual_Grounds"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_For_Non_Expert_Reviewer_And_Address_Questions"
+    },
+    {
+      "count": 1,
+      "name": "Correct_Spelling"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Methodological_Scope"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Derivations_And_Assumptions"
+    },
+    {
+      "count": 1,
+      "name": "Concede_And_Promise_Improvement"
+    },
+    {
+      "count": 1,
+      "name": "Noise"
+    },
+    {
+      "count": 1,
+      "name": "Praise_Experimental_Completeness"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Result_Inconsistency"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Efficiency_Claim"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Transparency_And_Scope"
+    },
+    {
+      "count": 1,
+      "name": "Acknowledge_Methodological_Insight"
+    },
+    {
+      "count": 1,
+      "name": "Demand_Empirical_Support"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Contribution"
+    },
+    {
+      "count": 1,
+      "name": "Reframe_Negative_Result_Novelty"
+    },
+    {
+      "count": 1,
+      "name": "Provide_Unified_Explanation"
+    },
+    {
+      "count": 1,
+      "name": "Demand_Parameter_Clarity"
+    },
+    {
+      "count": 1,
+      "name": "Sustain_Critical_Pressure"
+    },
+    {
+      "count": 1,
+      "name": "Acknowledge_Novelty"
+    },
+    {
+      "count": 1,
+      "name": "Justify_Design_Equilibrium"
+    },
+    {
+      "count": 1,
+      "name": "Highlight_Originality"
+    },
+    {
+      "count": 1,
+      "name": "Highlight_Pedagogical_Value"
+    },
+    {
+      "count": 1,
+      "name": "Differentiate_From_SGD_Work"
+    },
+    {
+      "count": 1,
+      "name": "Trap_With_Mathematical_Scrutiny"
+    },
+    {
+      "count": 1,
+      "name": "Probe_Necessity_Of_Dynamics"
+    },
+    {
+      "count": 1,
+      "name": "Enforce_Attention_To_Detail"
+    },
+    {
+      "count": 1,
+      "name": "Acknowledge_Contributions_Before_Critiquing"
+    },
+    {
+      "count": 1,
+      "name": "Manage_Expectations_On_Utility"
+    },
+    {
+      "count": 1,
+      "name": "Provide_Practitioner_Insights"
+    },
+    {
+      "count": 1,
+      "name": "Improve_Experimental_Reporting"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Statistical_Methods"
+    },
+    {
+      "count": 1,
+      "name": "Counter_Critique_With_Empirical_Evidence"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Notational_Conventions"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Scope_Assumption"
+    },
+    {
+      "count": 1,
+      "name": "Influence_Rating"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Paper_Organization"
+    },
+    {
+      "count": 1,
+      "name": "Justify_Scope"
+    },
+    {
+      "count": 1,
+      "name": "Secure_Closure_On_Key_Issues"
+    },
+    {
+      "count": 1,
+      "name": "Demonstrate_Attack_Generality"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Technical_Divergence"
+    },
+    {
+      "count": 1,
+      "name": "Reframe_Narrative_To_Contribution"
+    },
+    {
+      "count": 1,
+      "name": "Negotiate_Evaluation_Scope"
+    },
+    {
+      "count": 1,
+      "name": "Illustrate_Constraint_Violation"
+    },
+    {
+      "count": 1,
+      "name": "Test_Core_Assumption"
+    },
+    {
+      "count": 1,
+      "name": "Neutralize_Performance_Critique"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Analytical_Choice"
+    },
+    {
+      "count": 1,
+      "name": "Force_Empirical_Validation"
+    },
+    {
+      "count": 1,
+      "name": "Address_Minor_Concern"
+    },
+    {
+      "count": 1,
+      "name": "Reframe_Benchmark_Message"
+    },
+    {
+      "count": 1,
+      "name": "Maintain_Focus_And_Scope"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Practicality"
+    },
+    {
+      "count": 1,
+      "name": "Request_Explicit_Explanation"
+    },
+    {
+      "count": 1,
+      "name": "Strengthen_Motivation"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Incomplete_Evaluation"
+    },
+    {
+      "count": 1,
+      "name": "Establish_Reviewer_Understanding"
+    },
+    {
+      "count": 1,
+      "name": "Demand_Rigor_In_Analysis"
+    },
+    {
+      "count": 1,
+      "name": "Formalize_Score_Increase_After_Verification"
+    },
+    {
+      "count": 1,
+      "name": "Contextualize_Results"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Generalization"
+    },
+    {
+      "count": 1,
+      "name": "Probe_Methodological_Clarity"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Problem_Formulation"
+    },
+    {
+      "count": 1,
+      "name": "Substantiate_Problem_Statement"
+    },
+    {
+      "count": 1,
+      "name": "Refute_Incremental_Claim_Comprehensively"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Parameter_Impact"
+    },
+    {
+      "count": 1,
+      "name": "Redirect_To_Existing_Content"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Hyperparameter_Selection"
+    },
+    {
+      "count": 1,
+      "name": "Undermine_Experimental_Significance"
+    },
+    {
+      "count": 1,
+      "name": "Acknowledge_Author_Corrections_And_Adjust_Evaluation"
+    },
+    {
+      "count": 1,
+      "name": "Highlight_Experimental_Rigor"
+    },
+    {
+      "count": 1,
+      "name": "Commend_Detailed_Analysis"
+    },
+    {
+      "count": 1,
+      "name": "Contextualize_Methodological_Choice"
+    },
+    {
+      "count": 1,
+      "name": "Provide_Evidence"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Experimental_Setup_For_Reproducibility"
+    },
+    {
+      "count": 1,
+      "name": "Improve_Clarity"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Contradictory_Evidence"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Against_Specific_Criticisms"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Methodological_Approach"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Consistency_Issues"
+    },
+    {
+      "count": 1,
+      "name": "Cite_Reproducibility_Concern"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Experimental_Fairness"
+    },
+    {
+      "count": 1,
+      "name": "Establish_Superiority_Claims"
+    },
+    {
+      "count": 1,
+      "name": "Shift_Burden_Of_Evaluation_To_Context"
+    },
+    {
+      "count": 1,
+      "name": "Preemptively_Disclose_Limitations_To_Build_Credibility"
+    },
+    {
+      "count": 1,
+      "name": "Request_Stronger_Empirical_Evidence"
+    },
+    {
+      "count": 1,
+      "name": "Comprehensively_Address_Technical_Queries"
+    },
+    {
+      "count": 1,
+      "name": "Ensure_Clarity"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Weakness_in_Evidence"
+    },
+    {
+      "count": 1,
+      "name": "Highlight_Paper_Strengths"
+    },
+    {
+      "count": 1,
+      "name": "Force_Theoretical_Retraction"
+    },
+    {
+      "count": 1,
+      "name": "Provide_Evidence_of_Revision"
+    },
+    {
+      "count": 1,
+      "name": "Demand_Empirical_Evidence"
+    },
+    {
+      "count": 1,
+      "name": "Demand_Implementation_Transparency"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Framing_Inconsistencies_and_Methodological_Gaps"
+    },
+    {
+      "count": 1,
+      "name": "Acknowledge_Reviewer_Insight"
+    },
+    {
+      "count": 1,
+      "name": "Probe_for_Limitation"
+    },
+    {
+      "count": 1,
+      "name": "Open_Constructive_Dialogue"
+    },
+    {
+      "count": 1,
+      "name": "Acknowledge_Improvements"
+    },
+    {
+      "count": 1,
+      "name": "Secure_Score_Increase_by_Fulfilling_Conditions"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Significance_of_Result"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Novelty_With_Empirical_Evidence"
+    },
+    {
+      "count": 1,
+      "name": "Show_Unique_Capability"
+    },
+    {
+      "count": 1,
+      "name": "Promote_Reproducibility_And_Resource_Sharing"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Attack_Parameter_Tuning"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Core_Assumption"
+    },
+    {
+      "count": 1,
+      "name": "Synthesize_And_Transmit_Core_Scientific_Message"
+    },
+    {
+      "count": 1,
+      "name": "Demand_Experimental_Transparency"
+    },
+    {
+      "count": 1,
+      "name": "Build_Rapport_and_Preview_Defense"
+    },
+    {
+      "count": 1,
+      "name": "Address_Missing_Evidence_Criticism"
+    },
+    {
+      "count": 1,
+      "name": "Support_Claim_With_Evidence"
+    },
+    {
+      "count": 1,
+      "name": "Initiate_Constructive_Dialogue"
+    },
+    {
+      "count": 1,
+      "name": "Strengthen_Empirical_Claim"
+    },
+    {
+      "count": 1,
+      "name": "Probe_Metric_Justification"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Textual_Input_Ecological_Validity"
+    },
+    {
+      "count": 1,
+      "name": "Neutralize_Potential_Confounding_Factor"
+    },
+    {
+      "count": 1,
+      "name": "Correct_Presentation_Flaw"
+    },
+    {
+      "count": 1,
+      "name": "Strengthen_Evaluation"
+    },
+    {
+      "count": 1,
+      "name": "Establish_Collaborative_Frame"
+    },
+    {
+      "count": 1,
+      "name": "Correct_Misunderstanding"
+    },
+    {
+      "count": 1,
+      "name": "Provide_Reproducibility_Details"
+    },
+    {
+      "count": 1,
+      "name": "Expand_Empirical_Support"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Methodological_Scope"
+    },
+    {
+      "count": 1,
+      "name": "Request_Stronger_Evidence_for_Generalizability"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Limited_Novelty_Or_Methodological_Simplicity"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Factual_Inaccuracy_in_Literature_Review"
+    },
+    {
+      "count": 1,
+      "name": "Validate_Compatibility_Claim"
+    },
+    {
+      "count": 1,
+      "name": "Resolve_Misunderstanding"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Foundational_Assumption"
+    },
+    {
+      "count": 1,
+      "name": "Strengthen_Empirical_Evidence"
+    },
+    {
+      "count": 1,
+      "name": "Demand_Resource_Analysis"
+    },
+    {
+      "count": 1,
+      "name": "Acknowledge_Empirical_Validation"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Unsubstantiated_Generalization_Claim"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Methodological_Incoherence_and_Impracticality"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Practical_Implementation"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Novelty_with_Concrete_Evidence"
+    },
+    {
+      "count": 1,
+      "name": "Express_Satisfaction_and_Request_Final_Enhancements"
+    },
+    {
+      "count": 1,
+      "name": "Probe_Scope"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Inconsistent_Result_For_Explanation"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Novelty_and_Reframe_Utility"
+    },
+    {
+      "count": 1,
+      "name": "Final_Negotiation"
+    },
+    {
+      "count": 1,
+      "name": "Concede_Correction_To_Maintain_Credibility"
+    },
+    {
+      "count": 1,
+      "name": "Probe_Definitional_Choice"
+    },
+    {
+      "count": 1,
+      "name": "Acknowledge_Experimental_Innovation"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Claim_Novelty"
+    },
+    {
+      "count": 1,
+      "name": "Address_Experimental_Setup_Criticism"
+    },
+    {
+      "count": 1,
+      "name": "Validate_Core_Contributions"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Data_Quality"
+    },
+    {
+      "count": 1,
+      "name": "Establish_Initial_Assessment_Framework"
+    },
+    {
+      "count": 1,
+      "name": "Suggest_Algorithm_Improvement"
+    },
+    {
+      "count": 1,
+      "name": "Stress_Test_Boundary_Condition"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Novelty_And_Utility"
+    },
+    {
+      "count": 1,
+      "name": "Navigate_Reviewer_Consensus"
+    },
+    {
+      "count": 1,
+      "name": "Resolve_Terminology_Ambiguity"
+    },
+    {
+      "count": 1,
+      "name": "Concede_And_Support"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Flawed_Experimental_Validation"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Ambitious_Claim_With_Rigorous_Test"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Architectural_Ambiguity"
+    },
+    {
+      "count": 1,
+      "name": "Express_Preference_for_Manuscript_Flow"
+    },
+    {
+      "count": 1,
+      "name": "Address_Key_Limitation"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Novelty_Claim"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Contribution_Significance"
+    },
+    {
+      "count": 1,
+      "name": "Request_Essential_Evaluation"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Motivation_Consistency"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Analytical_Ambiguity"
+    },
+    {
+      "count": 1,
+      "name": "Acknowledge_Strength_Establish_Relevance"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Novelty_By_Reframing"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Weakness_in_Experimental_Justification"
+    },
+    {
+      "count": 1,
+      "name": "Empirically_Substantiate_Claim"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Theoretical_Contributions_And_Research_Scope"
+    },
+    {
+      "count": 1,
+      "name": "Multi_Point_Defense_Against_Benchmark_And_Scope_Criticism"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Potential_Quality_Degradation"
+    },
+    {
+      "count": 1,
+      "name": "Highlight_Practical_Limitations"
+    },
+    {
+      "count": 1,
+      "name": "Ensure_Robustness_of_Approach"
+    },
+    {
+      "count": 1,
+      "name": "Exaggerate_Flaw_in_Results"
+    },
+    {
+      "count": 1,
+      "name": "Request_Further_Validation"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Claim_By_Hypothesis"
+    },
+    {
+      "count": 1,
+      "name": "Probe_Conceptual_Novelty_And_Clarity"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Novelty_via_Niche_Positioning"
+    },
+    {
+      "count": 1,
+      "name": "Probe_Future_Vision_and_Scalability"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Scope_And_Focus"
+    },
+    {
+      "count": 1,
+      "name": "Provide_Fair_Comparison_And_Highlight_Key_Finding"
+    },
+    {
+      "count": 1,
+      "name": "Test_Contribution_Novelty"
+    },
+    {
+      "count": 1,
+      "name": "Probe_Deep_Methodological_Understanding"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Scope_Breadth"
+    },
+    {
+      "count": 1,
+      "name": "Ensure_Reproducibility"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Potential_Logical_Error_In_Paper"
+    },
+    {
+      "count": 1,
+      "name": "Provide_Supporting_Evidence_For_Argument"
+    },
+    {
+      "count": 1,
+      "name": "Demonstrate_Responsiveness_And_Address_Weakness"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Claims_of_Superiority"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Methodological_Inconsistency_In_Parameter_Claims"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Biased_Claim"
+    },
+    {
+      "count": 1,
+      "name": "Correct_Errors_And_Clarify"
+    },
+    {
+      "count": 1,
+      "name": "Frame_Limitation_As_Opportunity_For_Future_Work"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Ontological_Weakness_In_Framework"
+    },
+    {
+      "count": 1,
+      "name": "Correct_Misperception_Of_Automation_Goal"
+    },
+    {
+      "count": 1,
+      "name": "Distinguish_from_RL_Literature"
+    },
+    {
+      "count": 1,
+      "name": "Question_Novelty"
+    },
+    {
+      "count": 1,
+      "name": "Provide_Additional_Evidence_to_Satisfy_Curiosity"
+    },
+    {
+      "count": 1,
+      "name": "Initial_Sanity_Check_and_Problem_Framing"
+    },
+    {
+      "count": 1,
+      "name": "Demand_Finer_Granularity_Analysis_and_Hypothesis_Testing"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Foundational_Claims_And_Dismiss_Critique"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Missing_Normative_Argument"
+    },
+    {
+      "count": 1,
+      "name": "Improve_Manuscript_Coherence"
+    },
+    {
+      "count": 1,
+      "name": "Ensure_Replicability"
+    },
+    {
+      "count": 1,
+      "name": "Request_Overhead_Comparison"
+    },
+    {
+      "count": 1,
+      "name": "Accept_Response"
+    },
+    {
+      "count": 1,
+      "name": "Extend_Applicability_Claim"
+    },
+    {
+      "count": 1,
+      "name": "Provide_Nuanced_Explanation"
+    },
+    {
+      "count": 1,
+      "name": "Question_Venue_Appropriateness"
+    },
+    {
+      "count": 1,
+      "name": "Establish_Overall_Understanding"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Theoretical_Weakness"
+    },
+    {
+      "count": 1,
+      "name": "Suggest_Simpler_Alternative"
+    },
+    {
+      "count": 1,
+      "name": "Probe_Practical_Feasibility"
+    },
+    {
+      "count": 1,
+      "name": "Acknowledge_Improvements_And_Reward_Effort"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Scope_Limitation"
+    },
+    {
+      "count": 1,
+      "name": "Enhance_Evaluation_Thoroughness"
+    },
+    {
+      "count": 1,
+      "name": "Expand_Scope_and_Impact"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Scope_Limitation"
+    },
+    {
+      "count": 1,
+      "name": "Provide_Empirical_Evidence_for_Claim"
+    },
+    {
+      "count": 1,
+      "name": "Request_Clarification_On_Novelty_And_Advantages"
+    },
+    {
+      "count": 1,
+      "name": "Comprehensively_Address_Reviewer_Weaknesses_With_Paper_Evidence"
+    },
+    {
+      "count": 1,
+      "name": "Stress_Test_Literature_Review"
+    },
+    {
+      "count": 1,
+      "name": "Provide_Requested_Information"
+    },
+    {
+      "count": 1,
+      "name": "Improve_Scholarly_Rigor"
+    },
+    {
+      "count": 1,
+      "name": "Downplay_Contribution_Significance"
+    },
+    {
+      "count": 1,
+      "name": "Reward_Responsiveness"
+    },
+    {
+      "count": 1,
+      "name": "Request_Empirical_Validation"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Lack_Of_Novelty"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Design_Parameter"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Design_Choice"
+    },
+    {
+      "count": 1,
+      "name": "Endorse_Paper_Value"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Benchmark_Rationale"
+    },
+    {
+      "count": 1,
+      "name": "Critique_Theoretical_Utility"
+    },
+    {
+      "count": 1,
+      "name": "Undermine_Argument_Logic"
+    },
+    {
+      "count": 1,
+      "name": "Probe_Methodological_Optimality"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Conference_Fit"
+    },
+    {
+      "count": 1,
+      "name": "Highlight_Scalability_Advantage"
+    },
+    {
+      "count": 1,
+      "name": "Invoke_Standard_Theorem_Requirements"
+    },
+    {
+      "count": 1,
+      "name": "Assert_Primary_Contribution"
+    },
+    {
+      "count": 1,
+      "name": "Expand_Scope_Significance"
+    },
+    {
+      "count": 1,
+      "name": "Request_Clarity"
+    },
+    {
+      "count": 1,
+      "name": "Seek_Clarification_On_Preprocessing"
+    },
+    {
+      "count": 1,
+      "name": "Probe_Practical_Details"
+    },
+    {
+      "count": 1,
+      "name": "Request_Detailed_Comparison"
+    },
+    {
+      "count": 1,
+      "name": "Concede_Structural_Point_with_Justification"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Experimental_Handling"
+    },
+    {
+      "count": 1,
+      "name": "Establish_Initial_Understanding"
+    },
+    {
+      "count": 1,
+      "name": "Finalize_Positive_Judgment"
+    },
+    {
+      "count": 1,
+      "name": "Request_Definitional_Consistency"
+    },
+    {
+      "count": 1,
+      "name": "Request_Enhanced_Interpretation"
+    },
+    {
+      "count": 1,
+      "name": "Deepen_Technical_Scrutiny"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Equation_Derivation"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Interpretability_Claims"
+    },
+    {
+      "count": 1,
+      "name": "Link_Normalization_to_Bulk_Contribution"
+    },
+    {
+      "count": 1,
+      "name": "Correct_Experimental_Errors"
+    },
+    {
+      "count": 1,
+      "name": "Request_Comprehensive_Comparison"
+    },
+    {
+      "count": 1,
+      "name": "Summarize_Paper_And_Results"
+    },
+    {
+      "count": 1,
+      "name": "Address_Ethical_Concerns"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Theoretical_Contradiction"
+    },
+    {
+      "count": 1,
+      "name": "Justify_Baseline_Exclusion"
+    },
+    {
+      "count": 1,
+      "name": "Probe_Theoretical_Grounding"
+    },
+    {
+      "count": 1,
+      "name": "Present_Key_Rebuttal_Results_and_Validation_Studies"
+    },
+    {
+      "count": 1,
+      "name": "Acknowledge_Resolution_And_Update_Evaluation"
+    },
+    {
+      "count": 1,
+      "name": "Organize_Multi_Point_Rebuttal"
+    },
+    {
+      "count": 1,
+      "name": "Ensure_Methodological_Clarity"
+    },
+    {
+      "count": 1,
+      "name": "Provide_Evidence_To_Rebut_Criticism"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Methodological_Claim"
+    },
+    {
+      "count": 1,
+      "name": "Normalize_Limitation_across_Baselines"
+    },
+    {
+      "count": 1,
+      "name": "Solidify_Conclusion"
+    },
+    {
+      "count": 1,
+      "name": "Demand_Stronger_Baselines"
+    },
+    {
+      "count": 1,
+      "name": "Enhance_Clarity"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Experimental_Gap"
+    },
+    {
+      "count": 1,
+      "name": "Question_Experiment_Relevance"
+    },
+    {
+      "count": 1,
+      "name": "Reinforce_Methodological_Rigor"
+    },
+    {
+      "count": 1,
+      "name": "Justify_Score_Revision_with_New_Evidence"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Significance_of_Research"
+    },
+    {
+      "count": 1,
+      "name": "Seek_Final_Consensus"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Applicability"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Baseline_Selection_With_Evidence"
+    },
+    {
+      "count": 1,
+      "name": "Acknowledge_And_Manage_Future_Work"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Methodological_Details"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Generalizability_of_Findings"
+    },
+    {
+      "count": 1,
+      "name": "Acknowledge_Paper_Strengths"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Methodological_Practicality"
+    },
+    {
+      "count": 1,
+      "name": "Probe_Evaluation_Fairness"
+    },
+    {
+      "count": 1,
+      "name": "Concede_And_Clarify_Misunderstanding"
+    },
+    {
+      "count": 1,
+      "name": "Establish_Experimental_Fairness_And_Ensure_Transparency"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Novelty_and_Generalizability"
+    },
+    {
+      "count": 1,
+      "name": "Request_Evidence_and_Replicability"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Methodological_Limitation"
+    },
+    {
+      "count": 1,
+      "name": "Concede_Point_To_Reconcile"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Realism"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Practicality_Issues"
+    },
+    {
+      "count": 1,
+      "name": "Counter_Methodological_Critique"
+    },
+    {
+      "count": 1,
+      "name": "Question_Technical_Robustness"
+    },
+    {
+      "count": 1,
+      "name": "Enhance_Impact_And_Clarity_Based_On_Feedback"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Fairness_and_Broad_Applicability"
+    },
+    {
+      "count": 1,
+      "name": "Resolve_Ambiguity_With_Reference"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Evaluation_Incompleteness"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Experimental_Setup_by_Appealing_to_Original_Method_and_Scalability"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Mathematical_Rigor_And_Precision"
+    },
+    {
+      "count": 1,
+      "name": "Ensure_Correctness"
+    },
+    {
+      "count": 1,
+      "name": "Strengthen_Empirical_Validity"
+    },
+    {
+      "count": 1,
+      "name": "Enforce_Terminology_Standards"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Against_Multi_Faceted_Critique"
+    },
+    {
+      "count": 1,
+      "name": "Probe_Robustness_Claims"
+    },
+    {
+      "count": 1,
+      "name": "Demand_Statistical_Rigor"
+    },
+    {
+      "count": 1,
+      "name": "Acknowledge_Positive_Change"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Validity_Of_Shift"
+    },
+    {
+      "count": 1,
+      "name": "Acknowledge_Analytical_Contribution"
+    },
+    {
+      "count": 1,
+      "name": "Affirm_Theoretical_Novelty"
+    },
+    {
+      "count": 1,
+      "name": "Provide_Mathematical_Proof_of_Claim"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Argument_Structure"
+    },
+    {
+      "count": 1,
+      "name": "Improve_Presentation_Quality"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Methodological_Distinction"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Hardware_Choice_And_Demonstrate_Framework_Generality"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Methodological_Choices"
+    },
+    {
+      "count": 1,
+      "name": "Demonstrate_Scalability_And_Reframe_Method_Complementarity"
+    },
+    {
+      "count": 1,
+      "name": "Establish_Review_Context"
+    },
+    {
+      "count": 1,
+      "name": "Undermine_Problem_Motivation"
+    },
+    {
+      "count": 1,
+      "name": "Question_Fundamental_Design_Choice"
+    },
+    {
+      "count": 1,
+      "name": "Consolidate_Rebuttal"
+    },
+    {
+      "count": 1,
+      "name": "Prove_Architectural_Necessity"
+    },
+    {
+      "count": 1,
+      "name": "Discredit_Evaluation_Foundations"
+    },
+    {
+      "count": 1,
+      "name": "Assert_Novelty_And_Superiority"
+    },
+    {
+      "count": 1,
+      "name": "Explain_Synergy"
+    },
+    {
+      "count": 1,
+      "name": "Demand_Clarity_Of_Contribution"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Assumption_Validity"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Prior_Art_Overlap"
+    },
+    {
+      "count": 1,
+      "name": "Request_Complete_Data"
+    },
+    {
+      "count": 1,
+      "name": "Shift_Evaluation_Metrics"
+    },
+    {
+      "count": 1,
+      "name": "Request_Methodological_Analysis"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Visual_Presentation"
+    },
+    {
+      "count": 1,
+      "name": "Consolidate_Rebuttal_Evidence"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Practical_Viability"
+    },
+    {
+      "count": 1,
+      "name": "Question_Prompt_Design_Integrity"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Limited_Contribution"
+    },
+    {
+      "count": 1,
+      "name": "Question_Statistical_Rigor"
+    },
+    {
+      "count": 1,
+      "name": "Request_Deeper_Experimental_Analysis"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Novelty_Gap"
+    },
+    {
+      "count": 1,
+      "name": "Ensure_Compliance_with_Requests"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Theoretical_Novelty"
+    },
+    {
+      "count": 1,
+      "name": "Bridge_Theory_Experiment_Gap"
+    },
+    {
+      "count": 1,
+      "name": "Establish_Problem_Distinctness"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Insufficient_Details"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Current_Scope"
+    },
+    {
+      "count": 1,
+      "name": "Provide_Concrete_Evidence_for_Fairness"
+    },
+    {
+      "count": 1,
+      "name": "Concede_Minor_Point_To_Maintain_Credibility"
+    },
+    {
+      "count": 1,
+      "name": "Mitigate_Data_Leakage_Concern"
+    },
+    {
+      "count": 1,
+      "name": "Highlight_Scope_Limitation"
+    },
+    {
+      "count": 1,
+      "name": "Counter_Criticism_with_Empirical_Efficiency_Data"
+    },
+    {
+      "count": 1,
+      "name": "Accept_Minor_Correction"
+    },
+    {
+      "count": 1,
+      "name": "Probe_Privacy_Motivation_and_Accounting"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Anomalous_Result"
+    },
+    {
+      "count": 1,
+      "name": "Ensure_Honest_Brokerage"
+    },
+    {
+      "count": 1,
+      "name": "Probe_Experimental_Validity"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Theoretical_Grounding"
+    },
+    {
+      "count": 1,
+      "name": "Mitigate_Concern"
+    },
+    {
+      "count": 1,
+      "name": "Improve_Paper_Presentation"
+    },
+    {
+      "count": 1,
+      "name": "Address_Limitations_Proactively"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Output_Quality"
+    },
+    {
+      "count": 1,
+      "name": "Demonstrate_Empirical_Rigor"
+    },
+    {
+      "count": 1,
+      "name": "Maintain_Position_Due_To_Unmet_Requirement"
+    },
+    {
+      "count": 1,
+      "name": "Probe_Limitations"
+    },
+    {
+      "count": 1,
+      "name": "Document_Revisions"
+    },
+    {
+      "count": 1,
+      "name": "Provide_Mechanistic_Explanation_For_Empirical_Finding"
+    },
+    {
+      "count": 1,
+      "name": "Request_Deeper_Conceptual_Mapping"
+    },
+    {
+      "count": 1,
+      "name": "Concede_Limitation_While_Providing_Supporting_Evidence"
+    },
+    {
+      "count": 1,
+      "name": "Probe_Robustness_Under_Constraints"
+    },
+    {
+      "count": 1,
+      "name": "Concede_Potential_Improvement"
+    },
+    {
+      "count": 1,
+      "name": "Validate_Generation_Novelty"
+    },
+    {
+      "count": 1,
+      "name": "Demand_Comprehensive_Evaluation"
+    },
+    {
+      "count": 1,
+      "name": "Amend_Claim_With_Additional_Evidence"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Novelty_Relative_To_Prior_Work"
+    },
+    {
+      "count": 1,
+      "name": "Ensure_Fair_Comparison"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Claim_Superiority"
+    },
+    {
+      "count": 1,
+      "name": "Counter_Bias_Allegation"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Unrealistic_System_Assumption"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Conceptual_Ambiguity"
+    },
+    {
+      "count": 1,
+      "name": "Explain_Confounding_Result"
+    },
+    {
+      "count": 1,
+      "name": "Extend_Contribution_Scope"
+    },
+    {
+      "count": 1,
+      "name": "Trap_With_Fairness_Request"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_And_Defend"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Literature_Review"
+    },
+    {
+      "count": 1,
+      "name": "Maintain_Position_Acknowledge_Engagement"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Technical_Misunderstanding"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Architectural_Assumptions"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Efficacy"
+    },
+    {
+      "count": 1,
+      "name": "Counter_Downplay"
+    },
+    {
+      "count": 1,
+      "name": "Demonstrate_Method_Flexibility"
+    },
+    {
+      "count": 1,
+      "name": "Address_Limitations_And_Update_Benchmarks"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Experimental_Validity"
+    },
+    {
+      "count": 1,
+      "name": "Endorse_Paper"
+    },
+    {
+      "count": 1,
+      "name": "Shift_Goalposts_And_Neutralize_Critique"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_And_Limit_Scope"
+    },
+    {
+      "count": 1,
+      "name": "Demonstrate_Superiority_via_Ablation"
+    },
+    {
+      "count": 1,
+      "name": "Prevent_Community_Confusion_and_Ensure_Proper_Citation"
+    },
+    {
+      "count": 1,
+      "name": "Establish_Common_Understanding"
+    },
+    {
+      "count": 1,
+      "name": "Acknowledge_Satisfactory_Rebuttal"
+    },
+    {
+      "count": 1,
+      "name": "Justify_Methodological_Choice"
+    },
+    {
+      "count": 1,
+      "name": "Reframe_Weakness_as_Training_Data_Issue"
+    },
+    {
+      "count": 1,
+      "name": "Validate_Problem_Interest"
+    },
+    {
+      "count": 1,
+      "name": "Demand_Comparative_Discussion"
+    },
+    {
+      "count": 1,
+      "name": "Elicit_Justification_for_Utility"
+    },
+    {
+      "count": 1,
+      "name": "Finalize_Negative_Evaluation"
+    },
+    {
+      "count": 1,
+      "name": "Ensure_Mathematical_Precision"
+    },
+    {
+      "count": 1,
+      "name": "Test_Real_World_Applicability"
+    },
+    {
+      "count": 1,
+      "name": "Address_Definition_Gap"
+    },
+    {
+      "count": 1,
+      "name": "Probe_Methodological_Completeness"
+    },
+    {
+      "count": 1,
+      "name": "Probe_Mechanistic_Explanation"
+    },
+    {
+      "count": 1,
+      "name": "Position_Relative_To_Existing_Work"
+    },
+    {
+      "count": 1,
+      "name": "Evaluate_Practical_Feasibility"
+    },
+    {
+      "count": 1,
+      "name": "Justify_Design_Choice"
+    },
+    {
+      "count": 1,
+      "name": "Probe_Architectural_Justification"
+    },
+    {
+      "count": 1,
+      "name": "Enhance_Presentation"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Methodological_Rigor_with_Empirical_Evidence"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Scope"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Scope_Choice"
+    },
+    {
+      "count": 1,
+      "name": "Suggest_Method_Extension"
+    },
+    {
+      "count": 1,
+      "name": "Enhance_Presentation_Clarity"
+    },
+    {
+      "count": 1,
+      "name": "Concede_Minor_Point_to_Improve_Clarity"
+    },
+    {
+      "count": 1,
+      "name": "Reinforce_TinyMem_Validation_Approach"
+    },
+    {
+      "count": 1,
+      "name": "Demonstrate_Practical_And_Environmental_Benefits"
+    },
+    {
+      "count": 1,
+      "name": "Summarize_Empirical_Validation"
+    },
+    {
+      "count": 1,
+      "name": "Highlight_Complexity_Limitations"
+    },
+    {
+      "count": 1,
+      "name": "Solidify_Support"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Construction_Validity"
+    },
+    {
+      "count": 1,
+      "name": "Acknowledge_Limitation_But_Show_Relevance"
+    },
+    {
+      "count": 1,
+      "name": "Improve_Evaluation_Comprehensiveness"
+    },
+    {
+      "count": 1,
+      "name": "Enhance_Interpretability_Design"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Experimental_Control"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Implementation_Weakness"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Empirical_Robustness"
+    },
+    {
+      "count": 1,
+      "name": "Substantiate_Claims_With_References"
+    },
+    {
+      "count": 1,
+      "name": "Enforce_Scientific_Precision_in_Terminology"
+    },
+    {
+      "count": 1,
+      "name": "Summarize_Core_Contribution"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Contribution_Significance"
+    },
+    {
+      "count": 1,
+      "name": "Foster_Constructive_Dialogue"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Narrative_Inconsistency"
+    },
+    {
+      "count": 1,
+      "name": "Improve_Evaluation_Reliability"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Methodological_Mismatch"
+    },
+    {
+      "count": 1,
+      "name": "Undermine_Empirical_Support"
+    },
+    {
+      "count": 1,
+      "name": "Empirically_Substantiate_Expertise_Claim"
+    },
+    {
+      "count": 1,
+      "name": "Improve_Proof_Explanation"
+    },
+    {
+      "count": 1,
+      "name": "Counter_Complexity_Concern"
+    },
+    {
+      "count": 1,
+      "name": "Preemptively_Validate_and_Expand_Scope"
+    },
+    {
+      "count": 1,
+      "name": "Demonstrate_Transparency_and_Robustness"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Distillation_Value"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Limitation_Of_In_Context_Learning"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Basic_Training_Setup"
+    },
+    {
+      "count": 1,
+      "name": "Acknowledge_Feedback"
+    },
+    {
+      "count": 1,
+      "name": "Request_Novelty_Clarification"
+    },
+    {
+      "count": 1,
+      "name": "Escalate_Conflict_and_Demand_Evidence"
+    },
+    {
+      "count": 1,
+      "name": "Provide_Empirical_Evidence_to_Address_Critique"
+    },
+    {
+      "count": 1,
+      "name": "Reframe_Weakness_As_Strength"
+    },
+    {
+      "count": 1,
+      "name": "Substantiate_Claims"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Novelty_And_Scope"
+    },
+    {
+      "count": 1,
+      "name": "Probe_For_Details"
+    },
+    {
+      "count": 1,
+      "name": "Demand_Stronger_Empirical_Validation"
+    },
+    {
+      "count": 1,
+      "name": "Demand_Reproducibility_Detail"
+    },
+    {
+      "count": 1,
+      "name": "Ensure_Comprehensive_Related_Work"
+    },
+    {
+      "count": 1,
+      "name": "Enforce_Consistency"
+    },
+    {
+      "count": 1,
+      "name": "Concede_And_Reframe"
+    },
+    {
+      "count": 1,
+      "name": "Request_Additional_Experiment"
+    },
+    {
+      "count": 1,
+      "name": "Ground_Argument_in_Prior_Work"
+    },
+    {
+      "count": 1,
+      "name": "Enforce_Comparative_Rigor"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Misunderstanding; Conduct_Ablation_Study"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Performance_Tradeoff"
+    },
+    {
+      "count": 1,
+      "name": "Maintain_Assessment"
+    },
+    {
+      "count": 1,
+      "name": "Discredit_Revision_Validity"
+    },
+    {
+      "count": 1,
+      "name": "Correct_Minor_Error"
+    },
+    {
+      "count": 1,
+      "name": "Differentiate_from_Prior_Work"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Methodological_Integrity"
+    },
+    {
+      "count": 1,
+      "name": "Address_Benchmarking_Gap"
+    },
+    {
+      "count": 1,
+      "name": "Demonstrate_Practical_Utility"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Study_Design"
+    },
+    {
+      "count": 1,
+      "name": "Reinforce_Reproducibility_Value"
+    },
+    {
+      "count": 1,
+      "name": "Seek_Clarity_On_Ancillary_Point"
+    },
+    {
+      "count": 1,
+      "name": "Highlight_Presentation_Flaws"
+    },
+    {
+      "count": 1,
+      "name": "Specify_Application_Mechanism"
+    },
+    {
+      "count": 1,
+      "name": "Request_Clarification_Of_Impact"
+    },
+    {
+      "count": 1,
+      "name": "Mandate_Literature_Engagement"
+    },
+    {
+      "count": 1,
+      "name": "Validate_Understanding_Of_Results"
+    },
+    {
+      "count": 1,
+      "name": "Probe_Assumption_Justification"
+    },
+    {
+      "count": 1,
+      "name": "Suggest_Experiment_To_Isolate_Mechanism"
+    },
+    {
+      "count": 1,
+      "name": "Concede_And_Express_Optimism"
+    },
+    {
+      "count": 1,
+      "name": "Acknowledge_Strength"
+    },
+    {
+      "count": 1,
+      "name": "Validate_Benchmark_Alignment"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Method_Practicality"
+    },
+    {
+      "count": 1,
+      "name": "Refine_Argument_Clarity"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Methodological_Framing"
+    },
+    {
+      "count": 1,
+      "name": "Strengthen_Qualitative_Evidence"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Novelty_Claim"
+    },
+    {
+      "count": 1,
+      "name": "Demonstrate_Scalability_and_Robustness"
+    },
+    {
+      "count": 1,
+      "name": "Pressure_For_Ablation_Study"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Inappropriate_Experimental_Comparison"
+    },
+    {
+      "count": 1,
+      "name": "Proactively_Respond_to_Criticism"
+    },
+    {
+      "count": 1,
+      "name": "Maintain_Pressure_On_Core_Flaw"
+    },
+    {
+      "count": 1,
+      "name": "Provide_Evidence_Justification"
+    },
+    {
+      "count": 1,
+      "name": "Address_Refined_Generalization_Request"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Motivational_Gap"
+    },
+    {
+      "count": 1,
+      "name": "Highlight_Architectural_Dependency"
+    },
+    {
+      "count": 1,
+      "name": "Extend_Application_Scope"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Limitation_of_Contribution"
+    },
+    {
+      "count": 1,
+      "name": "Set_Initial_Assessment_Tone"
+    },
+    {
+      "count": 1,
+      "name": "Highlight_Evaluation_Gap"
+    },
+    {
+      "count": 1,
+      "name": "Secure_Reviewer_Approval"
+    },
+    {
+      "count": 1,
+      "name": "Contextualize_Findings"
+    },
+    {
+      "count": 1,
+      "name": "Acknowledge_Open_Problem_And_Show_Insight"
+    },
+    {
+      "count": 1,
+      "name": "Justify_Experimental_Design"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Novelty_And_Reframe_Debate"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Practical_Limitation"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Inconsistency"
+    },
+    {
+      "count": 1,
+      "name": "Answer_Question"
+    },
+    {
+      "count": 1,
+      "name": "Fix_Technical_Error"
+    },
+    {
+      "count": 1,
+      "name": "Establish_Momentum_And_Consensus"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Simplicity_vs_Performance_Tradeoff"
+    },
+    {
+      "count": 1,
+      "name": "Provoke_Discussion_on_Optimal_Methods"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Novelty_and_Distinction"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Theoretical_Result"
+    },
+    {
+      "count": 1,
+      "name": "Establish_Evaluation_Context"
+    },
+    {
+      "count": 1,
+      "name": "Acknowledge_Contributions"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Theoretical_Claims"
+    },
+    {
+      "count": 1,
+      "name": "Delineate_Method_Characteristics"
+    },
+    {
+      "count": 1,
+      "name": "Provide_Constructive_Feedback"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Author's_Novelty_Claim"
+    },
+    {
+      "count": 1,
+      "name": "Finalize_Explanation"
+    },
+    {
+      "count": 1,
+      "name": "Acknowledge_Methodological_Clarity"
+    },
+    {
+      "count": 1,
+      "name": "Acknowledge_And_Address_Limitation"
+    },
+    {
+      "count": 1,
+      "name": "Persist_with_Definition_Challenge"
+    },
+    {
+      "count": 1,
+      "name": "Correct_Factual_Error"
+    },
+    {
+      "count": 1,
+      "name": "Conditionally_Request_Additional_Validation"
+    },
+    {
+      "count": 1,
+      "name": "Address_Reviewer_Feedback"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Theoretical_Justifications"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Unfair_Comparison"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Novelty_And_Impact"
+    },
+    {
+      "count": 1,
+      "name": "Address_Reproducibility_Concern"
+    },
+    {
+      "count": 1,
+      "name": "Request_Baseline_Expansion"
+    },
+    {
+      "count": 1,
+      "name": "Demand_More_Rigorous_Evaluation"
+    },
+    {
+      "count": 1,
+      "name": "Negotiate_Consensus_By_Showing_Good_Faith"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Originality_Claim"
+    },
+    {
+      "count": 1,
+      "name": "Address_Scope_Limitation"
+    },
+    {
+      "count": 1,
+      "name": "Demand_Practical_Motivation"
+    },
+    {
+      "count": 1,
+      "name": "Probe_Generalizability"
+    },
+    {
+      "count": 1,
+      "name": "Probe_Method_Boundaries"
+    },
+    {
+      "count": 1,
+      "name": "Establish_Thorough_Engagement"
+    },
+    {
+      "count": 1,
+      "name": "Probe_Experimental_Justification"
+    },
+    {
+      "count": 1,
+      "name": "Establish_Context_for_Evaluation"
+    },
+    {
+      "count": 1,
+      "name": "Improve_Clarity_And_Robustness"
+    },
+    {
+      "count": 1,
+      "name": "Pressure_For_Reproducibility"
+    },
+    {
+      "count": 1,
+      "name": "Counter_Efficiency_Concerns"
+    },
+    {
+      "count": 1,
+      "name": "Mount_Comprehensive_Defense_To_Neutralize_Criticism_Of_Dataset_Size"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Architectural_Choice_with_Empirical_Evidence"
+    },
+    {
+      "count": 1,
+      "name": "Request_Clarification_On_Weaknesses"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Notational_Ambiguity"
+    },
+    {
+      "count": 1,
+      "name": "Probe_Model_Robustness"
+    },
+    {
+      "count": 1,
+      "name": "Justify_Core_Design_Choice"
+    },
+    {
+      "count": 1,
+      "name": "Acknowledge_Conceptual_Contribution"
+    },
+    {
+      "count": 1,
+      "name": "Request_Complete_Evaluation"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Evaluation_Validity"
+    },
+    {
+      "count": 1,
+      "name": "Demonstrate_Superiority"
+    },
+    {
+      "count": 1,
+      "name": "Highlight_Sample_Complexity_Superiority"
+    },
+    {
+      "count": 1,
+      "name": "Devalue_Contribution"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Theoretical_Limitation"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Experimental_Flaw"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Potential_Bias"
+    },
+    {
+      "count": 1,
+      "name": "Justify_Methodological_Approach"
+    },
+    {
+      "count": 1,
+      "name": "Appeal_For_Score_Increase"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Methodology_with_Ablation"
+    },
+    {
+      "count": 1,
+      "name": "Strengthen_Threat_Model_Claims"
+    },
+    {
+      "count": 1,
+      "name": "Request_Explanation_for_Anomalous_Result"
+    },
+    {
+      "count": 1,
+      "name": "Resolve_Methodological_Confusion"
+    },
+    {
+      "count": 1,
+      "name": "Question_Novelty_Threshold"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Method_Scope"
+    },
+    {
+      "count": 1,
+      "name": "Acknowledge_Methodological_Rigor"
+    },
+    {
+      "count": 1,
+      "name": "Outline_Critique_Areas"
+    },
+    {
+      "count": 1,
+      "name": "Highlight_Positive_Reception_And_Consensus"
+    },
+    {
+      "count": 1,
+      "name": "Request_Deeper_Justification"
+    },
+    {
+      "count": 1,
+      "name": "Validate_Empirical_Claims"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Contribution_Specificity"
+    },
+    {
+      "count": 1,
+      "name": "Demonstrate_Component_Effectiveness"
+    },
+    {
+      "count": 1,
+      "name": "Question_Novelty_Sufficiency_For_Venue"
+    },
+    {
+      "count": 1,
+      "name": "Correct_Misunderstanding_But_Maintain_Critique"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Contribution_Hierarchy"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Against_Irrelevant_Counterexample"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Empirical_Choice"
+    },
+    {
+      "count": 1,
+      "name": "Formalize_Theoretical_Challenge"
+    },
+    {
+      "count": 1,
+      "name": "Organize_Rebuttal_Structure"
+    },
+    {
+      "count": 1,
+      "name": "Address_Practicality_Concern"
+    },
+    {
+      "count": 1,
+      "name": "Provide_Empirical_Evidence"
+    },
+    {
+      "count": 1,
+      "name": "Acknowledge_Strengths"
+    },
+    {
+      "count": 1,
+      "name": "Address_Experimental_Request"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Scalability_Limitation"
+    },
+    {
+      "count": 1,
+      "name": "Request_Enhanced_Analysis"
+    },
+    {
+      "count": 1,
+      "name": "Enhance_Transparency"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Methodological_Ambiguity"
+    },
+    {
+      "count": 1,
+      "name": "Ensure_Comprehensive_Evaluation"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Architectural_Design"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Method_Robustness"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Methodological_Gaps"
+    },
+    {
+      "count": 1,
+      "name": "Leverage_Score_For_Action"
+    },
+    {
+      "count": 1,
+      "name": "Undermine_Contribution_Significance"
+    },
+    {
+      "count": 1,
+      "name": "Establish_Initial_Stance"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Incomplete_Comparison"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Presentation_Flaw"
+    },
+    {
+      "count": 1,
+      "name": "Acknowledge_Practical_Benefits"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Scope_of_Comparison"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Methodological_Inconsistency_And_Force_Clarification"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Generalization_Claim"
+    },
+    {
+      "count": 1,
+      "name": "Strengthen_Methodological_Rigor"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Under-specification"
+    },
+    {
+      "count": 1,
+      "name": "Improve_Notational_Clarity"
+    },
+    {
+      "count": 1,
+      "name": "Contextualize_Competing_Results"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Theoretical_Depth_and_Rigor"
+    },
+    {
+      "count": 1,
+      "name": "Partially_Concede_To_Defend_Core"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Scalability"
+    },
+    {
+      "count": 1,
+      "name": "Demand_Competitive_Validation"
+    },
+    {
+      "count": 1,
+      "name": "Defend_by_Reframing_Novelty_and_Scope"
+    },
+    {
+      "count": 1,
+      "name": "Validate_Ablation_Methodology"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Architectural_Motivation"
+    },
+    {
+      "count": 1,
+      "name": "Ensure_Baseline_Validity"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Motivation_Weakness"
+    },
+    {
+      "count": 1,
+      "name": "Establish_Understanding_And_Context"
+    },
+    {
+      "count": 1,
+      "name": "Probe_Future_Directions_and_Limitations"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Methodological_Weakness_and_Scope_Limitations"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Task_Setup_For_Reproducibility"
+    },
+    {
+      "count": 1,
+      "name": "Leverage_Existing_Evidence_For_Multiple_Reviewers"
+    },
+    {
+      "count": 1,
+      "name": "Probe_Methodological_Choice"
+    },
+    {
+      "count": 1,
+      "name": "Provide_Coherent_Narrative"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Experimental_Rigor"
+    },
+    {
+      "count": 1,
+      "name": "Uncover_Efficiency_Trade_offs"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Methodological_Weakness; Demand_Experimental_Rigor; Critique_Presentation_Quality"
+    },
+    {
+      "count": 1,
+      "name": "Counter_Criticism_With_Evidence"
+    },
+    {
+      "count": 1,
+      "name": "Summarize_And_Request_Rating_Change"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Against_Data_Leakage_And_Explain_Anomaly"
+    },
+    {
+      "count": 1,
+      "name": "Demand_Empirical_Clarity"
+    },
+    {
+      "count": 1,
+      "name": "Enforce_Reproducibility"
+    },
+    {
+      "count": 1,
+      "name": "Insist_on_Complete_Experimental_Coverage"
+    },
+    {
+      "count": 1,
+      "name": "Demonstrate_Robustness"
+    },
+    {
+      "count": 1,
+      "name": "Address_Interpretability_Concern"
+    },
+    {
+      "count": 1,
+      "name": "Counter_Pre-trained_Model_Suggestion"
+    },
+    {
+      "count": 1,
+      "name": "Provide_Comprehensive_Evidence"
+    },
+    {
+      "count": 1,
+      "name": "Deepen_Robustness_Analysis"
+    },
+    {
+      "count": 1,
+      "name": "Preempt_Criticism_by_Adding_Nuance"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Performance_with_Empirical_Results"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Practical_Gap"
+    },
+    {
+      "count": 1,
+      "name": "Strengthen_Theoretical_Presentation"
+    },
+    {
+      "count": 1,
+      "name": "Refute_Alternative_Explanation"
+    },
+    {
+      "count": 1,
+      "name": "Visualize_Superiority"
+    },
+    {
+      "count": 1,
+      "name": "Demonstrate_Scalability_And_Generalizability"
+    },
+    {
+      "count": 1,
+      "name": "Address_Inconsistency_Critique"
+    },
+    {
+      "count": 1,
+      "name": "Address_Theoretical_Query"
+    },
+    {
+      "count": 1,
+      "name": "Uniform_Engagement"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Fundamental_Theoretical_Weakness"
+    },
+    {
+      "count": 1,
+      "name": "Request_Contextual_Clarification"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Empirical_Validity"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Novelty_Against_Criticism"
+    },
+    {
+      "count": 1,
+      "name": "Establish_Trust"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Solution_Concept"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Gaps_in_Literature_Review"
+    },
+    {
+      "count": 1,
+      "name": "Reframe_Novelty_to_Defend_Contribution"
+    },
+    {
+      "count": 1,
+      "name": "Execute_Formal_Withdrawal_Procedure"
+    },
+    {
+      "count": 1,
+      "name": "Empirical_Validation_of_Theory"
+    },
+    {
+      "count": 1,
+      "name": "Report_Presentation_Change"
+    },
+    {
+      "count": 1,
+      "name": "Direct_To_Specific_Evidence"
+    },
+    {
+      "count": 1,
+      "name": "Establish_Collaborative_Stance"
+    },
+    {
+      "count": 1,
+      "name": "Question_Design_Choice"
+    },
+    {
+      "count": 1,
+      "name": "Reiterate_Contribution_Value"
+    },
+    {
+      "count": 1,
+      "name": "Request_Methodological_Balance"
+    },
+    {
+      "count": 1,
+      "name": "Probe_Error_Handling"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Experimental_Design_And_Results"
+    },
+    {
+      "count": 1,
+      "name": "Reframe_Contribution_From_Accuracy_To_Efficiency"
+    },
+    {
+      "count": 1,
+      "name": "Request_Deep_Analysis_of_Anomalies"
+    },
+    {
+      "count": 1,
+      "name": "Request_Contextualization"
+    },
+    {
+      "count": 1,
+      "name": "Demand_Clarity_of_Contribution"
+    },
+    {
+      "count": 1,
+      "name": "Recommend_Enhancement_of_Paper_Completeness_by_Highlighting_Practical_Considerations"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Metric_Reliability"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Theoretical_Clarity"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Weakness_in_Interpretability"
+    },
+    {
+      "count": 1,
+      "name": "Concede_and_Correct"
+    },
+    {
+      "count": 1,
+      "name": "Establish_Collaborative_Tone"
+    },
+    {
+      "count": 1,
+      "name": "Address_Query_Directly"
+    },
+    {
+      "count": 1,
+      "name": "Improve_Readability"
+    },
+    {
+      "count": 1,
+      "name": "Probe_Parameter_Sensitivity"
+    },
+    {
+      "count": 1,
+      "name": "Request_Parameter_Clarity"
+    },
+    {
+      "count": 1,
+      "name": "Challenge_Experimental_Design"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Problem_Importance"
+    },
+    {
+      "count": 1,
+      "name": "Acknowledge_Positive_Contribution"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Misconception"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Algorithmic_Ambiguity"
+    },
+    {
+      "count": 1,
+      "name": "Request_Minor_Correction"
+    },
+    {
+      "count": 1,
+      "name": "Request_More_Comprehensive_Baseline_Comparison"
+    },
+    {
+      "count": 1,
+      "name": "Demonstrate_Method_Generalization"
+    },
+    {
+      "count": 1,
+      "name": "Request_Clarity_on_Novelty"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Methodological_Weaknesses"
+    },
+    {
+      "count": 1,
+      "name": "Ensure_Experimental_Fairness"
+    },
+    {
+      "count": 1,
+      "name": "Strengthen_Empirical_Evaluation"
+    },
+    {
+      "count": 1,
+      "name": "Reframe_Novelty_Narrative"
+    },
+    {
+      "count": 1,
+      "name": "Show_Plug_and_Play_Value"
+    },
+    {
+      "count": 1,
+      "name": "Summarize_Technical_Contribution"
+    },
+    {
+      "count": 1,
+      "name": "Ensure_Methodological_Clarity_for_Replication"
+    },
+    {
+      "count": 1,
+      "name": "Establish_Positive_Frame"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Experimental_Rigor_and_Contribution_Scope"
+    },
+    {
+      "count": 1,
+      "name": "Experimental_Design_Clarity"
+    },
+    {
+      "count": 1,
+      "name": "Request_Clarity_And_Precision"
+    },
+    {
+      "count": 1,
+      "name": "Maintain_Position_On_Core_Weakness"
+    },
+    {
+      "count": 1,
+      "name": "Redirect_Weakness_to_Additional_Contribution"
+    },
+    {
+      "count": 1,
+      "name": "Concede_Minor_Point_To_Maintain_Position"
+    },
+    {
+      "count": 1,
+      "name": "Question_Experimental_Fairness"
+    },
+    {
+      "count": 1,
+      "name": "Probe_System_Robustness"
+    },
+    {
+      "count": 1,
+      "name": "Enhance_Transparency_Of_Data_Labeling_Process"
+    },
+    {
+      "count": 1,
+      "name": "Identify_Experimental_Gaps"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Paper_Scope"
+    },
+    {
+      "count": 1,
+      "name": "Defend_Novelty_by_Pivoting_to_Domain-Specific_Application"
+    },
+    {
+      "count": 1,
+      "name": "Concede_Major_Point_And_Reframe_Experiment"
+    },
+    {
+      "count": 1,
+      "name": "Negate_Parameter_Sensitivity_Critique"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Weakness_in_Mechanism_Justification"
+    },
+    {
+      "count": 1,
+      "name": "Rebut_Empirical_Challenge_With_New_Evidence"
+    },
+    {
+      "count": 1,
+      "name": "Expose_Theoretical_Practical_Gap"
+    },
+    {
+      "count": 1,
+      "name": "Clarify_Experimental_Rationale"
+    },
+    {
+      "count": 1,
+      "name": "Provide_Theoretical_Justification"
+    },
+    {
+      "count": 1,
+      "name": "Concede_and_Place_Evidence_Strategically"
+    },
+    {
+      "count": 1,
+      "name": "Recommend_Experimental_Update"
+    },
+    {
+      "count": 1,
+      "name": "Test_Boundary_Conditions"
+    },
+    {
+      "count": 1,
+      "name": "Acknowledge_Contextual_Justification"
+    },
+    {
+      "count": 1,
+      "name": "Acknowledge_Suggestion_And_Include_in_Revision"
+    }
+  ],
+  "total": 1000
+}

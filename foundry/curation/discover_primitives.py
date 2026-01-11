@@ -64,6 +64,7 @@ def parse_args():
     parser.add_argument("--progress-path", default="", help="Optional progress JSON path")
     parser.add_argument("--out-issues", default="", help="Optional output issues JSONL with primitive_id")
     parser.add_argument("--out-assignments", default="", help="Optional tool-call assignments JSONL")
+    parser.add_argument("--evidence-map", default="", help="Optional evidence mapping JSON/JSONL")
     parser.add_argument("--quiet", action="store_true", help="Disable progress logs")
     return parser.parse_args()
 
@@ -86,6 +87,38 @@ def default_schema(tool_category, operation):
     if operation and "Extract" in operation:
         return {"text": "string"}
     return {"note": "string"}
+
+
+def load_evidence_map(path):
+    if not path:
+        return {}
+    data = read_json_or_jsonl(path)
+    if len(data) == 1 and isinstance(data[0], dict):
+        record = data[0]
+        if "mapping" in record:
+            mapping = record.get("mapping", {})
+            return {str(k): str(v) for k, v in mapping.items() if k and v}
+        if "evidence_map" in record:
+            mapping = record.get("evidence_map", {})
+            return {str(k): str(v) for k, v in mapping.items() if k and v}
+        if "items" in record:
+            mapping = {}
+            for item in record.get("items", []):
+                cat = item.get("tool_category")
+                evidence = item.get("evidence_type") or item.get("mapped_evidence")
+                if cat and evidence:
+                    mapping[str(cat)] = str(evidence)
+            return mapping
+        return {str(k): str(v) for k, v in record.items() if k and v}
+    mapping = {}
+    for rec in data:
+        if not isinstance(rec, dict):
+            continue
+        cat = rec.get("tool_category")
+        evidence = rec.get("evidence_type") or rec.get("mapped_evidence")
+        if cat and evidence:
+            mapping[str(cat)] = str(evidence)
+    return mapping
 
 
 def build_call_text(call, include_outcome):
@@ -345,6 +378,7 @@ def kmeans_sklearn(embeddings, num_clusters, batch_size, max_iter, seed, method,
 
 def main():
     args = parse_args()
+    evidence_map = load_evidence_map(args.evidence_map)
     issues = read_json_or_jsonl(args.input_path)
 
     call_entries = []
@@ -478,7 +512,13 @@ def main():
         tool_category = tool_counts.most_common(1)[0][0]
         operation = op_counts.most_common(1)[0][0]
         target_type = target_counts.most_common(1)[0][0]
-        evidence_type = map_evidence_type(tool_category, operation)
+        mapped = None
+        if evidence_map:
+            if tool_category and operation:
+                mapped = evidence_map.get(f"{tool_category}::{operation}")
+            if not mapped and tool_category:
+                mapped = evidence_map.get(tool_category)
+        evidence_type = mapped or map_evidence_type(tool_category, operation)
 
         name = operation or "unknown"
         base_id = f"prim_{label:04d}_{slugify(name)[:24]}"

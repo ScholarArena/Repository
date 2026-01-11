@@ -10,7 +10,7 @@ from urllib import request as url_request
 
 sys.path.append(str(Path(__file__).resolve().parents[2]))
 
-from foundry.utils import now_iso, read_json_or_jsonl
+from foundry.utils import now_iso, read_json_or_jsonl, split_intents
 
 
 def parse_args():
@@ -65,7 +65,9 @@ def build_prompt(raw_items, min_canonical, max_canonical):
                 "each raw_intent must map to exactly one canonical intent; "
                 "mapped_intent must appear in canonical_intents; "
                 "definitions are one sentence; avoid paper-specific terms. "
-                "If a raw_intent is already generic, you may reuse it as a canonical intent."
+                "Compression goal: do not simply copy raw intents. "
+                "Each canonical intent should cover multiple raw intents when possible. "
+                "If there are more raw intents than MAX_CANONICAL, you must merge them."
             ),
         },
         {
@@ -89,14 +91,18 @@ def main():
 
     intents = defaultdict(lambda: {"count": 0, "examples": []})
     for rec in records:
-        intent = rec.get("strategic_intent")
-        if not intent:
+        raw_intents = split_intents(rec.get("strategic_intent"))
+        if not raw_intents:
             continue
-        entry = intents[intent]
-        entry["count"] += 1
-        if len(entry["examples"]) < args.per_intent:
-            action = rec.get("action")
-            if action:
+        action = rec.get("action")
+        seen = set()
+        for intent in raw_intents:
+            if intent in seen:
+                continue
+            seen.add(intent)
+            entry = intents[intent]
+            entry["count"] += 1
+            if action and len(entry["examples"]) < args.per_intent:
                 entry["examples"].append(action)
 
     raw_items = [

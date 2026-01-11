@@ -1,0 +1,38 @@
+{
+  "generated_at": "2026-01-11T12:43:03Z",
+  "items": [
+    {
+      "count": 833,
+      "name": "Unknown"
+    },
+    {
+      "count": 733,
+      "name": "Document"
+    },
+    {
+      "count": 165,
+      "name": "Text"
+    },
+    {
+      "count": 149,
+      "name": "Table"
+    },
+    {
+      "count": 113,
+      "name": "Figure"
+    },
+    {
+      "count": 111,
+      "name": "Implementation"
+    },
+    {
+      "count": 105,
+      "name": "Citation"
+    },
+    {
+      "count": 64,
+      "name": "Statistical"
+    }
+  ],
+  "total": 1000
+}

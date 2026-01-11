@@ -3,7 +3,7 @@ import re
 from collections import Counter, defaultdict
 from pathlib import Path
 
-from foundry.utils import normalize_tool_calls, read_json_or_jsonl, slugify, stable_hash, write_jsonl
+from foundry.utils import normalize_tool_calls, read_json_or_jsonl, slugify, stable_hash, write_jsonl, split_intents
 
 
 SEC_RE = re.compile(r"\bsec(?:tion)?\.?\s*(\d+(?:\.\d+)*)", re.IGNORECASE)
@@ -132,8 +132,8 @@ def main():
         for act in acts:
             if act.get("role"):
                 role_counts[act.get("role")] += 1
-            if act.get("strategic_intent"):
-                intent_counts[act.get("strategic_intent")] += 1
+            for intent in split_intents(act.get("strategic_intent")):
+                intent_counts[intent] += 1
             index_records.append(
                 {
                     "act_id": act.get("act_id") or act.get("issue_id"),

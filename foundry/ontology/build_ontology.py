@@ -6,7 +6,14 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).resolve().parents[2]))
 
-from foundry.utils import map_evidence_type, map_ref_type_to_evidence, normalize_tool_calls, now_iso, read_json_or_jsonl
+from foundry.utils import (
+    map_evidence_type,
+    map_ref_type_to_evidence,
+    normalize_tool_calls,
+    now_iso,
+    read_json_or_jsonl,
+    split_intents,
+)
 
 
 def parse_args():
@@ -15,6 +22,7 @@ def parse_args():
     parser.add_argument("--out", dest="output_dir", required=True, help="Output directory")
     parser.add_argument("--labels", default="", help="Optional cluster labels JSON/JSONL")
     parser.add_argument("--intent-map", default="", help="Optional intent mapping JSON/JSONL")
+    parser.add_argument("--evidence-map", default="", help="Optional evidence mapping JSON/JSONL")
     return parser.parse_args()
 
 
@@ -74,19 +82,57 @@ def load_intent_map(path):
     return {}
 
 
+def load_evidence_map(path):
+    if not path:
+        return {}
+    data = read_json_or_jsonl(path)
+    if len(data) == 1 and isinstance(data[0], dict):
+        record = data[0]
+        if "mapping" in record:
+            mapping = record.get("mapping", {})
+            return {str(k): str(v) for k, v in mapping.items() if k and v}
+        if "evidence_map" in record:
+            mapping = record.get("evidence_map", {})
+            return {str(k): str(v) for k, v in mapping.items() if k and v}
+        if "items" in record:
+            mapping = {}
+            for item in record.get("items", []):
+                cat = item.get("tool_category")
+                evidence = item.get("evidence_type") or item.get("mapped_evidence")
+                if cat and evidence:
+                    mapping[str(cat)] = str(evidence)
+            return mapping
+        return {str(k): str(v) for k, v in record.items() if k and v}
+    mapping = {}
+    for rec in data:
+        if not isinstance(rec, dict):
+            continue
+        cat = rec.get("tool_category")
+        evidence = rec.get("evidence_type") or rec.get("mapped_evidence")
+        if cat and evidence:
+            mapping[str(cat)] = str(evidence)
+    return mapping
+
+
 def summarize(counter, total):
     items = [{"name": k, "count": v} for k, v in counter.most_common()]
     return {"generated_at": now_iso(), "total": total, "items": items}
 
 
-def count_evidence(rec):
+def count_evidence(rec, evidence_map):
     counts = Counter()
     for call in normalize_tool_calls(rec.get("latent_tool_calls")):
         if not isinstance(call, dict):
             continue
         tool_category = call.get("tool_category")
         operation = call.get("operation")
-        counts[map_evidence_type(tool_category, operation)] += 1
+        mapped = None
+        if evidence_map:
+            if tool_category and operation:
+                mapped = evidence_map.get(f"{tool_category}::{operation}")
+            if not mapped and tool_category:
+                mapped = evidence_map.get(tool_category)
+        counts[mapped or map_evidence_type(tool_category, operation)] += 1
     paper_span = rec.get("paper_span") or {}
     if paper_span.get("status") != "not_required":
         for ref_type in paper_span.get("ref_types") or []:
@@ -100,6 +146,7 @@ def main():
     total = len(records)
     labels = load_labels(args.labels)
     intent_map = load_intent_map(args.intent_map)
+    evidence_map = load_evidence_map(args.evidence_map)
 
     raw_intent_counts = Counter()
     intent_counts = Counter()
@@ -112,8 +159,7 @@ def main():
         cluster_id = rec.get("issue_cluster_id") or rec.get("cluster_id") or "unclustered"
         cluster_groups[cluster_id].append(rec)
 
-        raw_intent = rec.get("strategic_intent")
-        if raw_intent:
+        for raw_intent in split_intents(rec.get("strategic_intent")):
             raw_intent_counts[raw_intent] += 1
             mapped = intent_map.get(raw_intent, raw_intent)
             intent_counts[mapped] += 1
@@ -128,7 +174,7 @@ def main():
             if operation:
                 operation_counts[operation] += 1
 
-        evidence_counts.update(count_evidence(rec))
+        evidence_counts.update(count_evidence(rec, evidence_map))
 
     issue_items = []
     for cluster_id, items in cluster_groups.items():
@@ -136,14 +182,13 @@ def main():
         cluster_evidence = Counter()
         cluster_tools = Counter()
         for rec in items:
-            raw_intent = rec.get("strategic_intent")
-            if raw_intent:
+            for raw_intent in split_intents(rec.get("strategic_intent")):
                 mapped = intent_map.get(raw_intent, raw_intent)
                 cluster_intents[mapped] += 1
             for call in normalize_tool_calls(rec.get("latent_tool_calls")):
                 if isinstance(call, dict) and call.get("tool_category"):
                     cluster_tools[call.get("tool_category")] += 1
-            cluster_evidence.update(count_evidence(rec))
+            cluster_evidence.update(count_evidence(rec, evidence_map))
 
         label = labels.get(cluster_id, {}) if labels else {}
         issue_items.append(

@@ -129,7 +129,21 @@ python foundry/ontology/label_intents.py \
   --out foundry/ontology/intent_map.json
 ```
 
-### 7) Build ontology summaries (issue / intent / evidence)
+### 7) Optional: Map tool categories to evidence types
+
+- Script: `foundry/ontology/label_evidence_types.py`
+- Input: `data/processed/issues.jsonl`
+- Output: `foundry/ontology/evidence_map.json`
+
+```
+export DMX_API_KEY=sk-...
+python foundry/ontology/label_evidence_types.py \
+  --in data/processed/issues.jsonl \
+  --out foundry/ontology/evidence_map.json
+```
+By default it maps `tool_category::operation` pairs; use `--category-fallback` to ask the LLM for category-only mappings when no operations are selected.
+
+### 8) Build ontology summaries (issue / intent / evidence)
 
 - Script: `foundry/ontology/build_ontology.py`
 - Input: `data/processed/issues.jsonl`
@@ -140,12 +154,13 @@ python foundry/ontology/build_ontology.py \
   --in data/processed/issues.jsonl \
   --out foundry/ontology \
   --labels foundry/ontology/cluster_labels.jsonl \
-  --intent-map foundry/ontology/intent_map.json
+  --intent-map foundry/ontology/intent_map.json \
+  --evidence-map foundry/ontology/evidence_map.json
 ```
 
 Outputs include `issue_ontology.json`, `intent_ontology.json`, `intent_ontology_raw.json`, `evidence_ontology.json`, and tool/operation summaries.
 
-### 8) Discover deterministic primitives (clustered tool calls)
+### 9) Discover deterministic primitives (clustered tool calls)
 
 - Script: `foundry/curation/discover_primitives.py`
 - Input: `data/processed/issues.jsonl`
@@ -161,8 +176,9 @@ python foundry/curation/discover_primitives.py \
 
 Use `--out-issues data/processed/issues_with_primitives.jsonl` to attach `primitive_id` back into issues. Use `--out-assignments` to save the call→primitive index.
 If `skills/primitives/embeddings.npy` is missing, add `--generate-embeddings` and the usual DMX embedding flags.
+To propagate LLM evidence mapping into primitives, add `--evidence-map foundry/ontology/evidence_map.json`.
 
-### 9) Compile primitives into skills
+### 10) Compile primitives into skills
 
 - Script: `foundry/curation/compile_skills.py`
 - Input: `skills/primitives/registry.json`
@@ -177,7 +193,7 @@ python foundry/curation/compile_skills.py \
 
 This creates stub `skill.py` files and manifests that reference discovered primitives.
 
-### 10) Run skills and collect observations
+### 11) Run skills and collect observations
 
 - Script: `foundry/curation/run_skills.py`
 - Input: `data/processed/issues.jsonl` + `skills/registry.json`
@@ -190,7 +206,7 @@ python foundry/curation/run_skills.py \
   --out data/interim/observations.jsonl
 ```
 
-### 11) Curate trajectories
+### 12) Curate trajectories
 
 - Script: `foundry/curation/curate_trajectories.py`
 - Input: `data/processed/issues.jsonl` + `data/interim/observations.jsonl`
