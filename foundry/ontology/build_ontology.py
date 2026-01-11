@@ -40,6 +40,8 @@ def main():
     evidence_counter = Counter()
 
     for rec in records:
+        if rec.get("latent_tool_calls") == "N/A":
+            continue
         intent = rec.get("strategic_intent")
         if intent:
             intent_counter[intent] += 1

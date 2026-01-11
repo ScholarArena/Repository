@@ -255,3 +255,19 @@ Output:
   - {'issue_id': 'M11LONBkx1#0008', 'forum_id': 'M11LONBkx1', 'grounding_ref': 'Appendix C.4 (to be added)', 'doc_path': 'data\\raw\\papers_md\\M11LONBkx1\\auto\\M11LONBkx1.md'}
   - {'issue_id': 'M11LONBkx1#0012', 'forum_id': 'M11LONBkx1', 'grounding_ref': 'Appendix C.3, Appendix C.4', 'doc_path': 'data\\raw\\papers_md\\M11LONBkx1\\auto\\M11LONBkx1.md'}
 ```
+
+## Run Log (cluster_issues: KMeans)
+
+Notes:
+- Selected KMeans over MiniBatchKMeans; `issues_kmeans.jsonl` renamed to `issues.jsonl`.
+
+Output:
+```
+[load] records=50991
+[cluster] method=kmeans k=226
+[cluster] sklearn KMeans fit start
+[cluster] sklearn KMeans fit done
+[summary] clusters=226 size_min=23 size_median=220.0 size_mean=225.6 size_max=496
+[summary] top_clusters: 199:496, 100:436, 149:419, 47:403, 106:388, 141:371, 191:369, 181:367, 19:367, 156:366
+[summary] inertia=22165.010
+```
