@@ -9,6 +9,22 @@ This document describes the concrete scripts and I/O for the Foundry pipeline (s
 
 ## Scripts and Responsibilities
 
+### Pipeline Scripts (ordered)
+
+For easier debugging, the pipeline is also split into step scripts with built-in checks:
+- `scripts/pipeline/01_parse.py`
+- `scripts/pipeline/02_grounding.py`
+- `scripts/pipeline/03_cluster.py`
+- `scripts/pipeline/04_ontology.py`
+- `scripts/pipeline/05_threads.py`
+- `scripts/pipeline/06_primitives.py`
+- `scripts/pipeline/07_skills_and_trajectories.py`
+
+Run the full chain with:
+```
+python scripts/pipeline/run_all.py
+```
+
 ### 1) Parse mining_results into issue-level JSONL
 
 - Script: `foundry/issue_mining/parse_mining_results.py`
