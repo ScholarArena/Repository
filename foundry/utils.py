@@ -55,6 +55,26 @@ def now_iso():
     return datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
 
 
+def normalize_tool_calls(value):
+    if value is None:
+        return []
+    if isinstance(value, dict):
+        return [value]
+    if isinstance(value, str):
+        return [value]
+    if isinstance(value, list):
+        cleaned = []
+        for item in value:
+            if item is None:
+                continue
+            if isinstance(item, (dict, str)):
+                cleaned.append(item)
+            else:
+                cleaned.append(str(item))
+        return cleaned
+    return [str(value)]
+
+
 def map_evidence_type(tool_category, operation):
     mapping = {
         "Literature_Cross_Check": "Citation",
@@ -63,6 +83,10 @@ def map_evidence_type(tool_category, operation):
         "Textual_Analysis": "Text",
         "Logical_Deduction": "Symbolic",
         "Argumentation_Validation": "Logical",
+        "Contextual_Clarification": "Implementation",
+        "Experimental_Addition": "Implementation",
+        "Methodology_Comparison": "Implementation",
+        "Performance_Analysis": "Statistical",
     }
     if tool_category in mapping:
         return mapping[tool_category]
@@ -75,6 +99,19 @@ def map_evidence_type(tool_category, operation):
         if "test" in op or "effect" in op or "ci" in op:
             return "Statistical"
     return "Unknown"
+
+
+def map_ref_type_to_evidence(ref_type):
+    mapping = {
+        "figure": "Figure",
+        "table": "Table",
+        "appendix": "Document",
+        "section": "Document",
+        "abstract": "Document",
+        "related_work": "Document",
+        "substring": "Text",
+    }
+    return mapping.get(ref_type, "Unknown")
 
 
 def load_registry(path):

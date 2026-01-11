@@ -14,7 +14,7 @@ import numpy as np
 
 sys.path.append(str(Path(__file__).resolve().parents[2]))
 
-from foundry.utils import read_json_or_jsonl, write_jsonl
+from foundry.utils import normalize_tool_calls, read_json_or_jsonl, write_jsonl
 
 
 def parse_args():
@@ -56,7 +56,7 @@ def parse_args():
     )
     parser.add_argument(
         "--embed-input-mode",
-        choices=["tool_calls", "intent_action"],
+        choices=["tool_calls", "intent_action", "semantic_act"],
         default="tool_calls",
         help="How to build embedding input text",
     )
@@ -96,24 +96,6 @@ def parse_args():
     return parser.parse_args()
 
 
-def derive_issue_type(issue):
-    intent = issue.get("strategic_intent")
-    if intent:
-        return intent
-    calls = issue.get("latent_tool_calls") or []
-    if isinstance(calls, dict):
-        return calls.get("operation") or "UNKNOWN"
-    if isinstance(calls, str):
-        return calls.strip()[:80] or "UNKNOWN"
-    if isinstance(calls, list) and calls:
-        first = calls[0]
-        if isinstance(first, dict):
-            return first.get("operation") or "UNKNOWN"
-        if isinstance(first, str):
-            return first.strip()[:80] or "UNKNOWN"
-    return "UNKNOWN"
-
-
 def load_embeddings(path, use_mmap):
     mmap_mode = "r" if use_mmap else None
     embeddings = np.load(path, mmap_mode=mmap_mode)
@@ -133,33 +115,7 @@ def heuristic_k(n):
     return int(max(10, min(2000, round(math.sqrt(n)))))
 
 
-def normalize_tool_calls(value):
-    if value is None:
-        return []
-    if isinstance(value, dict):
-        return [value]
-    if isinstance(value, str):
-        return [value]
-    if isinstance(value, list):
-        cleaned = []
-        for item in value:
-            if item is None:
-                continue
-            if isinstance(item, (dict, str)):
-                cleaned.append(item)
-            else:
-                cleaned.append(str(item))
-        return cleaned
-    return [str(value)]
-
-
-def build_embedding_text(issue, mode, include_outcome, include_grounding_ref):
-    if mode == "intent_action":
-        intent = issue.get("strategic_intent") or ""
-        action = issue.get("action") or ""
-        text = " | ".join([part for part in [intent, action] if part])
-        return text if text else "unknown"
-
+def build_tool_call_text(issue, include_outcome):
     calls = normalize_tool_calls(issue.get("latent_tool_calls"))
     parts = []
     for call in calls:
@@ -178,15 +134,40 @@ def build_embedding_text(issue, mode, include_outcome, include_grounding_ref):
         segment = " | ".join([part for part in segment_parts if part])
         if segment:
             parts.append(segment)
-    if parts:
-        text = " || ".join(parts)
-        if include_grounding_ref:
-            span = issue.get("paper_span") or {}
-            if span.get("status") != "not_required":
-                grounding_ref = issue.get("grounding_ref") or ""
-                if grounding_ref:
-                    text = f"{text} || grounding_ref: {grounding_ref}"
+    return " || ".join(parts)
+
+
+def maybe_append_grounding(text, issue, include_grounding_ref):
+    if not include_grounding_ref:
         return text
+    span = issue.get("paper_span") or {}
+    if span.get("status") == "not_required":
+        return text
+    grounding_ref = issue.get("grounding_ref") or ""
+    if grounding_ref:
+        return f"{text} || grounding_ref: {grounding_ref}" if text else f"grounding_ref: {grounding_ref}"
+    return text
+
+
+def build_embedding_text(issue, mode, include_outcome, include_grounding_ref):
+    if mode == "intent_action":
+        intent = issue.get("strategic_intent") or ""
+        action = issue.get("action") or ""
+        text = " | ".join([part for part in [intent, action] if part])
+        text = text if text else "unknown"
+        return maybe_append_grounding(text, issue, include_grounding_ref)
+
+    if mode == "semantic_act":
+        intent = issue.get("strategic_intent") or ""
+        action = issue.get("action") or ""
+        tool_text = build_tool_call_text(issue, include_outcome)
+        parts = [part for part in [intent, action, tool_text] if part]
+        text = " || ".join(parts) if parts else "unknown"
+        return maybe_append_grounding(text, issue, include_grounding_ref)
+
+    tool_text = build_tool_call_text(issue, include_outcome)
+    if tool_text:
+        return maybe_append_grounding(tool_text, issue, include_grounding_ref)
     return build_embedding_text(issue, "intent_action", include_outcome, include_grounding_ref)
 
 
@@ -549,11 +530,15 @@ def main():
     out = []
     for idx, rec in enumerate(records):
         label = int(labels[idx])
-        rec["cluster_id"] = f"emb_{label:04d}"
-        rec["issue_type"] = derive_issue_type(rec)
+        cluster_id = f"issue_{label:04d}"
+        rec["issue_cluster_id"] = cluster_id
+        rec["cluster_id"] = cluster_id
+        if rec.get("issue_type") in (None, "", "UNKNOWN"):
+            rec["issue_type"] = None
         meta = rec.get("meta") or {}
         meta["cluster_method"] = "embedding"
         meta["cluster_label"] = label
+        meta["cluster_k"] = k
         rec["meta"] = meta
         out.append(rec)
     write_jsonl(args.output_path, out)

@@ -1,6 +1,7 @@
 import argparse
 import re
 import sys
+from bisect import bisect_right
 from collections import Counter
 from pathlib import Path
 
@@ -148,15 +149,56 @@ def extract_number(ref, label):
     return match.group(1) if match else None
 
 
-def regex_matches(text, regex, ref, match_type, image_refs, include_snippet):
+def extract_headings(text):
+    if not text:
+        return []
+    headings = []
+    for match in re.finditer(r"^(#{1,6})\s+(.+)$", text, re.MULTILINE):
+        level = len(match.group(1))
+        title = match.group(2).strip()
+        headings.append(
+            {
+                "start": match.start(),
+                "end": match.end(),
+                "level": level,
+                "title": title,
+            }
+        )
+    for idx, heading in enumerate(headings):
+        level = heading["level"]
+        section_end = len(text)
+        for j in range(idx + 1, len(headings)):
+            if headings[j]["level"] <= level:
+                section_end = headings[j]["start"]
+                break
+        heading["section_start"] = heading["start"]
+        heading["section_end"] = section_end
+    return headings
+
+
+def find_section_span(headings, heading_starts, pos, text_len):
+    if not headings:
+        return 0, text_len, None
+    idx = bisect_right(heading_starts, pos) - 1
+    if idx < 0:
+        return 0, heading_starts[0], None
+    heading = headings[idx]
+    return heading.get("section_start", 0), heading.get("section_end", text_len), heading.get("title")
+
+
+def regex_matches(text, regex, ref, match_type, image_refs, include_snippet, headings, heading_starts):
     matches = []
     for match in regex.finditer(text):
         start, end = match.start(), match.end()
+        section_start, section_end, section_title = find_section_span(headings, heading_starts, start, len(text))
         entry = {
             "ref": ref,
             "match_type": match_type,
-            "start": start,
-            "end": end,
+            "ref_start": start,
+            "ref_end": end,
+            "section_start": section_start,
+            "section_end": section_end,
+            "section_title": section_title,
             "snippet": make_snippet(text, start, end, include=include_snippet),
         }
         if match_type == "figure":
@@ -167,7 +209,7 @@ def regex_matches(text, regex, ref, match_type, image_refs, include_snippet):
     return matches
 
 
-def match_ref(text, ref, image_refs, include_snippet):
+def match_ref(text, ref, image_refs, include_snippet, headings, heading_starts):
     if not text or not ref:
         return []
     lower = ref.lower()
@@ -175,61 +217,65 @@ def match_ref(text, ref, image_refs, include_snippet):
         sec_num = extract_section_number(ref)
         if sec_num:
             regex = re.compile(rf"^#+\s*{re.escape(sec_num)}(\s|\.|$)", re.IGNORECASE | re.MULTILINE)
-            matches = regex_matches(text, regex, ref, "section", image_refs, include_snippet)
+            matches = regex_matches(text, regex, ref, "section", image_refs, include_snippet, headings, heading_starts)
             if matches:
                 return matches
     if "abstract" in lower:
         regex = re.compile(r"^#+\s*abstract\b", re.IGNORECASE | re.MULTILINE)
-        matches = regex_matches(text, regex, ref, "section", image_refs, include_snippet)
+        matches = regex_matches(text, regex, ref, "section", image_refs, include_snippet, headings, heading_starts)
         if matches:
             return matches
     if "related work" in lower:
         regex = re.compile(r"^#+\s*related work(s)?\b", re.IGNORECASE | re.MULTILINE)
-        matches = regex_matches(text, regex, ref, "section", image_refs, include_snippet)
+        matches = regex_matches(text, regex, ref, "section", image_refs, include_snippet, headings, heading_starts)
         if matches:
             return matches
     if "appendix" in lower:
         appendix = extract_appendix_letter(ref)
         if appendix:
             regex = re.compile(rf"^#+\s*appendix\s*{appendix}\b", re.IGNORECASE | re.MULTILINE)
-            matches = regex_matches(text, regex, ref, "appendix", image_refs, include_snippet)
+            matches = regex_matches(text, regex, ref, "appendix", image_refs, include_snippet, headings, heading_starts)
             if matches:
                 return matches
     if "fig" in lower or "figure" in lower:
         fig_num = extract_number(ref, "fig(?:ure)?")
         if fig_num:
             regex = re.compile(rf"(fig(?:ure)?\.?\s*{fig_num})", re.IGNORECASE)
-            matches = regex_matches(text, regex, ref, "figure", image_refs, include_snippet)
+            matches = regex_matches(text, regex, ref, "figure", image_refs, include_snippet, headings, heading_starts)
             if matches:
                 return matches
     if "table" in lower:
         table_num = extract_number(ref, "table")
         if table_num:
             regex = re.compile(rf"(table\.?\s*{table_num})", re.IGNORECASE)
-            matches = regex_matches(text, regex, ref, "table", image_refs, include_snippet)
+            matches = regex_matches(text, regex, ref, "table", image_refs, include_snippet, headings, heading_starts)
             if matches:
                 return matches
     lower_text = text.lower()
     idx = lower_text.find(lower)
     if idx != -1:
+        section_start, section_end, section_title = find_section_span(headings, heading_starts, idx, len(text))
         return [
             {
                 "ref": ref,
                 "match_type": "substring",
-                "start": idx,
-                "end": idx + len(ref),
+                "ref_start": idx,
+                "ref_end": idx + len(ref),
+                "section_start": section_start,
+                "section_end": section_end,
+                "section_title": section_title,
                 "snippet": make_snippet(text, idx, idx + len(ref), include=include_snippet),
             }
         ]
     return []
 
 
-def match_refs(text, refs, image_refs, include_snippet):
+def match_refs(text, refs, image_refs, include_snippet, headings, heading_starts):
     matches = []
     if not text:
         return matches
     for ref in refs:
-        matches.extend(match_ref(text, ref, image_refs, include_snippet))
+        matches.extend(match_ref(text, ref, image_refs, include_snippet, headings, heading_starts))
     return matches
 
 
@@ -324,18 +370,30 @@ def main():
             paper_path, images_dir = find_paper_bundle(args.papers_dir, forum_id)
             text = load_text(paper_path) if paper_path else None
             image_refs = extract_image_refs(text, paper_path, images_dir)
+            headings = extract_headings(text)
+            heading_starts = [heading["start"] for heading in headings]
             cache[forum_id] = {
                 "path": paper_path,
                 "images_dir": images_dir,
                 "text": text,
                 "image_refs": image_refs,
+                "headings": headings,
+                "heading_starts": heading_starts,
             }
         doc = cache[forum_id]
         text = doc["text"]
         tool_calls = rec.get("latent_tool_calls") or []
         intent = rec.get("strategic_intent")
         not_required = not_required_reason(grounding_ref, refs, intent, tool_calls)
-        matches = match_refs(text, refs, doc["image_refs"], include_snippet=not args.no_snippet)
+        matches = match_refs(
+            text,
+            refs,
+            doc["image_refs"],
+            include_snippet=not args.no_snippet,
+            headings=doc["headings"],
+            heading_starts=doc["heading_starts"],
+        )
+        ref_types = sorted({match.get("match_type") for match in matches if match.get("match_type")})
         if not doc["path"]:
             missing_docs += 1
         status = "resolved" if matches else "unresolved"
@@ -371,6 +429,7 @@ def main():
             "doc_kind": "markdown" if doc["path"] and doc["path"].suffix == ".md" else "text",
             "images_dir": str(doc["images_dir"]) if doc["images_dir"] else None,
             "matches": matches,
+            "ref_types": ref_types,
             "resolved": bool(matches),
             "status": status,
             "reason": not_required,

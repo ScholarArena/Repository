@@ -12,6 +12,7 @@ def parse_args():
     parser.add_argument("--issues", required=True, help="Input issues JSONL")
     parser.add_argument("--obs", required=True, help="Input observations JSONL")
     parser.add_argument("--out", required=True, help="Output trajectories JSONL")
+    parser.add_argument("--thread-index", default="", help="Optional act->thread index JSONL")
     return parser.parse_args()
 
 
@@ -27,6 +28,13 @@ def main():
     issues = read_json_or_jsonl(args.issues)
     observations = read_json_or_jsonl(args.obs)
     obs_by_issue = {obs.get("issue_id"): obs for obs in observations}
+    thread_by_act = {}
+    if args.thread_index:
+        for rec in read_json_or_jsonl(args.thread_index):
+            act_id = rec.get("act_id") or rec.get("issue_id")
+            thread_id = rec.get("thread_id")
+            if act_id and thread_id:
+                thread_by_act[act_id] = thread_id
 
     out = []
     for issue in issues:
@@ -43,6 +51,8 @@ def main():
             )
         record = {
             "issue_id": issue_id,
+            "issue_cluster_id": issue.get("issue_cluster_id") or issue.get("cluster_id"),
+            "thread_id": issue.get("thread_id") or thread_by_act.get(issue.get("act_id") or issue_id),
             "state": {
                 "role": issue.get("role"),
                 "paper_span": issue.get("paper_span"),

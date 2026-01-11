@@ -121,6 +121,8 @@ def main():
                 issues_with_grounding_ref += 1
             out.append(
                 {
+                    "act_id": issue_id,
+                    "act_index": idx,
                     "issue_id": issue_id,
                     "forum_id": forum_id,
                     "title": title,
@@ -131,7 +133,9 @@ def main():
                     "grounding_ref": item.get("grounding_ref"),
                     "paper_span": None,
                     "strategic_intent": intent,
+                    "intent": intent,
                     "action": item.get("action"),
+                    "act_text": item.get("action"),
                     "latent_tool_calls": item.get("latent_tool_calls") or [],
                     "issue_type": None,
                     "cluster_id": None,

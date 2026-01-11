@@ -48,12 +48,23 @@ def index_skills_by_operation(skills):
     return index
 
 
+def index_skills_by_primitive(skills):
+    index = {}
+    for skill in skills:
+        source = skill.get("source") or {}
+        primitive_id = source.get("primitive_id")
+        if primitive_id:
+            index[primitive_id] = skill
+    return index
+
+
 def main():
     args = parse_args()
     issues = read_json_or_jsonl(args.issues)
     registry = load_registry(args.registry)
     skills = registry.get("skills", [])
     skills_by_op = index_skills_by_operation(skills)
+    skills_by_primitive = index_skills_by_primitive(skills)
 
     out_records = []
     for issue in issues:
@@ -62,11 +73,16 @@ def main():
         failure_codes = []
         calls = issue.get("latent_tool_calls") or []
         for idx, call in enumerate(calls):
-            operation = call.get("operation")
-            candidates = skills_by_op.get(operation) or []
-            if not candidates:
+            if not isinstance(call, dict):
                 continue
-            skill = candidates[0]
+            primitive_id = call.get("primitive_id")
+            skill = skills_by_primitive.get(primitive_id) if primitive_id else None
+            if not skill:
+                operation = call.get("operation")
+                candidates = skills_by_op.get(operation) or []
+                skill = candidates[0] if candidates else None
+            if not skill:
+                continue
             entrypoint = skill.get("entrypoint")
             args_dict = build_args(issue, call)
             try:

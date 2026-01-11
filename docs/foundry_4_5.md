@@ -35,6 +35,7 @@ python foundry/issue_mining/link_grounding_ref.py \
 ```
 
 MinerU layout is supported by default: `data/raw/papers_md/<forum_id>/auto/<forum_id>.md`, with `images/` alongside the markdown. The resolver stores `doc_path`, `images_dir`, and simple matches (sections, figures, tables) with character offsets; snippets can be disabled via `--no-snippet`.
+Each match now includes `ref_start/ref_end` for the ref anchor and `section_start/section_end` for the enclosing section span, plus `section_title` when available.
 
 Optional flags:
 - `--log-every 5000` progress by issue count
@@ -42,7 +43,7 @@ Optional flags:
 - `--no-snippet` avoid storing snippets to reduce output size
 - `paper_span.status` is set to `resolved`, `unresolved`, or `not_required`, with `paper_span.reason` describing why grounding is skipped.
 
-### 3) Cluster issues and assign issue_type
+### 3) Cluster semantic acts into issue clusters
 
 - Script: `foundry/issue_mining/cluster_issues.py`
 - Input: `data/interim/grounded_issues.jsonl` + `data/raw/embeddings.npy`
@@ -74,14 +75,56 @@ python foundry/issue_mining/cluster_issues.py \
   --out data/processed/issues.jsonl
 ```
 
-Embedding text (default `tool_calls`): `tool_category | operation | target_type | outcome=...` with optional `grounding_ref` appended unless `paper_span.status=not_required`. Use `--no-embed-outcome` or `--no-embed-grounding-ref` to disable.
+Embedding text (default `tool_calls`): `tool_category | operation | target_type | outcome=...` with optional `grounding_ref` appended unless `paper_span.status=not_required`. For semantic-ontology clustering, use `--embed-input-mode semantic_act` to include `strategic_intent`, `action`, and tool calls together. Use `--no-embed-outcome` or `--no-embed-grounding-ref` to disable.
 
 Concurrency and resume:
 - `--embed-workers 4` concurrent requests
 - `--resume` resume from existing `embeddings.npy` and `embeddings.npy.progress.json`
 - `--overwrite-embeddings` regenerate from scratch
 
-### 4) Build ontology summaries
+### 4) Build issue threads (T3 ledger inputs)
+
+- Script: `foundry/issue_mining/build_issue_threads.py`
+- Input: `data/processed/issues.jsonl`
+- Output: `data/processed/threads.jsonl` + `data/processed/thread_index.jsonl`
+
+```
+python foundry/issue_mining/build_issue_threads.py \
+  --in data/processed/issues.jsonl \
+  --out-threads data/processed/threads.jsonl \
+  --out-index data/processed/thread_index.jsonl
+```
+
+Threads group semantic acts by `(forum_id, issue_cluster_id, target_key)` to approximate multi-round issue conversations.
+Use `--out-issues` to attach `thread_id` back into the issue records.
+
+### 5) Optional: Label clusters with a teacher LLM
+
+- Script: `foundry/ontology/label_clusters.py`
+- Input: `data/processed/issues.jsonl`
+- Output: `foundry/ontology/cluster_labels.jsonl`
+
+```
+export DMX_API_KEY=sk-...
+python foundry/ontology/label_clusters.py \
+  --in data/processed/issues.jsonl \
+  --out foundry/ontology/cluster_labels.jsonl
+```
+
+### 6) Optional: Map raw intents to a canonical intent ontology
+
+- Script: `foundry/ontology/label_intents.py`
+- Input: `data/processed/issues.jsonl`
+- Output: `foundry/ontology/intent_map.json`
+
+```
+export DMX_API_KEY=sk-...
+python foundry/ontology/label_intents.py \
+  --in data/processed/issues.jsonl \
+  --out foundry/ontology/intent_map.json
+```
+
+### 7) Build ontology summaries (issue / intent / evidence)
 
 - Script: `foundry/ontology/build_ontology.py`
 - Input: `data/processed/issues.jsonl`
@@ -90,49 +133,46 @@ Concurrency and resume:
 ```
 python foundry/ontology/build_ontology.py \
   --in data/processed/issues.jsonl \
-  --out foundry/ontology
+  --out foundry/ontology \
+  --labels foundry/ontology/cluster_labels.jsonl \
+  --intent-map foundry/ontology/intent_map.json
 ```
 
-Outputs include intent types, issue types, tool categories, operations, and evidence type counts.
+Outputs include `issue_ontology.json`, `intent_ontology.json`, `intent_ontology_raw.json`, `evidence_ontology.json`, and tool/operation summaries.
 
-### 5) Extract tool candidates
+### 8) Discover deterministic primitives (clustered tool calls)
 
-- Script: `foundry/curation/extract_tool_candidates.py`
+- Script: `foundry/curation/discover_primitives.py`
 - Input: `data/processed/issues.jsonl`
-- Output: `data/interim/tool_candidates.jsonl`
+- Output: `skills/primitives/registry.json`
 
 ```
-python foundry/curation/extract_tool_candidates.py \
+python foundry/curation/discover_primitives.py \
   --in data/processed/issues.jsonl \
-  --out data/interim/tool_candidates.jsonl
+  --out skills/primitives/registry.json \
+  --method auto \
+  --write-stubs
 ```
 
-By default, only known deterministic operations are marked executable. You can override:
+Use `--out-issues data/processed/issues_with_primitives.jsonl` to attach `primitive_id` back into issues. Use `--out-assignments` to save the call→primitive index.
+If `skills/primitives/embeddings.npy` is missing, add `--generate-embeddings` and the usual DMX embedding flags.
 
-```
-python foundry/curation/extract_tool_candidates.py \
-  --in data/processed/issues.jsonl \
-  --out data/interim/tool_candidates.jsonl \
-  --executable-operations "Resolve_Citation,Extract_Table" \
-  --executable-categories "Literature_Cross_Check"
-```
-
-### 6) Compile executable candidates into skills
+### 9) Compile primitives into skills
 
 - Script: `foundry/curation/compile_skills.py`
-- Input: `data/interim/tool_candidates.jsonl`
+- Input: `skills/primitives/registry.json`
 - Output: `skills/library/*` + `skills/registry.json`
 
 ```
 python foundry/curation/compile_skills.py \
-  --in data/interim/tool_candidates.jsonl \
+  --primitives skills/primitives/registry.json \
   --skills-dir skills/library \
   --registry skills/registry.json
 ```
 
-This creates stub `skill.py` files and a minimal manifest for each executable candidate.
+This creates stub `skill.py` files and manifests that reference discovered primitives.
 
-### 7) Run skills and collect observations
+### 10) Run skills and collect observations
 
 - Script: `foundry/curation/run_skills.py`
 - Input: `data/processed/issues.jsonl` + `skills/registry.json`
@@ -145,7 +185,7 @@ python foundry/curation/run_skills.py \
   --out data/interim/observations.jsonl
 ```
 
-### 8) Curate trajectories
+### 11) Curate trajectories
 
 - Script: `foundry/curation/curate_trajectories.py`
 - Input: `data/processed/issues.jsonl` + `data/interim/observations.jsonl`
@@ -155,6 +195,7 @@ python foundry/curation/run_skills.py \
 python foundry/curation/curate_trajectories.py \
   --issues data/processed/issues.jsonl \
   --obs data/interim/observations.jsonl \
+  --thread-index data/processed/thread_index.jsonl \
   --out data/processed/trajectories.jsonl
 ```
 
