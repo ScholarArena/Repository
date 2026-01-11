@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-01-11T16:48:21Z",
+  "generated_at": "2026-01-11T17:47:21Z",
   "method": "auto",
   "num_clusters": 33,
   "primitives": [
@@ -2249,7 +2249,7 @@
       "evidence_schema": {
         "note": "string"
       },
-      "evidence_type": "Logical",
+      "evidence_type": "Symbolic",
       "failure_codes": [
         "NOT_IMPLEMENTED"
       ],
@@ -3425,7 +3425,7 @@
       "evidence_schema": {
         "note": "string"
       },
-      "evidence_type": "Logical",
+      "evidence_type": "Symbolic",
       "failure_codes": [
         "NOT_IMPLEMENTED"
       ],
@@ -4015,7 +4015,7 @@
       "evidence_schema": {
         "note": "string"
       },
-      "evidence_type": "Document",
+      "evidence_type": "Text",
       "failure_codes": [
         "NOT_IMPLEMENTED"
       ],
