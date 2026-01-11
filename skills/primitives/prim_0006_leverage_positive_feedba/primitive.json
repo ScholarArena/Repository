@@ -5,7 +5,7 @@
   "evidence_schema": {
     "note": "string"
   },
-  "evidence_type": "Unknown",
+  "evidence_type": "Document",
   "failure_codes": [
     "NOT_IMPLEMENTED"
   ],
