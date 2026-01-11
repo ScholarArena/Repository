@@ -2,6 +2,7 @@ import argparse
 import json
 import math
 import os
+import random
 import sys
 import time
 from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
@@ -39,6 +40,17 @@ def parse_args():
     parser.add_argument("--embed-timeout", type=int, default=360, help="Embedding API timeout (seconds)")
     parser.add_argument("--embed-max-retries", type=int, default=3, help="Embedding API retries")
     parser.add_argument("--embed-retry-sleep", type=float, default=2.0, help="Retry backoff base (seconds)")
+    parser.add_argument(
+        "--embed-limit",
+        type=int,
+        default=0,
+        help="Only generate embeddings for the first N records (use --resume to continue later)",
+    )
+    parser.add_argument(
+        "--stop-after-embed",
+        action="store_true",
+        help="Exit after embedding generation (skip clustering)",
+    )
     parser.add_argument(
         "--resume",
         action="store_true",
@@ -93,6 +105,19 @@ def parse_args():
     parser.set_defaults(normalize=True)
     parser.add_argument("--no-mmap", dest="mmap", action="store_false", help="Disable mmap for embeddings")
     parser.set_defaults(mmap=True)
+    parser.add_argument(
+        "--sample-size",
+        type=int,
+        default=0,
+        help="Sample N records for a quick run (0 = full dataset)",
+    )
+    parser.add_argument(
+        "--sample-mode",
+        choices=["head", "random"],
+        default="head",
+        help="Sampling strategy when --sample-size is set",
+    )
+    parser.add_argument("--sample-seed", type=int, default=42, help="Random seed for sampling")
     return parser.parse_args()
 
 
@@ -212,8 +237,12 @@ def generate_embeddings(records, args):
         for rec in records
     ]
     total = len(texts)
+    embed_total = total
+    if args.embed_limit and args.embed_limit > 0:
+        embed_total = min(args.embed_limit, total)
     if not args.quiet:
-        print(f"[embed] total={total} model={args.embed_model}", file=sys.stderr)
+        extra = f" limit={embed_total}" if embed_total < total else ""
+        print(f"[embed] total={total} model={args.embed_model}{extra}", file=sys.stderr)
 
     out_path = Path(args.embeddings)
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -244,13 +273,20 @@ def generate_embeddings(records, args):
         try:
             progress = json.loads(progress_path.read_text(encoding="utf-8"))
             for start, end in progress.get("completed", []):
-                completed_ranges.add((int(start), int(end)))
+                start_i = int(start)
+                end_i = int(end)
+                if start_i >= embed_total:
+                    continue
+                completed_ranges.add((start_i, min(end_i, embed_total)))
             completed_rows = sum(end - start for start, end in completed_ranges)
         except Exception:
             completed_ranges = set()
             completed_rows = 0
 
-    batches = [(start, min(total, start + args.embed_batch_size)) for start in range(0, total, args.embed_batch_size)]
+    batches = [
+        (start, min(embed_total, start + args.embed_batch_size))
+        for start in range(0, embed_total, args.embed_batch_size)
+    ]
     pending = [batch for batch in batches if batch not in completed_ranges]
     if not args.quiet and completed_rows:
         print(f"[embed] resume completed_rows={completed_rows}", file=sys.stderr)
@@ -427,11 +463,32 @@ def main():
     if not args.quiet:
         print(f"[load] records={total}", file=sys.stderr)
 
+    if args.sample_size and 0 < args.sample_size < total:
+        rng = random.Random(args.sample_seed)
+        if args.sample_mode == "random":
+            indices = rng.sample(range(total), args.sample_size)
+            indices.sort()
+        else:
+            indices = list(range(args.sample_size))
+        records = [records[i] for i in indices]
+        total = len(records)
+        if not args.quiet:
+            print(f"[load] sample_size={total} mode={args.sample_mode}", file=sys.stderr)
+
     emb_path = Path(args.embeddings)
     if args.generate_embeddings:
         embeddings = generate_embeddings(records, args)
         if not args.quiet:
             print(f"[embed] saved embeddings to {emb_path}", file=sys.stderr)
+        if args.embed_limit and args.embed_limit > 0 and args.embed_limit < total:
+            if args.stop_after_embed:
+                if not args.quiet:
+                    print(f"[embed] stopped after {args.embed_limit}/{total} records", file=sys.stderr)
+                return
+            raise ValueError(
+                f"Embedding limit {args.embed_limit} is smaller than records {total}. "
+                "Use --stop-after-embed or set --sample-size to the same value."
+            )
     else:
         if not emb_path.exists():
             raise FileNotFoundError(f"Embeddings file not found: {emb_path}")

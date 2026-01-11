@@ -63,6 +63,8 @@ Common flags:
 - `--method auto|minibatch|kmeans`
 - `--log-every 5000` and `--log-every-iter 10`
 - `--stats-out data/processed/cluster_stats.json`
+- Quick run: `--sample-size 2000 --sample-mode random` (write to a separate embeddings/output file)
+- Partial embedding: `--embed-limit 2000 --stop-after-embed` (then rerun with `--resume` to complete)
 
 Optional embedding generation (DMXAPI):
 ```
@@ -281,9 +283,9 @@ Output:
   - {'issue_id': 'TTrzgEZt9s#0028', 'forum_id': 'TTrzgEZt9s', 'grounding_ref': 'Appendix D', 'doc_path': 'data\\raw\\papers_md\\TTrzgEZt9s\\auto\\TTrzgEZt9s.md'}
   - {'issue_id': 'TTrzgEZt9s#0031', 'forum_id': 'TTrzgEZt9s', 'grounding_ref': 'Appendix E', 'doc_path': 'data\\raw\\papers_md\\TTrzgEZt9s\\auto\\TTrzgEZt9s.md'}
   - {'issue_id': 'TTrzgEZt9s#0032', 'forum_id': 'TTrzgEZt9s', 'grounding_ref': 'Appendix length', 'doc_path': 'data\\raw\\papers_md\\TTrzgEZt9s\\auto\\TTrzgEZt9s.md'}
-  - {'issue_id': 'TTrzgEZt9s#0034', 'forum_id': 'TTrzgEZt9s', 'grounding_ref': 'Appendix B, Appendix C', 'doc_path': 'data\\raw\\papers_md\\TTrzgEZt9s\\auto\\TTrzgEZt9s.md'}   
+  - {'issue_id': 'TTrzgEZt9s#0034', 'forum_id': 'TTrzgEZt9s', 'grounding_ref': 'Appendix B, Appendix C', 'doc_path': 'data\\raw\\papers_md\\TTrzgEZt9s\\auto\\TTrzgEZt9s.md'}
   - {'issue_id': 'TTrzgEZt9s#0036', 'forum_id': 'TTrzgEZt9s', 'grounding_ref': 'Appendix E', 'doc_path': 'data\\raw\\papers_md\\TTrzgEZt9s\\auto\\TTrzgEZt9s.md'}
-  - {'issue_id': 'TTrzgEZt9s#0037', 'forum_id': 'TTrzgEZt9s', 'grounding_ref': 'Page 33 (Appendix D.5.2)', 'doc_path': 'data\\raw\\papers_md\\TTrzgEZt9s\\auto\\TTrzgEZt9s.md'} 
+  - {'issue_id': 'TTrzgEZt9s#0037', 'forum_id': 'TTrzgEZt9s', 'grounding_ref': 'Page 33 (Appendix D.5.2)', 'doc_path': 'data\\raw\\papers_md\\TTrzgEZt9s\\auto\\TTrzgEZt9s.md'}
   - {'issue_id': 'jUNSBetmAo#0013', 'forum_id': 'jUNSBetmAo', 'grounding_ref': 'Appendix C', 'doc_path': 'data\\raw\\papers_md\\jUNSBetmAo\\auto\\jUNSBetmAo.md'}
   - {'issue_id': '9ceadCJY4B#0015', 'forum_id': '9ceadCJY4B', 'grounding_ref': 'Sec 4 (Mitigation Methods)', 'doc_path': 'data\\raw\\papers_md\\9ceadCJY4B\\auto\\9ceadCJY4B.md'}
   - {'issue_id': 'jFiFmHrIfD#0030', 'forum_id': 'jFiFmHrIfD', 'grounding_ref': 'Appendix B', 'doc_path': 'data\\raw\\papers_md\\jFiFmHrIfD\\auto\\jFiFmHrIfD.md'}
