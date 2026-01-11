@@ -1,7 +1,10 @@
 import argparse
 import json
+import sys
 from collections import Counter, defaultdict
 from pathlib import Path
+
+sys.path.append(str(Path(__file__).resolve().parents[2]))
 
 from foundry.utils import map_evidence_type, map_ref_type_to_evidence, normalize_tool_calls, now_iso, read_json_or_jsonl
 
