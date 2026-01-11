@@ -1,0 +1,71 @@
+{
+  "cluster_id": "prim_cluster_0003",
+  "count": 8,
+  "definition": "Deterministic primitive to Cite_Reference on Timeout_Issue (category: Literature_Cross_Check).",
+  "evidence_schema": {
+    "matches": "list",
+    "missing_refs": "list"
+  },
+  "evidence_type": "Citation",
+  "failure_codes": [
+    "NOT_IMPLEMENTED"
+  ],
+  "name": "Cite_Reference",
+  "operation": "Cite_Reference",
+  "primitive_id": "prim_0003_cite_reference",
+  "sample_calls": [
+    {
+      "operation": "Cite_Reference",
+      "outcome": "Provided reference to Pardo et al. on time limits to support variance claim.",
+      "target_type": "Timeout_Issue",
+      "tool_category": "Literature_Cross_Check"
+    },
+    {
+      "operation": "Add_Reference",
+      "outcome": "Decided to add the citation [2].",
+      "target_type": "Related_Work_Section",
+      "tool_category": "Citation_Integration"
+    },
+    {
+      "operation": "Cite_Standard_Limitations",
+      "outcome": "Used existing literature to argue that standard FL also lacks privacy guarantees, contextualizing the concerns about FedWaD.",
+      "target_type": "FL_Privacy_Landscape",
+      "tool_category": "Literature_Based_Defense"
+    }
+  ],
+  "signature": {
+    "paper_span": "SpanRef",
+    "query": "string"
+  },
+  "source_counts": {
+    "operation": {
+      "Add_Reference": 1,
+      "Adhere_To_Guidelines": 1,
+      "Challenge_Guideline_Interpretation": 1,
+      "Cite_Reference": 1,
+      "Cite_Standard_Limitations": 1,
+      "Compare_With_Prior_Work": 1,
+      "Demand_Concrete_Justification": 1,
+      "Provide_Full_Citation": 1
+    },
+    "target_type": {
+      "Authors_Rebuttal": 1,
+      "Bibliography": 1,
+      "Contemporaneous_Works_Policy": 1,
+      "FL_Privacy_Landscape": 1,
+      "ICLR_Reviewer_Guidelines": 1,
+      "Layerwise_Privacy_Characterization": 1,
+      "Related_Work_Section": 1,
+      "Timeout_Issue": 1
+    },
+    "tool_category": {
+      "Citation_Integration": 1,
+      "Evidence_Request": 1,
+      "Literature_Based_Defense": 1,
+      "Literature_Cross_Check": 4,
+      "Procedural_Knowledge_Check": 1
+    }
+  },
+  "target_type": "Timeout_Issue",
+  "tool_category": "Literature_Cross_Check"
+}

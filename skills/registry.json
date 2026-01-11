@@ -1,1 +1,724 @@
-{}
+{
+  "generated_at": "2026-01-11T16:05:52Z",
+  "skills": [
+    {
+      "definition": "Deterministic primitive to Contrast_Baseline on Related_Work_Section (category: Literature_Cross_Check).",
+      "entrypoint": "skills\\library\\skill_prim_0004_contrast_baseline\\skill.py:run",
+      "evidence_schema": {
+        "matches": "list",
+        "missing_refs": "list"
+      },
+      "evidence_type": "Citation",
+      "failure_codes": [
+        "NOT_IMPLEMENTED"
+      ],
+      "generated_at": "2026-01-11T16:05:52Z",
+      "name": "Contrast_Baseline",
+      "signature": {
+        "paper_span": "SpanRef",
+        "query": "string"
+      },
+      "skill_id": "skill_prim_0004_contrast_baseline",
+      "source": {
+        "operation": "Contrast_Baseline",
+        "primitive_id": "prim_0004_contrast_baseline",
+        "target_type": "Related_Work_Section",
+        "tool_category": "Literature_Cross_Check"
+      }
+    },
+    {
+      "definition": "Deterministic primitive to Define_Parameter on Spherical_Harmonics (category: Contextual_Clarification).",
+      "entrypoint": "skills\\library\\skill_prim_0013_define_parameter\\skill.py:run",
+      "evidence_schema": {
+        "note": "string"
+      },
+      "evidence_type": "Document",
+      "failure_codes": [
+        "NOT_IMPLEMENTED"
+      ],
+      "generated_at": "2026-01-11T16:05:52Z",
+      "name": "Define_Parameter",
+      "signature": {
+        "paper_span": "SpanRef"
+      },
+      "skill_id": "skill_prim_0013_define_parameter",
+      "source": {
+        "operation": "Define_Parameter",
+        "primitive_id": "prim_0013_define_parameter",
+        "target_type": "Spherical_Harmonics",
+        "tool_category": "Contextual_Clarification"
+      }
+    },
+    {
+      "definition": "Deterministic primitive to Identify_Missing_Baselines on Experimental_Evaluation (category: Experimental_Design_Check).",
+      "entrypoint": "skills\\library\\skill_prim_0020_identify_missing_baselin\\skill.py:run",
+      "evidence_schema": {
+        "note": "string"
+      },
+      "evidence_type": "Unknown",
+      "failure_codes": [
+        "NOT_IMPLEMENTED"
+      ],
+      "generated_at": "2026-01-11T16:05:52Z",
+      "name": "Identify_Missing_Baselines",
+      "signature": {
+        "paper_span": "SpanRef"
+      },
+      "skill_id": "skill_prim_0020_identify_missing_baselin",
+      "source": {
+        "operation": "Identify_Missing_Baselines",
+        "primitive_id": "prim_0020_identify_missing_baselin",
+        "target_type": "Experimental_Evaluation",
+        "tool_category": "Experimental_Design_Check"
+      }
+    },
+    {
+      "definition": "Deterministic primitive to Review_Results_Summary on Method_Robustness (category: Experimental_Design_Check).",
+      "entrypoint": "skills\\library\\skill_prim_0014_review_results_summary\\skill.py:run",
+      "evidence_schema": {
+        "note": "string"
+      },
+      "evidence_type": "Unknown",
+      "failure_codes": [
+        "NOT_IMPLEMENTED"
+      ],
+      "generated_at": "2026-01-11T16:05:52Z",
+      "name": "Review_Results_Summary",
+      "signature": {
+        "paper_span": "SpanRef"
+      },
+      "skill_id": "skill_prim_0014_review_results_summary",
+      "source": {
+        "operation": "Review_Results_Summary",
+        "primitive_id": "prim_0014_review_results_summary",
+        "target_type": "Method_Robustness",
+        "tool_category": "Experimental_Design_Check"
+      }
+    },
+    {
+      "definition": "Deterministic primitive to Identify_Gap on Evaluation_Protocol (category: Experimental_Design_Check).",
+      "entrypoint": "skills\\library\\skill_prim_0030_identify_gap\\skill.py:run",
+      "evidence_schema": {
+        "note": "string"
+      },
+      "evidence_type": "Unknown",
+      "failure_codes": [
+        "NOT_IMPLEMENTED"
+      ],
+      "generated_at": "2026-01-11T16:05:52Z",
+      "name": "Identify_Gap",
+      "signature": {
+        "paper_span": "SpanRef"
+      },
+      "skill_id": "skill_prim_0030_identify_gap",
+      "source": {
+        "operation": "Identify_Gap",
+        "primitive_id": "prim_0030_identify_gap",
+        "target_type": "Evaluation_Protocol",
+        "tool_category": "Experimental_Design_Check"
+      }
+    },
+    {
+      "definition": "Deterministic primitive to Identify_Clarity_Issues on Problem_Setting (category: Contextual_Clarification).",
+      "entrypoint": "skills\\library\\skill_prim_0026_identify_clarity_issues\\skill.py:run",
+      "evidence_schema": {
+        "note": "string"
+      },
+      "evidence_type": "Implementation",
+      "failure_codes": [
+        "NOT_IMPLEMENTED"
+      ],
+      "generated_at": "2026-01-11T16:05:52Z",
+      "name": "Identify_Clarity_Issues",
+      "signature": {
+        "paper_span": "SpanRef"
+      },
+      "skill_id": "skill_prim_0026_identify_clarity_issues",
+      "source": {
+        "operation": "Identify_Clarity_Issues",
+        "primitive_id": "prim_0026_identify_clarity_issues",
+        "target_type": "Problem_Setting",
+        "tool_category": "Contextual_Clarification"
+      }
+    },
+    {
+      "definition": "Deterministic primitive to Generate_Visualization on Empirical_Evaluation (category: Experimental_Design_Check).",
+      "entrypoint": "skills\\library\\skill_prim_0008_generate_visualization\\skill.py:run",
+      "evidence_schema": {
+        "note": "string"
+      },
+      "evidence_type": "Unknown",
+      "failure_codes": [
+        "NOT_IMPLEMENTED"
+      ],
+      "generated_at": "2026-01-11T16:05:52Z",
+      "name": "Generate_Visualization",
+      "signature": {
+        "paper_span": "SpanRef"
+      },
+      "skill_id": "skill_prim_0008_generate_visualization",
+      "source": {
+        "operation": "Generate_Visualization",
+        "primitive_id": "prim_0008_generate_visualization",
+        "target_type": "Empirical_Evaluation",
+        "tool_category": "Experimental_Design_Check"
+      }
+    },
+    {
+      "definition": "Deterministic primitive to Link_To_Prior_Response on Theoretical_Justification (category: Mathematical_Verification).",
+      "entrypoint": "skills\\library\\skill_prim_0031_link_to_prior_response\\skill.py:run",
+      "evidence_schema": {
+        "note": "string"
+      },
+      "evidence_type": "Citation",
+      "failure_codes": [
+        "NOT_IMPLEMENTED"
+      ],
+      "generated_at": "2026-01-11T16:05:52Z",
+      "name": "Link_To_Prior_Response",
+      "signature": {
+        "paper_span": "SpanRef"
+      },
+      "skill_id": "skill_prim_0031_link_to_prior_response",
+      "source": {
+        "operation": "Link_To_Prior_Response",
+        "primitive_id": "prim_0031_link_to_prior_response",
+        "target_type": "Theoretical_Justification",
+        "tool_category": "Mathematical_Verification"
+      }
+    },
+    {
+      "definition": "Deterministic primitive to Evaluate_Results on Main_Results_Table (category: Experimental_Design_Check).",
+      "entrypoint": "skills\\library\\skill_prim_0019_evaluate_results\\skill.py:run",
+      "evidence_schema": {
+        "note": "string"
+      },
+      "evidence_type": "Unknown",
+      "failure_codes": [
+        "NOT_IMPLEMENTED"
+      ],
+      "generated_at": "2026-01-11T16:05:52Z",
+      "name": "Evaluate_Results",
+      "signature": {
+        "paper_span": "SpanRef"
+      },
+      "skill_id": "skill_prim_0019_evaluate_results",
+      "source": {
+        "operation": "Evaluate_Results",
+        "primitive_id": "prim_0019_evaluate_results",
+        "target_type": "Main_Results_Table",
+        "tool_category": "Experimental_Design_Check"
+      }
+    },
+    {
+      "definition": "Deterministic primitive to Question_Artifact on Generated_Prompts (category: Architectural_Analysis).",
+      "entrypoint": "skills\\library\\skill_prim_0023_question_artifact\\skill.py:run",
+      "evidence_schema": {
+        "note": "string"
+      },
+      "evidence_type": "Unknown",
+      "failure_codes": [
+        "NOT_IMPLEMENTED"
+      ],
+      "generated_at": "2026-01-11T16:05:52Z",
+      "name": "Question_Artifact",
+      "signature": {
+        "paper_span": "SpanRef"
+      },
+      "skill_id": "skill_prim_0023_question_artifact",
+      "source": {
+        "operation": "Question_Artifact",
+        "primitive_id": "prim_0023_question_artifact",
+        "target_type": "Generated_Prompts",
+        "tool_category": "Architectural_Analysis"
+      }
+    },
+    {
+      "definition": "Deterministic primitive to Identify_Novel_Component on Paper_Contribution (category: Novelty_Assessment).",
+      "entrypoint": "skills\\library\\skill_prim_0025_identify_novel_component\\skill.py:run",
+      "evidence_schema": {
+        "note": "string"
+      },
+      "evidence_type": "Unknown",
+      "failure_codes": [
+        "NOT_IMPLEMENTED"
+      ],
+      "generated_at": "2026-01-11T16:05:52Z",
+      "name": "Identify_Novel_Component",
+      "signature": {
+        "paper_span": "SpanRef"
+      },
+      "skill_id": "skill_prim_0025_identify_novel_component",
+      "source": {
+        "operation": "Identify_Novel_Component",
+        "primitive_id": "prim_0025_identify_novel_component",
+        "target_type": "Paper_Contribution",
+        "tool_category": "Novelty_Assessment"
+      }
+    },
+    {
+      "definition": "Deterministic primitive to Request_Clarification on Black-Box_Assumption (category: Contextual_Clarification).",
+      "entrypoint": "skills\\library\\skill_prim_0002_request_clarification\\skill.py:run",
+      "evidence_schema": {
+        "note": "string"
+      },
+      "evidence_type": "Implementation",
+      "failure_codes": [
+        "NOT_IMPLEMENTED"
+      ],
+      "generated_at": "2026-01-11T16:05:52Z",
+      "name": "Request_Clarification",
+      "signature": {
+        "paper_span": "SpanRef"
+      },
+      "skill_id": "skill_prim_0002_request_clarification",
+      "source": {
+        "operation": "Request_Clarification",
+        "primitive_id": "prim_0002_request_clarification",
+        "target_type": "Black-Box_Assumption",
+        "tool_category": "Contextual_Clarification"
+      }
+    },
+    {
+      "definition": "Deterministic primitive to Baseline_Suitability_Check on Equation_2 (category: Mathematical_Verification).",
+      "entrypoint": "skills\\library\\skill_prim_0022_baseline_suitability_che\\skill.py:run",
+      "evidence_schema": {
+        "note": "string"
+      },
+      "evidence_type": "Unknown",
+      "failure_codes": [
+        "NOT_IMPLEMENTED"
+      ],
+      "generated_at": "2026-01-11T16:05:52Z",
+      "name": "Baseline_Suitability_Check",
+      "signature": {
+        "paper_span": "SpanRef"
+      },
+      "skill_id": "skill_prim_0022_baseline_suitability_che",
+      "source": {
+        "operation": "Baseline_Suitability_Check",
+        "primitive_id": "prim_0022_baseline_suitability_che",
+        "target_type": "Equation_2",
+        "tool_category": "Mathematical_Verification"
+      }
+    },
+    {
+      "definition": "Deterministic primitive to Maintain_Skepticism_on_Empirical_Scope on Paper_Contribution (category: Critical_Evaluation).",
+      "entrypoint": "skills\\library\\skill_prim_0027_maintain_skepticism_on_e\\skill.py:run",
+      "evidence_schema": {
+        "note": "string"
+      },
+      "evidence_type": "Statistical",
+      "failure_codes": [
+        "NOT_IMPLEMENTED"
+      ],
+      "generated_at": "2026-01-11T16:05:52Z",
+      "name": "Maintain_Skepticism_on_Empirical_Scope",
+      "signature": {
+        "paper_span": "SpanRef"
+      },
+      "skill_id": "skill_prim_0027_maintain_skepticism_on_e",
+      "source": {
+        "operation": "Maintain_Skepticism_on_Empirical_Scope",
+        "primitive_id": "prim_0027_maintain_skepticism_on_e",
+        "target_type": "Paper_Contribution",
+        "tool_category": "Critical_Evaluation"
+      }
+    },
+    {
+      "definition": "Deterministic primitive to Identify_Missing_Analysis on LTS_Implementation (category: Complexity_Analysis).",
+      "entrypoint": "skills\\library\\skill_prim_0001_identify_missing_analysi\\skill.py:run",
+      "evidence_schema": {
+        "note": "string"
+      },
+      "evidence_type": "Unknown",
+      "failure_codes": [
+        "NOT_IMPLEMENTED"
+      ],
+      "generated_at": "2026-01-11T16:05:52Z",
+      "name": "Identify_Missing_Analysis",
+      "signature": {
+        "paper_span": "SpanRef"
+      },
+      "skill_id": "skill_prim_0001_identify_missing_analysi",
+      "source": {
+        "operation": "Identify_Missing_Analysis",
+        "primitive_id": "prim_0001_identify_missing_analysi",
+        "target_type": "LTS_Implementation",
+        "tool_category": "Complexity_Analysis"
+      }
+    },
+    {
+      "definition": "Deterministic primitive to Request_Ablation_Study on Ablation_Studies (category: Experimental_Design_Check).",
+      "entrypoint": "skills\\library\\skill_prim_0021_request_ablation_study\\skill.py:run",
+      "evidence_schema": {
+        "note": "string"
+      },
+      "evidence_type": "Unknown",
+      "failure_codes": [
+        "NOT_IMPLEMENTED"
+      ],
+      "generated_at": "2026-01-11T16:05:52Z",
+      "name": "Request_Ablation_Study",
+      "signature": {
+        "paper_span": "SpanRef"
+      },
+      "skill_id": "skill_prim_0021_request_ablation_study",
+      "source": {
+        "operation": "Request_Ablation_Study",
+        "primitive_id": "prim_0021_request_ablation_study",
+        "target_type": "Ablation_Studies",
+        "tool_category": "Experimental_Design_Check"
+      }
+    },
+    {
+      "definition": "Deterministic primitive to Check_Differentiability_Requirement on Equation_14 (category: Mathematical_Verification).",
+      "entrypoint": "skills\\library\\skill_prim_0016_check_differentiability\\skill.py:run",
+      "evidence_schema": {
+        "note": "string"
+      },
+      "evidence_type": "Unknown",
+      "failure_codes": [
+        "NOT_IMPLEMENTED"
+      ],
+      "generated_at": "2026-01-11T16:05:52Z",
+      "name": "Check_Differentiability_Requirement",
+      "signature": {
+        "paper_span": "SpanRef"
+      },
+      "skill_id": "skill_prim_0016_check_differentiability",
+      "source": {
+        "operation": "Check_Differentiability_Requirement",
+        "primitive_id": "prim_0016_check_differentiability_",
+        "target_type": "Equation_14",
+        "tool_category": "Mathematical_Verification"
+      }
+    },
+    {
+      "definition": "Deterministic primitive to Contrast_ELBO_Derivations on Evidence_Lower_Bound (category: Literature_Cross_Check).",
+      "entrypoint": "skills\\library\\skill_prim_0015_contrast_elbo_derivation\\skill.py:run",
+      "evidence_schema": {
+        "matches": "list",
+        "missing_refs": "list"
+      },
+      "evidence_type": "Citation",
+      "failure_codes": [
+        "NOT_IMPLEMENTED"
+      ],
+      "generated_at": "2026-01-11T16:05:52Z",
+      "name": "Contrast_ELBO_Derivations",
+      "signature": {
+        "paper_span": "SpanRef",
+        "query": "string"
+      },
+      "skill_id": "skill_prim_0015_contrast_elbo_derivation",
+      "source": {
+        "operation": "Contrast_ELBO_Derivations",
+        "primitive_id": "prim_0015_contrast_elbo_derivation",
+        "target_type": "Evidence_Lower_Bound",
+        "tool_category": "Literature_Cross_Check"
+      }
+    },
+    {
+      "definition": "Deterministic primitive to Compute_Smoothness_Metric on Dirichlet_Energy (category: Hyperparameter_Analysis).",
+      "entrypoint": "skills\\library\\skill_prim_0012_compute_smoothness_metri\\skill.py:run",
+      "evidence_schema": {
+        "note": "string"
+      },
+      "evidence_type": "Unknown",
+      "failure_codes": [
+        "NOT_IMPLEMENTED"
+      ],
+      "generated_at": "2026-01-11T16:05:52Z",
+      "name": "Compute_Smoothness_Metric",
+      "signature": {
+        "paper_span": "SpanRef"
+      },
+      "skill_id": "skill_prim_0012_compute_smoothness_metri",
+      "source": {
+        "operation": "Compute_Smoothness_Metric",
+        "primitive_id": "prim_0012_compute_smoothness_metri",
+        "target_type": "Dirichlet_Energy",
+        "tool_category": "Hyperparameter_Analysis"
+      }
+    },
+    {
+      "definition": "Deterministic primitive to Establish_Positive_Rapport on Reviewer_Concerns (category: Contextual_Clarification).",
+      "entrypoint": "skills\\library\\skill_prim_0032_establish_positive_rappo\\skill.py:run",
+      "evidence_schema": {
+        "note": "string"
+      },
+      "evidence_type": "Implementation",
+      "failure_codes": [
+        "NOT_IMPLEMENTED"
+      ],
+      "generated_at": "2026-01-11T16:05:52Z",
+      "name": "Establish_Positive_Rapport",
+      "signature": {
+        "paper_span": "SpanRef"
+      },
+      "skill_id": "skill_prim_0032_establish_positive_rappo",
+      "source": {
+        "operation": "Establish_Positive_Rapport",
+        "primitive_id": "prim_0032_establish_positive_rappo",
+        "target_type": "Reviewer_Concerns",
+        "tool_category": "Contextual_Clarification"
+      }
+    },
+    {
+      "definition": "Deterministic primitive to Summarize_Method on Paper_Framework (category: Contextual_Clarification).",
+      "entrypoint": "skills\\library\\skill_prim_0005_summarize_method\\skill.py:run",
+      "evidence_schema": {
+        "note": "string"
+      },
+      "evidence_type": "Implementation",
+      "failure_codes": [
+        "NOT_IMPLEMENTED"
+      ],
+      "generated_at": "2026-01-11T16:05:52Z",
+      "name": "Summarize_Method",
+      "signature": {
+        "paper_span": "SpanRef"
+      },
+      "skill_id": "skill_prim_0005_summarize_method",
+      "source": {
+        "operation": "Summarize_Method",
+        "primitive_id": "prim_0005_summarize_method",
+        "target_type": "Paper_Framework",
+        "tool_category": "Contextual_Clarification"
+      }
+    },
+    {
+      "definition": "Deterministic primitive to Identify_Definition_Inconsistency on PMI-based_Score (category: Mathematical_Verification).",
+      "entrypoint": "skills\\library\\skill_prim_0029_identify_definition_inco\\skill.py:run",
+      "evidence_schema": {
+        "note": "string"
+      },
+      "evidence_type": "Unknown",
+      "failure_codes": [
+        "NOT_IMPLEMENTED"
+      ],
+      "generated_at": "2026-01-11T16:05:52Z",
+      "name": "Identify_Definition_Inconsistency",
+      "signature": {
+        "paper_span": "SpanRef"
+      },
+      "skill_id": "skill_prim_0029_identify_definition_inco",
+      "source": {
+        "operation": "Identify_Definition_Inconsistency",
+        "primitive_id": "prim_0029_identify_definition_inco",
+        "target_type": "PMI-based_Score",
+        "tool_category": "Mathematical_Verification"
+      }
+    },
+    {
+      "definition": "Deterministic primitive to Illustrate_Decision_Scenario on Uncertainty_in_Decision_Making (category: Experimental_Design_Check).",
+      "entrypoint": "skills\\library\\skill_prim_0010_illustrate_decision_scen\\skill.py:run",
+      "evidence_schema": {
+        "note": "string"
+      },
+      "evidence_type": "Statistical",
+      "failure_codes": [
+        "NOT_IMPLEMENTED"
+      ],
+      "generated_at": "2026-01-11T16:05:52Z",
+      "name": "Illustrate_Decision_Scenario",
+      "signature": {
+        "paper_span": "SpanRef"
+      },
+      "skill_id": "skill_prim_0010_illustrate_decision_scen",
+      "source": {
+        "operation": "Illustrate_Decision_Scenario",
+        "primitive_id": "prim_0010_illustrate_decision_scen",
+        "target_type": "Uncertainty_in_Decision_Making",
+        "tool_category": "Experimental_Design_Check"
+      }
+    },
+    {
+      "definition": "Deterministic primitive to Assess_Contribution_Scope on Application_Domains (category: Contextual_Clarification).",
+      "entrypoint": "skills\\library\\skill_prim_0024_assess_contribution_scop\\skill.py:run",
+      "evidence_schema": {
+        "note": "string"
+      },
+      "evidence_type": "Implementation",
+      "failure_codes": [
+        "NOT_IMPLEMENTED"
+      ],
+      "generated_at": "2026-01-11T16:05:52Z",
+      "name": "Assess_Contribution_Scope",
+      "signature": {
+        "paper_span": "SpanRef"
+      },
+      "skill_id": "skill_prim_0024_assess_contribution_scop",
+      "source": {
+        "operation": "Assess_Contribution_Scope",
+        "primitive_id": "prim_0024_assess_contribution_scop",
+        "target_type": "Application_Domains",
+        "tool_category": "Contextual_Clarification"
+      }
+    },
+    {
+      "definition": "Deterministic primitive to Update_Score on Paper_Quality (category: Decision_Making).",
+      "entrypoint": "skills\\library\\skill_prim_0009_update_score\\skill.py:run",
+      "evidence_schema": {
+        "note": "string"
+      },
+      "evidence_type": "Unknown",
+      "failure_codes": [
+        "NOT_IMPLEMENTED"
+      ],
+      "generated_at": "2026-01-11T16:05:52Z",
+      "name": "Update_Score",
+      "signature": {
+        "paper_span": "SpanRef"
+      },
+      "skill_id": "skill_prim_0009_update_score",
+      "source": {
+        "operation": "Update_Score",
+        "primitive_id": "prim_0009_update_score",
+        "target_type": "Paper_Quality",
+        "tool_category": "Decision_Making"
+      }
+    },
+    {
+      "definition": "Deterministic primitive to Identify_Typo on Manuscript_Text (category: Proofreading).",
+      "entrypoint": "skills\\library\\skill_prim_0018_identify_typo\\skill.py:run",
+      "evidence_schema": {
+        "note": "string"
+      },
+      "evidence_type": "Unknown",
+      "failure_codes": [
+        "NOT_IMPLEMENTED"
+      ],
+      "generated_at": "2026-01-11T16:05:52Z",
+      "name": "Identify_Typo",
+      "signature": {
+        "paper_span": "SpanRef"
+      },
+      "skill_id": "skill_prim_0018_identify_typo",
+      "source": {
+        "operation": "Identify_Typo",
+        "primitive_id": "prim_0018_identify_typo",
+        "target_type": "Manuscript_Text",
+        "tool_category": "Proofreading"
+      }
+    },
+    {
+      "definition": "Deterministic primitive to Cite_Reference on Timeout_Issue (category: Literature_Cross_Check).",
+      "entrypoint": "skills\\library\\skill_prim_0003_cite_reference\\skill.py:run",
+      "evidence_schema": {
+        "matches": "list",
+        "missing_refs": "list"
+      },
+      "evidence_type": "Citation",
+      "failure_codes": [
+        "NOT_IMPLEMENTED"
+      ],
+      "generated_at": "2026-01-11T16:05:52Z",
+      "name": "Cite_Reference",
+      "signature": {
+        "paper_span": "SpanRef",
+        "query": "string"
+      },
+      "skill_id": "skill_prim_0003_cite_reference",
+      "source": {
+        "operation": "Cite_Reference",
+        "primitive_id": "prim_0003_cite_reference",
+        "target_type": "Timeout_Issue",
+        "tool_category": "Literature_Cross_Check"
+      }
+    },
+    {
+      "definition": "Deterministic primitive to Leverage_Positive_Feedback on Reviewer_Rating (category: Strategic_Positioning).",
+      "entrypoint": "skills\\library\\skill_prim_0006_leverage_positive_feedba\\skill.py:run",
+      "evidence_schema": {
+        "note": "string"
+      },
+      "evidence_type": "Unknown",
+      "failure_codes": [
+        "NOT_IMPLEMENTED"
+      ],
+      "generated_at": "2026-01-11T16:05:52Z",
+      "name": "Leverage_Positive_Feedback",
+      "signature": {
+        "paper_span": "SpanRef"
+      },
+      "skill_id": "skill_prim_0006_leverage_positive_feedba",
+      "source": {
+        "operation": "Leverage_Positive_Feedback",
+        "primitive_id": "prim_0006_leverage_positive_feedba",
+        "target_type": "Reviewer_Rating",
+        "tool_category": "Strategic_Positioning"
+      }
+    },
+    {
+      "definition": "Deterministic primitive to Request_Definition on Task_Definition (category: Contextual_Clarification).",
+      "entrypoint": "skills\\library\\skill_prim_0007_request_definition\\skill.py:run",
+      "evidence_schema": {
+        "note": "string"
+      },
+      "evidence_type": "Implementation",
+      "failure_codes": [
+        "NOT_IMPLEMENTED"
+      ],
+      "generated_at": "2026-01-11T16:05:52Z",
+      "name": "Request_Definition",
+      "signature": {
+        "paper_span": "SpanRef"
+      },
+      "skill_id": "skill_prim_0007_request_definition",
+      "source": {
+        "operation": "Request_Definition",
+        "primitive_id": "prim_0007_request_definition",
+        "target_type": "Task_Definition",
+        "tool_category": "Contextual_Clarification"
+      }
+    },
+    {
+      "definition": "Deterministic primitive to Differentiate_Problem_Settings on Traditional_vs_TestTime_Poisoning (category: Hypothesis_Testing).",
+      "entrypoint": "skills\\library\\skill_prim_0028_differentiate_problem_se\\skill.py:run",
+      "evidence_schema": {
+        "note": "string"
+      },
+      "evidence_type": "Unknown",
+      "failure_codes": [
+        "NOT_IMPLEMENTED"
+      ],
+      "generated_at": "2026-01-11T16:05:52Z",
+      "name": "Differentiate_Problem_Settings",
+      "signature": {
+        "paper_span": "SpanRef"
+      },
+      "skill_id": "skill_prim_0028_differentiate_problem_se",
+      "source": {
+        "operation": "Differentiate_Problem_Settings",
+        "primitive_id": "prim_0028_differentiate_problem_se",
+        "target_type": "Traditional_vs_TestTime_Poisoning",
+        "tool_category": "Hypothesis_Testing"
+      }
+    },
+    {
+      "definition": "Deterministic primitive to Assess_Programming_Model on Conversation_Programming (category: Paradigm_Evaluation).",
+      "entrypoint": "skills\\library\\skill_prim_0000_assess_programming_model\\skill.py:run",
+      "evidence_schema": {
+        "note": "string"
+      },
+      "evidence_type": "Unknown",
+      "failure_codes": [
+        "NOT_IMPLEMENTED"
+      ],
+      "generated_at": "2026-01-11T16:05:52Z",
+      "name": "Assess_Programming_Model",
+      "signature": {
+        "paper_span": "SpanRef"
+      },
+      "skill_id": "skill_prim_0000_assess_programming_model",
+      "source": {
+        "operation": "Assess_Programming_Model",
+        "primitive_id": "prim_0000_assess_programming_model",
+        "target_type": "Conversation_Programming",
+        "tool_category": "Paradigm_Evaluation"
+      }
+    }
+  ]
+}

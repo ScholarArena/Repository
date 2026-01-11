@@ -1,116 +1,80 @@
 {
   "canonical_intents": [
     {
-      "definition": "Identify and highlight weaknesses in the methodology used in the research.",
+      "definition": "Highlight deficiencies in the research methodology or experimental design.",
       "name": "Expose_Methodological_Weakness"
     },
     {
-      "definition": "Address and correct any misunderstandings regarding the research or its findings.",
+      "definition": "Provide explanations to resolve confusion or misinterpretations of the paper.",
       "name": "Clarify_Misunderstanding"
     },
     {
-      "definition": "Argue for the uniqueness and significance of the research compared to previous studies.",
-      "name": "Defend_Novelty_Against_Prior_Work"
+      "definition": "Argue for the originality and significance of the research contributions.",
+      "name": "Defend_Novelty"
     },
     {
-      "definition": "Provide a theoretical basis or justification for the research approach or findings.",
+      "definition": "Provide theoretical justification or support for the proposed methods.",
       "name": "Establish_Theoretical_Grounding"
     },
     {
-      "definition": "Acknowledge minor criticisms while maintaining the overall strength of the main argument.",
+      "definition": "Acknowledge minor criticisms while reinforcing the main arguments.",
       "name": "Concede_Minor_Point_To_Win_Major"
     },
     {
-      "definition": "Redirect the responsibility of providing evidence or justification to the opposing side.",
-      "name": "Shift_Burden_Of_Proof"
-    },
-    {
-      "definition": "Justify the chosen methods and approaches used in the research.",
-      "name": "Defend_Methodological_Choice"
-    },
-    {
-      "definition": "Show that the authors have addressed reviewer comments and made necessary revisions.",
-      "name": "Demonstrate_Responsiveness"
-    },
-    {
-      "definition": "Ask for a more thorough examination or investigation of specific aspects of the research.",
+      "definition": "Ask for more thorough investigation or additional experiments to support claims.",
       "name": "Request_Deeper_Analysis"
     },
     {
-      "definition": "Respond to feedback regarding the clarity and presentation of the research.",
+      "definition": "Respond to comments regarding the clarity and organization of the paper.",
       "name": "Address_Presentation_Feedback"
     },
     {
-      "definition": "Question the originality or significance of the research contributions.",
+      "definition": "Question the uniqueness or significance of the proposed contributions.",
       "name": "Challenge_Novelty"
-    },
-    {
-      "definition": "Provide detailed explanations of the experimental design and setup used in the research.",
-      "name": "Clarify_Experimental_Setup"
     }
   ],
-  "generated_at": "2026-01-11T12:02:06Z",
+  "generated_at": "2026-01-11T14:27:08Z",
   "items": [
     {
       "mapped_intent": "Expose_Methodological_Weakness",
-      "rationale": "Identifying weaknesses in methodology is a key aspect of peer review.",
+      "rationale": "Critiques that highlight methodological flaws are consolidated under this intent.",
       "raw_intent": "Expose_Methodological_Weakness"
     },
     {
       "mapped_intent": "Clarify_Misunderstanding",
-      "rationale": "Addressing misunderstandings is crucial for clear communication of research findings.",
+      "rationale": "Responses aimed at resolving confusion are grouped here.",
       "raw_intent": "Clarify_Misunderstanding"
     },
     {
-      "mapped_intent": "Defend_Novelty_Against_Prior_Work",
-      "rationale": "Establishing the novelty of research is essential in academic discourse.",
+      "mapped_intent": "Defend_Novelty",
+      "rationale": "Arguments defending the novelty of the work are categorized under defending novelty.",
       "raw_intent": "Defend_Novelty_Against_Prior_Work"
     },
     {
       "mapped_intent": "Establish_Theoretical_Grounding",
-      "rationale": "Providing theoretical justification is important for validating research claims.",
+      "rationale": "Theoretical justifications for methods are included in this intent.",
       "raw_intent": "Establish_Theoretical_Grounding"
     },
     {
       "mapped_intent": "Concede_Minor_Point_To_Win_Major",
-      "rationale": "Acknowledging minor points can strengthen the overall argument.",
+      "rationale": "Acknowledging minor points while maintaining the main argument fits this intent.",
       "raw_intent": "Concede_Minor_Point_To_Win_Major"
     },
     {
-      "mapped_intent": "Shift_Burden_Of_Proof",
-      "rationale": "Redirecting the burden of proof is a common rhetorical strategy in debates.",
-      "raw_intent": "Shift_Burden_Of_Proof"
-    },
-    {
-      "mapped_intent": "Defend_Methodological_Choice",
-      "rationale": "Justifying methodological choices is critical in defending research integrity.",
-      "raw_intent": "Defend_Methodological_Choice"
-    },
-    {
-      "mapped_intent": "Demonstrate_Responsiveness",
-      "rationale": "Showing responsiveness to feedback is important for maintaining credibility.",
-      "raw_intent": "Demonstrate_Responsiveness"
-    },
-    {
       "mapped_intent": "Request_Deeper_Analysis",
-      "rationale": "Asking for deeper analysis can lead to more robust findings.",
+      "rationale": "Requests for additional analysis or experiments are grouped here.",
       "raw_intent": "Request_Deeper_Analysis"
     },
     {
       "mapped_intent": "Address_Presentation_Feedback",
-      "rationale": "Responding to presentation feedback improves the clarity of the research.",
+      "rationale": "Feedback regarding the clarity and organization of the paper is addressed under this intent.",
       "raw_intent": "Address_Presentation_Feedback"
     },
     {
       "mapped_intent": "Challenge_Novelty",
-      "rationale": "Questioning novelty is a critical part of evaluating research contributions.",
+      "rationale": "Critiques questioning the novelty of the work are categorized under this intent.",
       "raw_intent": "Challenge_Novelty"
-    },
-    {
-      "mapped_intent": "Clarify_Experimental_Setup",
-      "rationale": "Providing clarity on experimental setup is essential for reproducibility.",
-      "raw_intent": "Clarify_Experimental_Setup"
     }
   ],
-  "raw_response": "{\n  \"canonical_intents\": [\n    {\n      \"name\": \"Expose_Methodological_Weakness\",\n      \"definition\": \"Identify and highlight weaknesses in the methodology used in the research.\"\n    },\n    {\n      \"name\": \"Clarify_Misunderstanding\",\n      \"definition\": \"Address and correct any misunderstandings regarding the research or its findings.\"\n    },\n    {\n      \"name\": \"Defend_Novelty_Against_Prior_Work\",\n      \"definition\": \"Argue for the uniqueness and significance of the research compared to previous studies.\"\n    },\n    {\n      \"name\": \"Establish_Theoretical_Grounding\",\n      \"definition\": \"Provide a theoretical basis or justification for the research approach or findings.\"\n    },\n    {\n      \"name\": \"Concede_Minor_Point_To_Win_Major\",\n      \"definition\": \"Acknowledge minor criticisms while maintaining the overall strength of the main argument.\"\n    },\n    {\n      \"name\": \"Shift_Burden_Of_Proof\",\n      \"definition\": \"Redirect the responsibility of providing evidence or justification to the opposing side.\"\n    },\n    {\n      \"name\": \"Defend_Methodological_Choice\",\n      \"definition\": \"Justify the chosen methods and approaches used in the research.\"\n    },\n    {\n      \"name\": \"Demonstrate_Responsiveness\",\n      \"definition\": \"Show that the authors have addressed reviewer comments and made necessary revisions.\"\n    },\n    {\n      \"name\": \"Request_Deeper_Analysis\",\n      \"definition\": \"Ask for a more thorough examination or investigation of specific aspects of the research.\"\n    },\n    {\n      \"name\": \"Address_Presentation_Feedback\",\n      \"definition\": \"Respond to feedback regarding the clarity and presentation of the research.\"\n    },\n    {\n      \"name\": \"Challenge_Novelty\",\n      \"definition\": \"Question the originality or significance of the research contributions.\"\n    },\n    {\n      \"name\": \"Clarify_Experimental_Setup\",\n      \"definition\": \"Provide detailed explanations of the experimental design and setup used in the research.\"\n    }\n  ],\n  \"items\": [\n    {\n      \"raw_intent\": \"Expose_Methodological_Weakness\",\n      \"mapped_intent\": \"Expose_Methodological_Weakness\",\n      \"rationale\": \"Identifying weaknesses in methodology is a key aspect of peer review.\"\n    },\n    {\n      \"raw_intent\": \"Clarify_Misunderstanding\",\n      \"mapped_intent\": \"Clarify_Misunderstanding\",\n      \"rationale\": \"Addressing misunderstandings is crucial for clear communication of research findings.\"\n    },\n    {\n      \"raw_intent\": \"Defend_Novelty_Against_Prior_Work\",\n      \"mapped_intent\": \"Defend_Novelty_Against_Prior_Work\",\n      \"rationale\": \"Establishing the novelty of research is essential in academic discourse.\"\n    },\n    {\n      \"raw_intent\": \"Establish_Theoretical_Grounding\",\n      \"mapped_intent\": \"Establish_Theoretical_Grounding\",\n      \"rationale\": \"Providing theoretical justification is important for validating research claims.\"\n    },\n    {\n      \"raw_intent\": \"Concede_Minor_Point_To_Win_Major\",\n      \"mapped_intent\": \"Concede_Minor_Point_To_Win_Major\",\n      \"rationale\": \"Acknowledging minor points can strengthen the overall argument.\"\n    },\n    {\n      \"raw_intent\": \"Shift_Burden_Of_Proof\",\n      \"mapped_intent\": \"Shift_Burden_Of_Proof\",\n      \"rationale\": \"Redirecting the burden of proof is a common rhetorical strategy in debates.\"\n    },\n    {\n      \"raw_intent\": \"Defend_Methodological_Choice\",\n      \"mapped_intent\": \"Defend_Methodological_Choice\",\n      \"rationale\": \"Justifying methodological choices is critical in defending research integrity.\"\n    },\n    {\n      \"raw_intent\": \"Demonstrate_Responsiveness\",\n      \"mapped_intent\": \"Demonstrate_Responsiveness\",\n      \"rationale\": \"Showing responsiveness to feedback is important for maintaining credibility.\"\n    },\n    {\n      \"raw_intent\": \"Request_Deeper_Analysis\",\n      \"mapped_intent\": \"Request_Deeper_Analysis\",\n      \"rationale\": \"Asking for deeper analysis can lead to more robust findings.\"\n    },\n    {\n      \"raw_intent\": \"Address_Presentation_Feedback\",\n      \"mapped_intent\": \"Address_Presentation_Feedback\",\n      \"rationale\": \"Responding to presentation feedback improves the clarity of the research.\"\n    },\n    {\n      \"raw_intent\": \"Challenge_Novelty\",\n      \"mapped_intent\": \"Challenge_Novelty\",\n      \"rationale\": \"Questioning novelty is a critical part of evaluating research contributions.\"\n    },\n    {\n      \"raw_intent\": \"Clarify_Experimental_Setup\",\n      \"mapped_intent\": \"Clarify_Experimental_Setup\",\n      \"rationale\": \"Providing clarity on experimental setup is essential for reproducibility.\"\n    }\n  ]\n}"
+  "raw_response": "{\n  \"canonical_intents\": [\n    {\n      \"name\": \"Expose_Methodological_Weakness\",\n      \"definition\": \"Highlight deficiencies in the research methodology or experimental design.\"\n    },\n    {\n      \"name\": \"Clarify_Misunderstanding\",\n      \"definition\": \"Provide explanations to resolve confusion or misinterpretations of the paper.\"\n    },\n    {\n      \"name\": \"Defend_Novelty\",\n      \"definition\": \"Argue for the originality and significance of the research contributions.\"\n    },\n    {\n      \"name\": \"Establish_Theoretical_Grounding\",\n      \"definition\": \"Provide theoretical justification or support for the proposed methods.\"\n    },\n    {\n      \"name\": \"Concede_Minor_Point_To_Win_Major\",\n      \"definition\": \"Acknowledge minor criticisms while reinforcing the main arguments.\"\n    },\n    {\n      \"name\": \"Request_Deeper_Analysis\",\n      \"definition\": \"Ask for more thorough investigation or additional experiments to support claims.\"\n    },\n    {\n      \"name\": \"Address_Presentation_Feedback\",\n      \"definition\": \"Respond to comments regarding the clarity and organization of the paper.\"\n    },\n    {\n      \"name\": \"Challenge_Novelty\",\n      \"definition\": \"Question the uniqueness or significance of the proposed contributions.\"\n    }\n  ],\n  \"items\": [\n    {\n      \"raw_intent\": \"Expose_Methodological_Weakness\",\n      \"mapped_intent\": \"Expose_Methodological_Weakness\",\n      \"rationale\": \"Critiques that highlight methodological flaws are consolidated under this intent.\"\n    },\n    {\n      \"raw_intent\": \"Clarify_Misunderstanding\",\n      \"mapped_intent\": \"Clarify_Misunderstanding\",\n      \"rationale\": \"Responses aimed at resolving confusion are grouped here.\"\n    },\n    {\n      \"raw_intent\": \"Defend_Novelty_Against_Prior_Work\",\n      \"mapped_intent\": \"Defend_Novelty\",\n      \"rationale\": \"Arguments defending the novelty of the work are categorized under defending novelty.\"\n    },\n    {\n      \"raw_intent\": \"Establish_Theoretical_Grounding\",\n      \"mapped_intent\": \"Establish_Theoretical_Grounding\",\n      \"rationale\": \"Theoretical justifications for methods are included in this intent.\"\n    },\n    {\n      \"raw_intent\": \"Concede_Minor_Point_To_Win_Major\",\n      \"mapped_intent\": \"Concede_Minor_Point_To_Win_Major\",\n      \"rationale\": \"Acknowledging minor points while maintaining the main argument fits this intent.\"\n    },\n    {\n      \"raw_intent\": \"Request_Deeper_Analysis\",\n      \"mapped_intent\": \"Request_Deeper_Analysis\",\n      \"rationale\": \"Requests for additional analysis or experiments are grouped here.\"\n    },\n    {\n      \"raw_intent\": \"Address_Presentation_Feedback\",\n      \"mapped_intent\": \"Address_Presentation_Feedback\",\n      \"rationale\": \"Feedback regarding the clarity and organization of the paper is addressed under this intent.\"\n    },\n    {\n      \"raw_intent\": \"Challenge_Novelty\",\n      \"mapped_intent\": \"Challenge_Novelty\",\n      \"rationale\": \"Critiques questioning the novelty of the work are categorized under this intent.\"\n    }\n  ]\n}"
 }

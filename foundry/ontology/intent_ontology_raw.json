@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-01-11T12:43:03Z",
+  "generated_at": "2026-01-11T14:30:11Z",
   "items": [
     {
-      "count": 44,
+      "count": 45,
       "name": "Expose_Methodological_Weakness"
     },
     {
-      "count": 39,
+      "count": 40,
       "name": "Clarify_Misunderstanding"
     },
     {
@@ -2243,7 +2243,7 @@
     },
     {
       "count": 1,
-      "name": "Clarify_Misunderstanding; Conduct_Ablation_Study"
+      "name": "Conduct_Ablation_Study"
     },
     {
       "count": 1,
@@ -2903,7 +2903,11 @@
     },
     {
       "count": 1,
-      "name": "Expose_Methodological_Weakness; Demand_Experimental_Rigor; Critique_Presentation_Quality"
+      "name": "Demand_Experimental_Rigor"
+    },
+    {
+      "count": 1,
+      "name": "Critique_Presentation_Quality"
     },
     {
       "count": 1,

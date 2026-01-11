@@ -1,0 +1,123 @@
+{
+  "cluster_id": "prim_cluster_0016",
+  "count": 32,
+  "definition": "Deterministic primitive to Check_Differentiability_Requirement on Equation_14 (category: Mathematical_Verification).",
+  "evidence_schema": {
+    "note": "string"
+  },
+  "evidence_type": "Unknown",
+  "failure_codes": [
+    "NOT_IMPLEMENTED"
+  ],
+  "name": "Check_Differentiability_Requirement",
+  "operation": "Check_Differentiability_Requirement",
+  "primitive_id": "prim_0016_check_differentiability_",
+  "sample_calls": [
+    {
+      "operation": "Check_Differentiability_Requirement",
+      "outcome": "Equation 14 (in Appx B) for q^opt involves [f*]', the derivative of the convex conjugate. This requires f* to be differentiable, which follows from strict convexity and essential smoothness of f.",
+      "target_type": "Equation_14",
+      "tool_category": "Mathematical_Verification"
+    },
+    {
+      "operation": "Clarify_Metric_Definition",
+      "outcome": "Sought confirmation that WRG isolates reward improvement within fixed length bins.",
+      "target_type": "Weighted_Reward_Gain",
+      "tool_category": "Mathematical_Verification"
+    },
+    {
+      "operation": "Probe_Alternative_Derivations",
+      "outcome": "Questioned if bounds can be derived simpler via conditional distributions, and asked about subtask assumptions and worst-subpopulation bounds.",
+      "target_type": "Theoretical_Derivations",
+      "tool_category": "Mathematical_Verification"
+    }
+  ],
+  "signature": {
+    "paper_span": "SpanRef"
+  },
+  "source_counts": {
+    "operation": {
+      "Add_Explanation": 1,
+      "Analyze_Definition": 1,
+      "Analyze_Loss_Functions": 1,
+      "Analyze_Privacy_Accounting": 1,
+      "Analyze_Scaling_Bounds": 1,
+      "Analyze_Theoretical_Guarantee": 1,
+      "Check_Applicability_Condition": 1,
+      "Check_Condition_Consistency": 1,
+      "Check_Differentiability_Requirement": 1,
+      "Clarify_Assumption_Equivalence": 1,
+      "Clarify_Metric_Definition": 1,
+      "Clarify_Parameter_Value": 1,
+      "Clarify_Theorem_Interpretation": 1,
+      "Compare_Convergence_Rates": 1,
+      "Contrast_Method_Properties": 1,
+      "Correct_Theorem_Statement": 1,
+      "Define_Notation": 1,
+      "Define_Proportionality": 1,
+      "Derive_Multiplicity_Dependent_Bounds": 1,
+      "Derive_Theoretical_Bound": 1,
+      "Explain_Mathematical_Definition": 1,
+      "Explain_Rank_Adjustment_Mechanism": 1,
+      "Interpret_Regret_Bound": 1,
+      "Interpret_Sample_Complexity_Rate": 1,
+      "Parse_Theoretical_Framework": 1,
+      "Probe_Alternative_Derivations": 1,
+      "Propose_Axiomatic_Foundation": 1,
+      "Prove_Consistency": 1,
+      "Provide_Detailed_Derivation": 1,
+      "Reexamine_Proof_Conditions": 1,
+      "Restructure_Assumptions": 1,
+      "Trace_Expectation_Conditioning": 1
+    },
+    "target_type": {
+      "Assumption_2": 1,
+      "Behavior_Policy_Definition": 1,
+      "C_p_A_Function": 1,
+      "Corollary_1_Proof": 1,
+      "Discrimination_Free_Price": 1,
+      "Dynamic_Rank_Selection": 1,
+      "Equation_14": 1,
+      "Fairness_Bound_$\\epsilon$": 1,
+      "Fairness_Constrained_Optimality": 1,
+      "Fokker-Planck_Equation": 1,
+      "Gamma_Definition": 1,
+      "Hilbert_Estimate": 1,
+      "Lemma_3_Proof": 1,
+      "Matrix_Game_Example": 1,
+      "Mentor_Losses": 1,
+      "Minimal_Change_Principle": 1,
+      "Modality_Compensation_Motivation": 1,
+      "PAL_Loss": 1,
+      "Private_Vote_Query_Rate": 1,
+      "Pure_DP_Guarantee": 1,
+      "Regret_Analysis": 1,
+      "SAM_vs_SGD_Convergence": 1,
+      "Sparsity_Constraint": 1,
+      "Tensor_GaLore_Convergence": 1,
+      "Theorem": 1,
+      "Theorem_3.3": 1,
+      "Theorem_3.6_Proof": 1,
+      "Theoretical_Derivations": 1,
+      "Theoretical_Guarantee": 1,
+      "Trajectory_FKL_to_BC": 1,
+      "Troenpy_Optimality": 1,
+      "Weighted_Reward_Gain": 1
+    },
+    "tool_category": {
+      "Algorithmic_Analysis": 2,
+      "Conceptual_Clarification": 1,
+      "Hypothesis_Testing": 1,
+      "Logical_Consistency_Check": 1,
+      "Mathematical_Proof": 1,
+      "Mathematical_Verification": 21,
+      "Notational_Clarification": 1,
+      "Proof_Analysis": 1,
+      "Proof_Clarification": 1,
+      "Scope_Verification": 1,
+      "Theoretical_Analysis": 1
+    }
+  },
+  "target_type": "Equation_14",
+  "tool_category": "Mathematical_Verification"
+}

@@ -1,0 +1,23 @@
+{
+  "definition": "Deterministic primitive to Question_Artifact on Generated_Prompts (category: Architectural_Analysis).",
+  "entrypoint": "skills\\library\\skill_prim_0023_question_artifact\\skill.py:run",
+  "evidence_schema": {
+    "note": "string"
+  },
+  "evidence_type": "Unknown",
+  "failure_codes": [
+    "NOT_IMPLEMENTED"
+  ],
+  "generated_at": "2026-01-11T16:05:52Z",
+  "name": "Question_Artifact",
+  "signature": {
+    "paper_span": "SpanRef"
+  },
+  "skill_id": "skill_prim_0023_question_artifact",
+  "source": {
+    "operation": "Question_Artifact",
+    "primitive_id": "prim_0023_question_artifact",
+    "target_type": "Generated_Prompts",
+    "tool_category": "Architectural_Analysis"
+  }
+}

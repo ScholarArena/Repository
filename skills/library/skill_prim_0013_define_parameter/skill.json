@@ -1,0 +1,23 @@
+{
+  "definition": "Deterministic primitive to Define_Parameter on Spherical_Harmonics (category: Contextual_Clarification).",
+  "entrypoint": "skills\\library\\skill_prim_0013_define_parameter\\skill.py:run",
+  "evidence_schema": {
+    "note": "string"
+  },
+  "evidence_type": "Document",
+  "failure_codes": [
+    "NOT_IMPLEMENTED"
+  ],
+  "generated_at": "2026-01-11T16:05:52Z",
+  "name": "Define_Parameter",
+  "signature": {
+    "paper_span": "SpanRef"
+  },
+  "skill_id": "skill_prim_0013_define_parameter",
+  "source": {
+    "operation": "Define_Parameter",
+    "primitive_id": "prim_0013_define_parameter",
+    "target_type": "Spherical_Harmonics",
+    "tool_category": "Contextual_Clarification"
+  }
+}

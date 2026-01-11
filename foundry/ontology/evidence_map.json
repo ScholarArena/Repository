@@ -1,0 +1,57 @@
+{
+  "evidence_types": [
+    "Citation",
+    "Statistical",
+    "Figure",
+    "Table",
+    "Document",
+    "Text",
+    "Symbolic",
+    "Logical",
+    "Implementation",
+    "Unknown"
+  ],
+  "generated_at": "2026-01-11T14:18:58Z",
+  "items": [
+    {
+      "evidence_type": "Document",
+      "key": "Contextual_Clarification::Define_Parameter",
+      "operation": "Define_Parameter",
+      "rationale": "Defining parameters typically involves providing detailed explanations or descriptions, which aligns with document evidence.",
+      "tool_category": "Contextual_Clarification"
+    },
+    {
+      "evidence_type": "Citation",
+      "key": "Literature_Cross_Check::Assess_Novelty",
+      "operation": "Assess_Novelty",
+      "rationale": "Assessing novelty requires referencing prior work to establish what is new or different, thus citation is the appropriate evidence type.",
+      "tool_category": "Literature_Cross_Check"
+    },
+    {
+      "evidence_type": "Citation",
+      "key": "Literature_Cross_Check::Contrast_Baseline",
+      "operation": "Contrast_Baseline",
+      "rationale": "Contrasting with a baseline involves comparing against existing literature, which necessitates citations.",
+      "tool_category": "Literature_Cross_Check"
+    },
+    {
+      "evidence_type": "Citation",
+      "key": "Literature_Cross_Check::Contrast_With_Prior_Work",
+      "operation": "Contrast_With_Prior_Work",
+      "rationale": "This operation also requires referencing previous studies to highlight differences, making citation the suitable evidence type.",
+      "tool_category": "Literature_Cross_Check"
+    }
+  ],
+  "mapping": {
+    "Contextual_Clarification::Define_Parameter": "Document",
+    "Literature_Cross_Check::Assess_Novelty": "Citation",
+    "Literature_Cross_Check::Contrast_Baseline": "Citation",
+    "Literature_Cross_Check::Contrast_With_Prior_Work": "Citation"
+  },
+  "raw_responses": [
+    {
+      "chunk": 1,
+      "response": "{\n  \"items\": [\n    {\n      \"key\": \"Contextual_Clarification::Define_Parameter\",\n      \"tool_category\": \"Contextual_Clarification\",\n      \"operation\": \"Define_Parameter\",\n      \"evidence_type\": \"Document\",\n      \"rationale\": \"Defining parameters typically involves providing detailed explanations or descriptions, which aligns with document evidence.\"\n    },\n    {\n      \"key\": \"Literature_Cross_Check::Assess_Novelty\",\n      \"tool_category\": \"Literature_Cross_Check\",\n      \"operation\": \"Assess_Novelty\",\n      \"evidence_type\": \"Citation\",\n      \"rationale\": \"Assessing novelty requires referencing prior work to establish what is new or different, thus citation is the appropriate evidence type.\"\n    },\n    {\n      \"key\": \"Literature_Cross_Check::Contrast_Baseline\",\n      \"tool_category\": \"Literature_Cross_Check\",\n      \"operation\": \"Contrast_Baseline\",\n      \"evidence_type\": \"Citation\",\n      \"rationale\": \"Contrasting with a baseline involves comparing against existing literature, which necessitates citations.\"\n    },\n    {\n      \"key\": \"Literature_Cross_Check::Contrast_With_Prior_Work\",\n      \"tool_category\": \"Literature_Cross_Check\",\n      \"operation\": \"Contrast_With_Prior_Work\",\n      \"evidence_type\": \"Citation\",\n      \"rationale\": \"This operation also requires referencing previous studies to highlight differences, making citation the suitable evidence type.\"\n    }\n  ]\n}"
+    }
+  ]
+}

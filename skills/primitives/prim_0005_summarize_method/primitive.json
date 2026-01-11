@@ -1,0 +1,118 @@
+{
+  "cluster_id": "prim_cluster_0005",
+  "count": 27,
+  "definition": "Deterministic primitive to Summarize_Method on Paper_Framework (category: Contextual_Clarification).",
+  "evidence_schema": {
+    "note": "string"
+  },
+  "evidence_type": "Implementation",
+  "failure_codes": [
+    "NOT_IMPLEMENTED"
+  ],
+  "name": "Summarize_Method",
+  "operation": "Summarize_Method",
+  "primitive_id": "prim_0005_summarize_method",
+  "sample_calls": [
+    {
+      "operation": "Synthesize_Main_Contributions",
+      "outcome": "Extracted high-level problem and solution statement for heterogeneous meta-learning.",
+      "target_type": "Full_Paper_Content",
+      "tool_category": "Paper_Comprehension"
+    },
+    {
+      "operation": "Simplify_Technical_Details",
+      "outcome": "Explained ZKP concepts with examples and summarized contributions to aid understanding.",
+      "target_type": "Cryptographic_Primitives",
+      "tool_category": "Accessibility_Enhancement"
+    },
+    {
+      "operation": "Summarize_Method",
+      "outcome": "Summarized the method as using latent diffusion, mask, and refinement for consistent editing.",
+      "target_type": "ED-NeRF_Pipeline",
+      "tool_category": "Contextual_Clarification"
+    }
+  ],
+  "signature": {
+    "paper_span": "SpanRef"
+  },
+  "source_counts": {
+    "operation": {
+      "Create_Summary_Table": 1,
+      "Explain_Data_Cleaning_And_Deduplication": 1,
+      "Extract_Core_Contribution": 1,
+      "Extract_Core_Contributions": 1,
+      "Extract_High-Level_Insight": 1,
+      "Extract_Key_Contribution": 1,
+      "Extract_Performance_Claims": 1,
+      "Highlight_Ablation_Study": 1,
+      "List_Key_Insights": 1,
+      "Paraphrase_Problem_Statement": 1,
+      "Reiterate_Core_Contributions": 1,
+      "Simplify_Technical_Details": 1,
+      "Summarize_Full_Pipeline": 1,
+      "Summarize_Key_Advantage": 1,
+      "Summarize_Key_Findings": 1,
+      "Summarize_Method": 2,
+      "Summarize_Paper_Claims": 1,
+      "Summarize_Problem_Setup": 1,
+      "Summarize_Revisions": 1,
+      "Synthesize_Contribution": 1,
+      "Synthesize_Contribution_Flow": 1,
+      "Synthesize_Findings": 1,
+      "Synthesize_Main_Contributions": 1,
+      "Synthesize_Paper_Contribution": 2,
+      "Synthesize_Paper_Overview": 1
+    },
+    "target_type": {
+      "Benchmark_Insights": 1,
+      "Cryptographic_Primitives": 1,
+      "DCPT_Philosophy": 1,
+      "ED-NeRF_Pipeline": 1,
+      "Experimental_Results": 1,
+      "Full_Paper_Content": 1,
+      "ICAI_Method_Ablation": 1,
+      "IDOL_Theory_and_Experiments": 1,
+      "Main_Contribution": 1,
+      "Manuscript_Changes": 1,
+      "Methodology": 1,
+      "Molecular_Generation": 1,
+      "Multi-Stage_Architecture": 1,
+      "Overall_Contribution": 1,
+      "Paper_Abstract": 1,
+      "Paper_Contribution": 1,
+      "Paper_Contributions": 1,
+      "Paper_Framework": 2,
+      "Paper_Narrative": 1,
+      "Phantom_Framework": 1,
+      "RAG_Database_(RETRI-DB)_Construction": 1,
+      "Research_Problem": 1,
+      "UA-PbRL_Framework": 1,
+      "VIS_Methodology": 1,
+      "WASA_Framework": 1,
+      "Zero-Shot_Detection_Performance": 1
+    },
+    "tool_category": {
+      "Accessibility_Enhancement": 1,
+      "Conceptual_Synthesis": 1,
+      "Contextual_Clarification": 6,
+      "Contribution_Articulation": 1,
+      "Contribution_Summarization": 1,
+      "Core_Concept_Synthesis": 1,
+      "Data_Pipeline_Justification": 1,
+      "Information_Extraction": 1,
+      "Information_Synthesis": 1,
+      "Literature_Synthesis": 1,
+      "Paper_Comprehension": 1,
+      "Paper_Summary": 2,
+      "Paper_Synthesis": 1,
+      "Presentation_Clarification": 1,
+      "Result_Synthesis": 1,
+      "Strategic_Positioning": 1,
+      "Summarization": 3,
+      "Summary_Evaluation": 1,
+      "Synthesis": 1
+    }
+  },
+  "target_type": "Paper_Framework",
+  "tool_category": "Contextual_Clarification"
+}

@@ -1,0 +1,23 @@
+{
+  "definition": "Deterministic primitive to Identify_Definition_Inconsistency on PMI-based_Score (category: Mathematical_Verification).",
+  "entrypoint": "skills\\library\\skill_prim_0029_identify_definition_inco\\skill.py:run",
+  "evidence_schema": {
+    "note": "string"
+  },
+  "evidence_type": "Unknown",
+  "failure_codes": [
+    "NOT_IMPLEMENTED"
+  ],
+  "generated_at": "2026-01-11T16:05:52Z",
+  "name": "Identify_Definition_Inconsistency",
+  "signature": {
+    "paper_span": "SpanRef"
+  },
+  "skill_id": "skill_prim_0029_identify_definition_inco",
+  "source": {
+    "operation": "Identify_Definition_Inconsistency",
+    "primitive_id": "prim_0029_identify_definition_inco",
+    "target_type": "PMI-based_Score",
+    "tool_category": "Mathematical_Verification"
+  }
+}

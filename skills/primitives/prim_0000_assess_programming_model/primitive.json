@@ -1,0 +1,63 @@
+{
+  "cluster_id": "prim_cluster_0000",
+  "count": 5,
+  "definition": "Deterministic primitive to Assess_Programming_Model on Conversation_Programming (category: Paradigm_Evaluation).",
+  "evidence_schema": {
+    "note": "string"
+  },
+  "evidence_type": "Unknown",
+  "failure_codes": [
+    "NOT_IMPLEMENTED"
+  ],
+  "name": "Assess_Programming_Model",
+  "operation": "Assess_Programming_Model",
+  "primitive_id": "prim_0000_assess_programming_model",
+  "sample_calls": [
+    {
+      "operation": "Assess_Programming_Model",
+      "outcome": "Recognized the conversation-centric programming model as an original and simplifying abstraction for LLM workflows.",
+      "target_type": "Conversation_Programming",
+      "tool_category": "Paradigm_Evaluation"
+    },
+    {
+      "operation": "Justify_Simplicity",
+      "outcome": "Avoided arbitrary threshold choices",
+      "target_type": "Binary_Classification",
+      "tool_category": "Threshold_Selection"
+    },
+    {
+      "operation": "Quantify_Computational_Savings",
+      "outcome": "Quantified massive resource savings enabled by TinyMem approach",
+      "target_type": "Research_Sustainability",
+      "tool_category": "Resource_Efficiency_Analysis"
+    }
+  ],
+  "signature": {
+    "paper_span": "SpanRef"
+  },
+  "source_counts": {
+    "operation": {
+      "Assess_Programming_Model": 1,
+      "Evaluate_Algorithmic_Tradeoff": 1,
+      "Evaluate_Practical_Benefits": 1,
+      "Justify_Simplicity": 1,
+      "Quantify_Computational_Savings": 1
+    },
+    "target_type": {
+      "Binary_Classification": 1,
+      "Conversation_Programming": 1,
+      "Fixed_Global_Centroid": 1,
+      "MetaSD_Framework_vs_OFABaseline": 1,
+      "Research_Sustainability": 1
+    },
+    "tool_category": {
+      "Advantage_Assessment": 1,
+      "Cost_Benefit_Analysis": 1,
+      "Paradigm_Evaluation": 1,
+      "Resource_Efficiency_Analysis": 1,
+      "Threshold_Selection": 1
+    }
+  },
+  "target_type": "Conversation_Programming",
+  "tool_category": "Paradigm_Evaluation"
+}

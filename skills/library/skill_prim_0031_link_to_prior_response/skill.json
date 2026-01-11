@@ -1,0 +1,23 @@
+{
+  "definition": "Deterministic primitive to Link_To_Prior_Response on Theoretical_Justification (category: Mathematical_Verification).",
+  "entrypoint": "skills\\library\\skill_prim_0031_link_to_prior_response\\skill.py:run",
+  "evidence_schema": {
+    "note": "string"
+  },
+  "evidence_type": "Citation",
+  "failure_codes": [
+    "NOT_IMPLEMENTED"
+  ],
+  "generated_at": "2026-01-11T16:05:52Z",
+  "name": "Link_To_Prior_Response",
+  "signature": {
+    "paper_span": "SpanRef"
+  },
+  "skill_id": "skill_prim_0031_link_to_prior_response",
+  "source": {
+    "operation": "Link_To_Prior_Response",
+    "primitive_id": "prim_0031_link_to_prior_response",
+    "target_type": "Theoretical_Justification",
+    "tool_category": "Mathematical_Verification"
+  }
+}

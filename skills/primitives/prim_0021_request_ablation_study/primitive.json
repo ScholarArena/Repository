@@ -1,0 +1,124 @@
+{
+  "cluster_id": "prim_cluster_0021",
+  "count": 34,
+  "definition": "Deterministic primitive to Request_Ablation_Study on Ablation_Studies (category: Experimental_Design_Check).",
+  "evidence_schema": {
+    "note": "string"
+  },
+  "evidence_type": "Unknown",
+  "failure_codes": [
+    "NOT_IMPLEMENTED"
+  ],
+  "name": "Request_Ablation_Study",
+  "operation": "Request_Ablation_Study",
+  "primitive_id": "prim_0021_request_ablation_study",
+  "sample_calls": [
+    {
+      "operation": "Identify_Missing_Baseline",
+      "outcome": "Confirmed that Tables 1-4 compare ELSA against its own component ablations, not against external SOTA methods.",
+      "target_type": "SOTA_Comparisons",
+      "tool_category": "Experimental_Design_Check"
+    },
+    {
+      "operation": "Propose_Alternative_Training_Signal",
+      "outcome": "Hypothesized that incorporating ground-truth labels into consistency training could improve performance.",
+      "target_type": "Consistency_Training_Paradigm",
+      "tool_category": "Experimental_Design_Check"
+    },
+    {
+      "operation": "Probe_Architecture_Generalization",
+      "outcome": "Questioned whether the final sharing pattern, if used to initialize a new model and trained from scratch, would perform as well as the jointly trained model.",
+      "target_type": "Discovered_Architecture",
+      "tool_category": "Experimental_Design_Check"
+    }
+  ],
+  "signature": {
+    "paper_span": "SpanRef"
+  },
+  "source_counts": {
+    "operation": {
+      "Ablate_Feature_Layer_Selection": 1,
+      "Ablate_Perturbation_Constraint": 1,
+      "Analyze_Ablation_Results": 1,
+      "Conduct_mGGA_Ablation": 1,
+      "Construct_Decomposition_Study": 1,
+      "Demonstrate_Behavioral_Similarity": 1,
+      "Demonstrate_Generality": 1,
+      "Design_Ablation_Study": 1,
+      "Design_and_Conduct_Follow-up_Experiment": 1,
+      "Ensure_Fair_Ablation_Design": 1,
+      "Evaluate_Ablation_Quality": 1,
+      "Extend_Ablation_Studies": 1,
+      "Identify_Missing_Baseline": 1,
+      "Investigate_Counterintuitive_Result": 1,
+      "Isolate_Component_Effects": 1,
+      "Justify_Ablation_Model_Choice": 1,
+      "Perform_Ablation_Study": 1,
+      "Perform_Component_Ablation": 1,
+      "Prepare_Ablation_Study": 1,
+      "Present_Ablation_Results": 1,
+      "Present_Ablation_Study": 1,
+      "Probe_Architecture_Generalization": 1,
+      "Propose_Ablation_Experiment": 1,
+      "Propose_Alternative_Training_Signal": 1,
+      "Propose_Mixed_Activation_Strategy": 1,
+      "Reference_Ablation_Result": 1,
+      "Reference_Ablation_Studies": 1,
+      "Request_Ablation_Studies": 1,
+      "Request_Ablation_Study": 2,
+      "Retrieve_Existing_Ablation_Study": 1,
+      "Review_Ablation_Studies": 1,
+      "Run_Ablation_Experiment": 1,
+      "Supplement_Analysis": 1
+    },
+    "target_type": {
+      "Ablation_Studies": 2,
+      "Ablation_Study": 2,
+      "Brain_Region_Ablation": 1,
+      "Clustering_Based_FL": 1,
+      "Consistency_Training_Paradigm": 1,
+      "Core_Contributions": 1,
+      "DataGen_Framework_Modules": 1,
+      "Depth_Prior_Ablation": 1,
+      "Discovered_Architecture": 1,
+      "Discretization_Technique": 1,
+      "Energy_Function_Decomposition": 1,
+      "Generator_vs_BLTO_Contribution": 1,
+      "Inductive_Bias_Analysis": 1,
+      "Model_Components": 1,
+      "Model_and_Data_Contributions": 1,
+      "Multi-Layer_Feature_Concatenation_in_Loss": 1,
+      "Multi-layer_Transformer": 1,
+      "Multiview_Information": 1,
+      "Network_Architecture": 1,
+      "Network_Size_Consistency": 1,
+      "Perturbation_Constraint_\\epsilon": 1,
+      "Pretrained_Weights_Effect": 1,
+      "PsCo_and_BECLR_Modules": 1,
+      "Refined_Surface_Feature_MLP": 1,
+      "SAR_Ablation": 1,
+      "SEAL_Algorithm_Component": 1,
+      "SOTA_Comparisons": 1,
+      "Semi-local_Component": 1,
+      "Single_Layer_Task_Scaling": 1,
+      "Synchronized_GroupNorm": 1,
+      "Training_Pair_Size": 1,
+      "Visual_Refinement_at_Inference": 1
+    },
+    "tool_category": {
+      "Ablation_Analysis": 1,
+      "Contextual_Clarification": 1,
+      "Data_Extraction": 1,
+      "Empirical_Validation": 2,
+      "Experimental_Analysis": 1,
+      "Experimental_Audit": 1,
+      "Experimental_Design": 1,
+      "Experimental_Design_Check": 20,
+      "Experimental_Validation": 3,
+      "Hypothesis_Generation": 1,
+      "Hypothesis_Testing": 2
+    }
+  },
+  "target_type": "Ablation_Studies",
+  "tool_category": "Experimental_Design_Check"
+}

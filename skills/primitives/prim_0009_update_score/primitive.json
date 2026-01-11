@@ -1,0 +1,95 @@
+{
+  "cluster_id": "prim_cluster_0009",
+  "count": 18,
+  "definition": "Deterministic primitive to Update_Score on Paper_Quality (category: Decision_Making).",
+  "evidence_schema": {
+    "note": "string"
+  },
+  "evidence_type": "Unknown",
+  "failure_codes": [
+    "NOT_IMPLEMENTED"
+  ],
+  "name": "Update_Score",
+  "operation": "Update_Score",
+  "primitive_id": "prim_0009_update_score",
+  "sample_calls": [
+    {
+      "operation": "Finalize_Score_Adjustment",
+      "outcome": "Decided to increase score based on satisfactory revisions.",
+      "target_type": "Review_Outcome",
+      "tool_category": "Decision_Making"
+    },
+    {
+      "operation": "Score_Adjustment_Based_On_Responses",
+      "outcome": "Increased score to 6 after authors clarified methodological concerns and added appendices.",
+      "target_type": "Paper_Submission",
+      "tool_category": "Evaluation_Assessment"
+    },
+    {
+      "operation": "Assess_Response_Impact",
+      "outcome": "Reviewed author responses and found them satisfactory, leading to a score increase.",
+      "target_type": "Paper_Quality",
+      "tool_category": "Evaluation_Synthesis"
+    }
+  ],
+  "signature": {
+    "paper_span": "SpanRef"
+  },
+  "source_counts": {
+    "operation": {
+      "Affirm_Acceptance": 1,
+      "Assess_Paper_Prospects": 1,
+      "Assess_Response_Impact": 1,
+      "Conditional_Acceptance": 1,
+      "Confirm_Adequacy_of_Response": 1,
+      "Confirm_Positive_Assessment": 1,
+      "Evaluate_Paper_Readability": 1,
+      "Evaluate_Quality_And_Clarity": 1,
+      "Evaluate_Revision_Impact": 1,
+      "Finalize_Assessment": 1,
+      "Finalize_Score_Adjustment": 1,
+      "Maintain_Initial_Assessment": 1,
+      "Maintain_Low_Rating": 1,
+      "Score_Adjustment_Based_On_Responses": 1,
+      "Update_Evaluation_Score": 1,
+      "Update_Review_Score": 1,
+      "Update_Score": 2
+    },
+    "target_type": {
+      "Author_Rebuttal": 1,
+      "Manuscript_Structure": 1,
+      "Overall_Paper_Quality": 1,
+      "Paper_Evaluation": 1,
+      "Paper_Quality": 4,
+      "Paper_Rating": 2,
+      "Paper_Revision": 1,
+      "Paper_Submission": 1,
+      "Review_Outcome": 1,
+      "Review_Process_Outcome": 1,
+      "Review_Score": 1,
+      "Reviewer_Decision": 1,
+      "Reviewer_Rating": 1,
+      "Revised_Manuscript": 1
+    },
+    "tool_category": {
+      "Communication": 1,
+      "Conclusion": 1,
+      "Consensus_Navigation": 1,
+      "Contextual_Clarification": 1,
+      "Decision_Making": 2,
+      "Evaluation_Assessment": 1,
+      "Evaluation_Summary": 1,
+      "Evaluation_Synthesis": 1,
+      "Experimental_Design_Check": 1,
+      "Logical_Analysis": 1,
+      "Meta-Analysis": 1,
+      "Negotiation_Strategy": 1,
+      "Overall_Assessment": 1,
+      "Rating_Adherence": 1,
+      "Review_Assessment": 2,
+      "Reviewer_Decision": 1
+    }
+  },
+  "target_type": "Paper_Quality",
+  "tool_category": "Decision_Making"
+}

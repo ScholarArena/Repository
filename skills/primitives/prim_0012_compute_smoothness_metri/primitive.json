@@ -1,0 +1,126 @@
+{
+  "cluster_id": "prim_cluster_0012",
+  "count": 28,
+  "definition": "Deterministic primitive to Compute_Smoothness_Metric on Dirichlet_Energy (category: Hyperparameter_Analysis).",
+  "evidence_schema": {
+    "note": "string"
+  },
+  "evidence_type": "Unknown",
+  "failure_codes": [
+    "NOT_IMPLEMENTED"
+  ],
+  "name": "Compute_Smoothness_Metric",
+  "operation": "Compute_Smoothness_Metric",
+  "primitive_id": "prim_0012_compute_smoothness_metri",
+  "sample_calls": [
+    {
+      "operation": "Compute_Smoothness_Metric",
+      "outcome": "Computed $\\log(E_D)$ for imputed features from FP, PCFI, and FISF, showing FISF has higher energy (less smooth).",
+      "target_type": "Dirichlet_Energy",
+      "tool_category": "Metric_Calculation"
+    },
+    {
+      "operation": "Emphasize_Parameter_Efficiency",
+      "outcome": "Highlighted that method has lower parameter count as shown in Table 3, adding value beyond accuracy.",
+      "target_type": "Parameter_Complexity_Comparison",
+      "tool_category": "Result_Highlighting"
+    },
+    {
+      "operation": "Identify_Missing_Parameter_Details",
+      "outcome": "Noted that the paper lacks details on the selection and tuning of \\lambda and k_{reg} in the conformal model.",
+      "target_type": "Regularization_Hyperparameters",
+      "tool_category": "Methodological_Scrutiny"
+    }
+  ],
+  "signature": {
+    "paper_span": "SpanRef"
+  },
+  "source_counts": {
+    "operation": {
+      "Analyze_Threshold_Trade-offs": 1,
+      "Assess_Robustness_To_Hyperparameters": 1,
+      "Assess_Tuning_Complexity": 1,
+      "Check_for_Parameter_Details": 1,
+      "Compute_Smoothness_Metric": 1,
+      "Demonstrate_Robustness": 1,
+      "Emphasize_Parameter_Efficiency": 1,
+      "Explain_Parameter_Flexibility": 1,
+      "Explain_Synergistic_Effects": 1,
+      "Extend_To_Other_Scaling_Axes": 1,
+      "Formulate_Guidelines": 1,
+      "Guide_K_Selection": 1,
+      "Identify_Missing_Parameter_Details": 1,
+      "Illustrate_Trade-off": 1,
+      "List_Multi_Faceted_Advantages": 1,
+      "List_Parameters": 1,
+      "Present_Empirical_Data": 1,
+      "Probe_Rationale_Coverage": 1,
+      "Provide_Tuning_Guidelines": 1,
+      "Quantify_Parameter_Scalability": 1,
+      "Reference_Tuning_Procedure": 1,
+      "Report_Ablation_Results": 1,
+      "Request_Tradeoff_Analysis": 1,
+      "Show_Performance_With_Sparse_Data": 1,
+      "Specify_Classification_Rule": 1,
+      "Specify_Hyperparameter_Tuning_Strategy": 1,
+      "Sweep_Threshold_Parameter": 1,
+      "Test_Robustness_To_Hyperparameter": 1
+    },
+    "target_type": {
+      "$\\Delta$-SGD_Hyperparameters": 1,
+      "Adaptive_Threshold_Strategy": 1,
+      "Beta_Process_Hyperparameters": 1,
+      "Component_Interactions": 1,
+      "DiSK_Hyperparameters": 1,
+      "Dirichlet_Energy": 1,
+      "F1_Score_Calculation": 1,
+      "Framework_Robustness": 1,
+      "Hyperparameter_Sensitivity": 1,
+      "Hyperparameters_in_Appendix_C": 1,
+      "Intrinsic_Reward_Coefficient": 1,
+      "Loss_Weight_Tuning": 1,
+      "Low-Level_Retrieval_Hyperparameter": 1,
+      "Metric_Selection": 1,
+      "Model_Advantages": 1,
+      "Model_Complexity": 1,
+      "Model_Performance": 1,
+      "Parallel_Group_Size": 1,
+      "Parameter_Complexity_Comparison": 1,
+      "Parameter_Scaling": 1,
+      "Probability_Score_Threshold": 1,
+      "RALA_hyperparameter_m": 1,
+      "RaDis_Training_Data": 1,
+      "Regularization_Hyperparameters": 1,
+      "Regularization_Parameter": 1,
+      "Sampling_Parameters": 1,
+      "Softmax_Temperature": 1,
+      "Training_Hyperparameters": 1
+    },
+    "tool_category": {
+      "Analysis_Request": 1,
+      "Argumentation_Strategy": 1,
+      "Comparative_Analysis": 1,
+      "Data_Presentation": 1,
+      "Experimental_Analysis": 1,
+      "Experimental_Demonstration": 1,
+      "Experimental_Response": 1,
+      "Hyperparameter_Analysis": 7,
+      "Hyperparameter_Audit": 1,
+      "Implementation_Detail_Provision": 1,
+      "Mathematical_Verification": 1,
+      "Methodological_Scrutiny": 1,
+      "Methodology_Explanation": 1,
+      "Metric_Calculation": 1,
+      "Modeling_Justification": 1,
+      "Parameter_Analysis": 1,
+      "Practical_Advice": 1,
+      "Reproducibility_Audit": 1,
+      "Result_Highlighting": 1,
+      "Results_Interpretation": 1,
+      "Strategic_Defense": 1,
+      "Theoretical_Modeling": 1
+    }
+  },
+  "target_type": "Dirichlet_Energy",
+  "tool_category": "Hyperparameter_Analysis"
+}

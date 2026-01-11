@@ -1,0 +1,23 @@
+{
+  "definition": "Deterministic primitive to Request_Ablation_Study on Ablation_Studies (category: Experimental_Design_Check).",
+  "entrypoint": "skills\\library\\skill_prim_0021_request_ablation_study\\skill.py:run",
+  "evidence_schema": {
+    "note": "string"
+  },
+  "evidence_type": "Unknown",
+  "failure_codes": [
+    "NOT_IMPLEMENTED"
+  ],
+  "generated_at": "2026-01-11T16:05:52Z",
+  "name": "Request_Ablation_Study",
+  "signature": {
+    "paper_span": "SpanRef"
+  },
+  "skill_id": "skill_prim_0021_request_ablation_study",
+  "source": {
+    "operation": "Request_Ablation_Study",
+    "primitive_id": "prim_0021_request_ablation_study",
+    "target_type": "Ablation_Studies",
+    "tool_category": "Experimental_Design_Check"
+  }
+}

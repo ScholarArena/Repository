@@ -1,0 +1,117 @@
+{
+  "cluster_id": "prim_cluster_0032",
+  "count": 28,
+  "definition": "Deterministic primitive to Establish_Positive_Rapport on Reviewer_Concerns (category: Contextual_Clarification).",
+  "evidence_schema": {
+    "note": "string"
+  },
+  "evidence_type": "Implementation",
+  "failure_codes": [
+    "NOT_IMPLEMENTED"
+  ],
+  "name": "Establish_Positive_Rapport",
+  "operation": "Establish_Positive_Rapport",
+  "primitive_id": "prim_0032_establish_positive_rappo",
+  "sample_calls": [
+    {
+      "operation": "Acknowledge_Feedback",
+      "outcome": "Standard polite acknowledgment.",
+      "target_type": "Reviewer_Interaction",
+      "tool_category": "Contextual_Clarification"
+    },
+    {
+      "operation": "Acknowledge_Rebuttal",
+      "outcome": "Noted author efforts in addressing concerns.",
+      "target_type": "Reviewer_Response",
+      "tool_category": "Contextual_Clarification"
+    },
+    {
+      "operation": "Offer_Additional_Clarification",
+      "outcome": "Expressed willingness to provide more information.",
+      "target_type": "Reviewer_Dialogue",
+      "tool_category": "Contextual_Clarification"
+    }
+  ],
+  "signature": {
+    "paper_span": "SpanRef"
+  },
+  "source_counts": {
+    "operation": {
+      "Accept_Offer_and_Provide_Proof": 1,
+      "Acknowledge_Feedback": 1,
+      "Acknowledge_Praise_and_Set_Agenda": 1,
+      "Acknowledge_Rebuttal": 1,
+      "Acknowledge_Score_Increase": 1,
+      "Confirm_Rebuttal_Review": 1,
+      "Consolidate_Argument": 1,
+      "Establish_Positive_Rapport": 2,
+      "Formalize_Withdrawal_Announcement": 1,
+      "Frame_as_Constructive": 1,
+      "Identify_Sticking_Point": 1,
+      "Initialize_Rebuttal_Structure": 1,
+      "List_Revisions": 1,
+      "Offer_Additional_Clarification": 1,
+      "Provide_Point-by-Point_Claim": 1,
+      "Provide_Prologue_to_Response": 1,
+      "Recall_Previous_Actions": 1,
+      "Request_Final_Evaluation": 1,
+      "Segment_Response": 1,
+      "Set_Collaborative_Tone": 1,
+      "Set_Polite_Tone": 1,
+      "Signal_New_Experimental_Data": 1,
+      "Solicit_Final_Confirmation": 1,
+      "Structure_Response": 2,
+      "Summarize_Rebuttal_Actions": 1,
+      "Summarize_Revisions": 1
+    },
+    "target_type": {
+      "Author_Rebuttal": 1,
+      "Completed_Experiments": 1,
+      "Documentation_Tasks": 1,
+      "Manuscript_Changes": 1,
+      "Paper_Revisions": 1,
+      "Rebuttal": 1,
+      "Rebuttal_Discussion": 1,
+      "Rebuttal_Evidence": 1,
+      "Rebuttal_Organization": 1,
+      "Rebuttal_Structure": 2,
+      "Rebuttal_Tone": 1,
+      "Response_To_Detailed_Review": 1,
+      "Responses_to_Reviewer_cPom": 1,
+      "Review_Process": 2,
+      "Reviewer_Concerns": 3,
+      "Reviewer_Dialogue": 1,
+      "Reviewer_Engagement": 2,
+      "Reviewer_Feedback": 2,
+      "Reviewer_Interaction": 1,
+      "Reviewer_Response": 1,
+      "Revisions_Made": 1,
+      "Specific_Reviewer_Concerns": 1
+    },
+    "tool_category": {
+      "Communication_Strategy": 1,
+      "Communicative_Action": 1,
+      "Communicative_Strategy": 2,
+      "Contextual_Clarification": 7,
+      "Conversational_Strategy": 1,
+      "Evidence_Strengthening": 1,
+      "Final_Negotiation": 1,
+      "Formal_Rebuttal_Opening": 1,
+      "Information_Synthesis": 1,
+      "Negotiation_Response": 1,
+      "Negotiation_Strategy": 1,
+      "Procedural_Acknowledgement": 1,
+      "Procedural_Adherence": 1,
+      "Rebuttal_Strategy": 1,
+      "Rebuttal_Summarization": 1,
+      "Response_Structuring": 1,
+      "Strategic_Claim_Refutation": 1,
+      "Strategic_Communication": 1,
+      "Strategic_Positioning": 1,
+      "Strategic_Summarization": 1,
+      "Tone_Setting": 1
+    }
+  },
+  "target_type": "Reviewer_Concerns",
+  "tool_category": "Contextual_Clarification"
+}

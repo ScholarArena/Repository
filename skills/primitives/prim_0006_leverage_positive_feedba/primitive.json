@@ -1,0 +1,72 @@
+{
+  "cluster_id": "prim_cluster_0006",
+  "count": 8,
+  "definition": "Deterministic primitive to Leverage_Positive_Feedback on Reviewer_Rating (category: Strategic_Positioning).",
+  "evidence_schema": {
+    "note": "string"
+  },
+  "evidence_type": "Unknown",
+  "failure_codes": [
+    "NOT_IMPLEMENTED"
+  ],
+  "name": "Leverage_Positive_Feedback",
+  "operation": "Leverage_Positive_Feedback",
+  "primitive_id": "prim_0006_leverage_positive_feedba",
+  "sample_calls": [
+    {
+      "operation": "Leverage_Positive_Feedback",
+      "outcome": "Requested reviewer to consider satisfactory response in overall rating.",
+      "target_type": "Reviewer_Rating",
+      "tool_category": "Strategic_Positioning"
+    },
+    {
+      "operation": "Request_Status_Update",
+      "outcome": "Sought final confirmation before the discussion period closes.",
+      "target_type": "Reviewer_Score",
+      "tool_category": "Metacommunication"
+    },
+    {
+      "operation": "Invite_Feedback",
+      "outcome": "Expressed hope that the example illustrates applications and welcomed further questions to continue the discussion.",
+      "target_type": "Reviewer_Engagement",
+      "tool_category": "Communicative_Strategy"
+    }
+  ],
+  "signature": {
+    "paper_span": "SpanRef"
+  },
+  "source_counts": {
+    "operation": {
+      "Broadcast_Revisions": 1,
+      "Extract_Consensus_Points": 1,
+      "Invite_Feedback": 1,
+      "Leverage_Positive_Feedback": 1,
+      "Request_Elaboration": 1,
+      "Request_Status_Update": 1,
+      "Seek_Specificity": 1,
+      "Synthesize_Reviewer_Feedback": 1
+    },
+    "target_type": {
+      "Review_Process": 1,
+      "Reviewer_Comments": 1,
+      "Reviewer_Decision": 1,
+      "Reviewer_Engagement": 1,
+      "Reviewer_Feedback": 1,
+      "Reviewer_Rating": 1,
+      "Reviewer_Score": 1,
+      "Vague_Reviewer_Comment": 1
+    },
+    "tool_category": {
+      "Clarification_Request": 1,
+      "Communicative_Strategy": 1,
+      "Contextual_Clarification": 1,
+      "Feedback_Synthesis": 1,
+      "Meta-Communication_Strategy": 1,
+      "Metacommunication": 1,
+      "Strategic_Communication": 1,
+      "Strategic_Positioning": 1
+    }
+  },
+  "target_type": "Reviewer_Rating",
+  "tool_category": "Strategic_Positioning"
+}

@@ -1,0 +1,23 @@
+{
+  "definition": "Deterministic primitive to Maintain_Skepticism_on_Empirical_Scope on Paper_Contribution (category: Critical_Evaluation).",
+  "entrypoint": "skills\\library\\skill_prim_0027_maintain_skepticism_on_e\\skill.py:run",
+  "evidence_schema": {
+    "note": "string"
+  },
+  "evidence_type": "Statistical",
+  "failure_codes": [
+    "NOT_IMPLEMENTED"
+  ],
+  "generated_at": "2026-01-11T16:05:52Z",
+  "name": "Maintain_Skepticism_on_Empirical_Scope",
+  "signature": {
+    "paper_span": "SpanRef"
+  },
+  "skill_id": "skill_prim_0027_maintain_skepticism_on_e",
+  "source": {
+    "operation": "Maintain_Skepticism_on_Empirical_Scope",
+    "primitive_id": "prim_0027_maintain_skepticism_on_e",
+    "target_type": "Paper_Contribution",
+    "tool_category": "Critical_Evaluation"
+  }
+}

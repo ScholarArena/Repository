@@ -1,0 +1,23 @@
+{
+  "definition": "Deterministic primitive to Leverage_Positive_Feedback on Reviewer_Rating (category: Strategic_Positioning).",
+  "entrypoint": "skills\\library\\skill_prim_0006_leverage_positive_feedba\\skill.py:run",
+  "evidence_schema": {
+    "note": "string"
+  },
+  "evidence_type": "Unknown",
+  "failure_codes": [
+    "NOT_IMPLEMENTED"
+  ],
+  "generated_at": "2026-01-11T16:05:52Z",
+  "name": "Leverage_Positive_Feedback",
+  "signature": {
+    "paper_span": "SpanRef"
+  },
+  "skill_id": "skill_prim_0006_leverage_positive_feedba",
+  "source": {
+    "operation": "Leverage_Positive_Feedback",
+    "primitive_id": "prim_0006_leverage_positive_feedba",
+    "target_type": "Reviewer_Rating",
+    "tool_category": "Strategic_Positioning"
+  }
+}

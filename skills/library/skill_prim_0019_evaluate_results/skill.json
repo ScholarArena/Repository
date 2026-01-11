@@ -1,0 +1,23 @@
+{
+  "definition": "Deterministic primitive to Evaluate_Results on Main_Results_Table (category: Experimental_Design_Check).",
+  "entrypoint": "skills\\library\\skill_prim_0019_evaluate_results\\skill.py:run",
+  "evidence_schema": {
+    "note": "string"
+  },
+  "evidence_type": "Unknown",
+  "failure_codes": [
+    "NOT_IMPLEMENTED"
+  ],
+  "generated_at": "2026-01-11T16:05:52Z",
+  "name": "Evaluate_Results",
+  "signature": {
+    "paper_span": "SpanRef"
+  },
+  "skill_id": "skill_prim_0019_evaluate_results",
+  "source": {
+    "operation": "Evaluate_Results",
+    "primitive_id": "prim_0019_evaluate_results",
+    "target_type": "Main_Results_Table",
+    "tool_category": "Experimental_Design_Check"
+  }
+}

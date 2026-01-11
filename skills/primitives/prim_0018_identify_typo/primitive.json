@@ -1,0 +1,83 @@
+{
+  "cluster_id": "prim_cluster_0018",
+  "count": 13,
+  "definition": "Deterministic primitive to Identify_Typo on Manuscript_Text (category: Proofreading).",
+  "evidence_schema": {
+    "note": "string"
+  },
+  "evidence_type": "Unknown",
+  "failure_codes": [
+    "NOT_IMPLEMENTED"
+  ],
+  "name": "Identify_Typo",
+  "operation": "Identify_Typo",
+  "primitive_id": "prim_0018_identify_typo",
+  "sample_calls": [
+    {
+      "operation": "Enumerate_Required_Changes",
+      "outcome": "Listed specific promised changes (notation, proposition, theorem) requiring verification.",
+      "target_type": "Manuscript_Revisions",
+      "tool_category": "Procedural_Check"
+    },
+    {
+      "operation": "Fix_Typo",
+      "outcome": "Identified typo: 'pupulation' should be 'population'.",
+      "target_type": "Population_Spelling",
+      "tool_category": "Spelling_Correction"
+    },
+    {
+      "operation": "Identify_Typos",
+      "outcome": "Identified specific typos in the revised related work section.",
+      "target_type": "Revised_Manuscript",
+      "tool_category": "Text_Verification"
+    }
+  ],
+  "signature": {
+    "paper_span": "SpanRef"
+  },
+  "source_counts": {
+    "operation": {
+      "Acknowledge_and_Plan_Correction": 1,
+      "Assess_Flow_Disruption": 1,
+      "Correct_Typos": 1,
+      "Enumerate_Required_Changes": 1,
+      "Fix_Typo": 1,
+      "Identify_And_Correct_Typo": 1,
+      "Identify_Citation_Errors": 1,
+      "Identify_Inconsistency": 1,
+      "Identify_Presentation_Errors": 1,
+      "Identify_Typo": 2,
+      "Identify_Typographical_Error": 1,
+      "Identify_Typos": 1
+    },
+    "target_type": {
+      "Document_Formatting": 1,
+      "Document_Text": 1,
+      "Figure_Placement": 1,
+      "Line_245": 1,
+      "Manuscript": 2,
+      "Manuscript_Revisions": 1,
+      "Manuscript_Text": 2,
+      "Population_Spelling": 1,
+      "Reference_List": 1,
+      "Revised_Manuscript": 1,
+      "Textual_Content": 1
+    },
+    "tool_category": {
+      "Contextual_Clarification": 1,
+      "Editorial_Check": 1,
+      "Formatting_Check": 1,
+      "Manuscript_Review": 1,
+      "Presentation_Improvement": 1,
+      "Procedural_Check": 1,
+      "Proofreading": 2,
+      "Proofreading_and_Formatting": 1,
+      "Spelling_Correction": 1,
+      "Syntactic_Verification": 1,
+      "Text_Verification": 1,
+      "Textual_Parsing": 1
+    }
+  },
+  "target_type": "Manuscript_Text",
+  "tool_category": "Proofreading"
+}

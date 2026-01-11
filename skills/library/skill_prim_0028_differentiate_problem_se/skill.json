@@ -1,0 +1,23 @@
+{
+  "definition": "Deterministic primitive to Differentiate_Problem_Settings on Traditional_vs_TestTime_Poisoning (category: Hypothesis_Testing).",
+  "entrypoint": "skills\\library\\skill_prim_0028_differentiate_problem_se\\skill.py:run",
+  "evidence_schema": {
+    "note": "string"
+  },
+  "evidence_type": "Unknown",
+  "failure_codes": [
+    "NOT_IMPLEMENTED"
+  ],
+  "generated_at": "2026-01-11T16:05:52Z",
+  "name": "Differentiate_Problem_Settings",
+  "signature": {
+    "paper_span": "SpanRef"
+  },
+  "skill_id": "skill_prim_0028_differentiate_problem_se",
+  "source": {
+    "operation": "Differentiate_Problem_Settings",
+    "primitive_id": "prim_0028_differentiate_problem_se",
+    "target_type": "Traditional_vs_TestTime_Poisoning",
+    "tool_category": "Hypothesis_Testing"
+  }
+}

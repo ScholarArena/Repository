@@ -1,0 +1,129 @@
+{
+  "cluster_id": "prim_cluster_0015",
+  "count": 30,
+  "definition": "Deterministic primitive to Contrast_ELBO_Derivations on Evidence_Lower_Bound (category: Literature_Cross_Check).",
+  "evidence_schema": {
+    "matches": "list",
+    "missing_refs": "list"
+  },
+  "evidence_type": "Citation",
+  "failure_codes": [
+    "NOT_IMPLEMENTED"
+  ],
+  "name": "Contrast_ELBO_Derivations",
+  "operation": "Contrast_ELBO_Derivations",
+  "primitive_id": "prim_0015_contrast_elbo_derivation",
+  "sample_calls": [
+    {
+      "operation": "Contrast_ELBO_Derivations",
+      "outcome": "Highlighted that DNDM's ELBO follows diffusion tradition (intermediate latents $\\mathbf{x}_t$), while ARDM's uses autoregressive dimension decomposition.",
+      "target_type": "Evidence_Lower_Bound",
+      "tool_category": "Theoretical_Analysis"
+    },
+    {
+      "operation": "Synthesize_Research_Challenge",
+      "outcome": "Formulated the central open problem as designing methods that outperform FedAvg-ERM on DG tasks while preserving its convergence robustness.",
+      "target_type": "FDG_Objective",
+      "tool_category": "Strategic_Positioning"
+    },
+    {
+      "operation": "Articulate_Analytical_Differences",
+      "outcome": "Highlighted three major points of differentiation: general loss, local analysis framework, and improved adaptive step size, arguing these constitute a non-incremental advance.",
+      "target_type": "Proof_Technique",
+      "tool_category": "Literature_Cross_Check"
+    }
+  ],
+  "signature": {
+    "paper_span": "SpanRef",
+    "query": "string"
+  },
+  "source_counts": {
+    "operation": {
+      "Add_Nuance_to_Model_Family_Findings": 1,
+      "Address_Multiple_Criticisms": 1,
+      "Argue_PINN_Niche_Advantages": 1,
+      "Articulate_Analytical_Differences": 1,
+      "Attribute_Performance_to_Hyperparameter_Tuning": 1,
+      "Broaden_Benchmark_Variety": 1,
+      "Challenge_Causal_Link": 1,
+      "Challenge_Core_Motivation": 1,
+      "Cite_Application_Domains": 1,
+      "Cite_Internal_Contributions": 1,
+      "Cite_Prior_Results": 1,
+      "Cite_Prior_Work_to_Support_Generalizability": 1,
+      "Contrast_ELBO_Derivations": 1,
+      "Contrast_TC_Objectives": 1,
+      "Differentiate_Stability_Theorem": 1,
+      "Explain_Efficiency_And_Explicitness": 1,
+      "Highlight_SOTA_Performance_in_Mislabel_Detection": 1,
+      "Highlight_Theoretical_Difference": 1,
+      "Implement_Reviewer_Suggestion": 1,
+      "Justify_Data_Augmentation": 1,
+      "Justify_Focus_Area": 1,
+      "Link_Plausibility_To_Interpretability": 1,
+      "Provide_Citations": 1,
+      "Provide_Mechanistic_Insight": 1,
+      "Reference_Empirical_Results": 1,
+      "Request_Detailed_Mapping": 1,
+      "Request_Discussion": 1,
+      "Synthesize_Research_Challenge": 1,
+      "Synthesize_Theoretical_Justification": 1,
+      "Verify_Baseline_Implementation": 1
+    },
+    "target_type": {
+      "Architectural_Inductive_Bias": 1,
+      "Competing_Contrastive_Decoding_Paper": 1,
+      "Dataset_Distillation": 1,
+      "Deep_Metric_Learning_Advantages": 1,
+      "Evidence_Lower_Bound": 1,
+      "Experimental_Results": 1,
+      "FDG_Objective": 1,
+      "FFN_Module": 1,
+      "Feature_Backbone_Generalization_Claim": 1,
+      "Generalizability_of_Findings_to_Other_Architectures": 1,
+      "Global_Loss_Origin": 1,
+      "Gradient_Variance_vs_Geometry_Quality": 1,
+      "Influence_Function_Method": 1,
+      "Injectivity_Relevance": 1,
+      "Layer-Wise_Robustness": 1,
+      "Loss_Function": 1,
+      "Method_Efficacy": 1,
+      "Methodological_Claims": 1,
+      "Non_Sinusoidal_PDEs": 1,
+      "Normalization_Performance": 1,
+      "PINN_vs_Classical_Methods": 1,
+      "Prior_Control_Formulation": 1,
+      "Proof_Technique": 1,
+      "PyTorch_Component_Advancements": 1,
+      "Quality_Robustness_Tradeoff": 1,
+      "Recourse_Interpretability": 1,
+      "Role_of_Color_in_RL": 1,
+      "TC_Formulations": 1,
+      "Theorem_3.4_vs_Normalization_Layers": 1,
+      "V3_Method": 1
+    },
+    "tool_category": {
+      "Benchmark_Justification": 1,
+      "Claim_Delimitation": 1,
+      "Comprehensive_Response": 1,
+      "Conceptual_Clarification": 1,
+      "Conceptual_Explanation": 1,
+      "Contextual_Clarification": 1,
+      "Empirical_Defense": 1,
+      "Interpretability_Claim": 1,
+      "Interpretive_Critique": 1,
+      "Justification_Provision": 1,
+      "Literature_Analysis": 1,
+      "Literature_Comparison": 1,
+      "Literature_Cross_Check": 12,
+      "Methodological_Comparison": 1,
+      "Scope_Justification": 1,
+      "Strategic_Positioning": 1,
+      "Theoretical_Analysis": 1,
+      "Theoretical_Comparison": 1,
+      "Theoretical_Grounding": 1
+    }
+  },
+  "target_type": "Evidence_Lower_Bound",
+  "tool_category": "Literature_Cross_Check"
+}
