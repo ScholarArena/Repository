@@ -270,6 +270,7 @@ def parse_args():
     parser.add_argument("--llm-model", default="gpt-4o-mini")
     parser.add_argument("--llm-base-url", default="https://www.dmxapi.cn/v1")
     parser.add_argument("--llm-api-key", default="")
+    parser.add_argument("--llm-debug-dir", default="", help="Write raw LLM responses to this directory")
     parser.add_argument("--issue-sample-size", type=int, default=6)
     parser.add_argument("--intent-sample-size", type=int, default=6)
     parser.add_argument("--issue-memory-max", type=int, default=50)
@@ -313,7 +314,17 @@ def extract_json(text):
     return None
 
 
-def label_with_llm(kind, samples, existing, model, api_key, base_url):
+def write_llm_debug(debug_dir, kind, payload):
+    if not debug_dir:
+        return
+    path = Path(debug_dir)
+    path.mkdir(parents=True, exist_ok=True)
+    out_path = path / f"{kind}_llm.jsonl"
+    with out_path.open("a", encoding="utf-8") as f:
+        f.write(json.dumps(payload, ensure_ascii=True) + "\n")
+
+
+def label_with_llm(kind, samples, existing, model, api_key, base_url, debug_dir=None, debug_meta=None):
     kind = kind.lower().strip()
     if kind == "issue":
         definition = (
@@ -361,7 +372,23 @@ def label_with_llm(kind, samples, existing, model, api_key, base_url):
     ]
     response = call_chat(messages, model, api_key, base_url, max_retries=3, sleep_seconds=0.5)
     content = ((response.get("choices") or [{}])[0].get("message") or {}).get("content")
-    return extract_json(content) or {}
+    parsed = extract_json(content) or {}
+    if debug_dir:
+        write_llm_debug(
+            debug_dir,
+            kind,
+            {
+                "ts": time.time(),
+                "kind": kind,
+                "meta": debug_meta or {},
+                "samples": samples,
+                "existing_labels": existing or [],
+                "messages": messages,
+                "response": response,
+                "parsed": parsed,
+            },
+        )
+    return parsed
 
 
 def pick_samples(indices, acts, field, sample_size, rng, text_lookup=None):
@@ -536,6 +563,12 @@ def main():
                     model=args.llm_model,
                     api_key=llm_key,
                     base_url=args.llm_base_url,
+                    debug_dir=args.llm_debug_dir,
+                    debug_meta={
+                        "scope": scope_key,
+                        "cluster_id": int(cluster_id),
+                        "cluster_size": len(members),
+                    },
                 )
             if args.issue_cluster_scope == "global":
                 issue_id = f"issue_{cluster_id:03d}"
@@ -629,6 +662,11 @@ def main():
                 model=args.llm_model,
                 api_key=llm_key,
                 base_url=args.llm_base_url,
+                debug_dir=args.llm_debug_dir,
+                debug_meta={
+                    "cluster_id": int(cluster_id),
+                    "cluster_size": len(members),
+                },
             )
         intent_id = f"intent_{cluster_id:03d}"
         label = intent_payload.get("label") if intent_payload else f"Intent_{cluster_id:03d}"
