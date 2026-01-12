@@ -324,6 +324,17 @@ def write_llm_debug(debug_dir, kind, payload):
         f.write(json.dumps(payload, ensure_ascii=True) + "\n")
 
 
+def normalize_label_payload(parsed):
+    if isinstance(parsed, dict):
+        return parsed
+    if isinstance(parsed, list):
+        for item in parsed:
+            if isinstance(item, dict) and ("label" in item or "action" in item):
+                return item
+        return {}
+    return {}
+
+
 def label_with_llm(kind, samples, existing, model, api_key, base_url, debug_dir=None, debug_meta=None):
     kind = kind.lower().strip()
     if kind == "issue":
@@ -373,6 +384,7 @@ def label_with_llm(kind, samples, existing, model, api_key, base_url, debug_dir=
     response = call_chat(messages, model, api_key, base_url, max_retries=3, sleep_seconds=0.5)
     content = ((response.get("choices") or [{}])[0].get("message") or {}).get("content")
     parsed = extract_json(content) or {}
+    normalized = normalize_label_payload(parsed)
     if debug_dir:
         write_llm_debug(
             debug_dir,
@@ -386,9 +398,10 @@ def label_with_llm(kind, samples, existing, model, api_key, base_url, debug_dir=
                 "messages": messages,
                 "response": response,
                 "parsed": parsed,
+                "normalized": normalized,
             },
         )
-    return parsed
+    return normalized
 
 
 def pick_samples(indices, acts, field, sample_size, rng, text_lookup=None):
