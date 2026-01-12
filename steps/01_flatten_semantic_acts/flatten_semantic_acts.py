@@ -273,7 +273,7 @@ def parse_args():
     parser.add_argument("--intent-sample-size", type=int, default=6)
     parser.add_argument("--issue-memory-max", type=int, default=50)
     parser.add_argument("--intent-memory-max", type=int, default=50)
-    parser.add_argument("--issue-memory-scope", choices=["forum", "global"], default="forum")
+    parser.add_argument("--issue-memory-scope", choices=["forum", "global"], default="global")
     parser.add_argument("--skip-issue-labels", action="store_true")
     parser.add_argument("--skip-intent-labels", action="store_true")
 
@@ -504,6 +504,19 @@ def main():
         cluster_to_indices = {}
         for local_idx, cluster_id in enumerate(labels):
             cluster_to_indices.setdefault(int(cluster_id), []).append(indices[local_idx])
+        if not args.quiet:
+            sizes = sorted(len(members) for members in cluster_to_indices.values())
+            if sizes:
+                size_min = sizes[0]
+                size_max = sizes[-1]
+                size_mean = sum(sizes) / len(sizes)
+                size_median = float(np.median(sizes))
+                print(
+                    f"[issue] forum={forum_id} clusters={len(sizes)} "
+                    f"size_min={size_min} size_median={size_median:.1f} "
+                    f"size_mean={size_mean:.1f} size_max={size_max}",
+                    file=sys.stderr,
+                )
 
         forum_issue_memory = []
         for cluster_id, members in sorted(cluster_to_indices.items()):
@@ -577,6 +590,25 @@ def main():
     cluster_to_indices = {}
     for idx, cluster_id in enumerate(intent_labels):
         cluster_to_indices.setdefault(int(cluster_id), []).append(idx)
+
+    if not args.quiet:
+        sizes = sorted(len(members) for members in cluster_to_indices.values())
+        if sizes:
+            size_min = sizes[0]
+            size_max = sizes[-1]
+            size_mean = sum(sizes) / len(sizes)
+            size_median = float(np.median(sizes))
+            top_clusters = sorted(
+                ((cluster_id, len(members)) for cluster_id, members in cluster_to_indices.items()),
+                key=lambda item: (-item[1], item[0]),
+            )[:10]
+            top_summary = ", ".join(f"{cid}:{count}" for cid, count in top_clusters)
+            print(
+                f"[intent] clusters={len(sizes)} size_min={size_min} "
+                f"size_median={size_median:.1f} size_mean={size_mean:.1f} size_max={size_max}",
+                file=sys.stderr,
+            )
+            print(f"[intent] top_clusters: {top_summary}", file=sys.stderr)
 
     for cluster_id, members in sorted(cluster_to_indices.items()):
         samples = pick_samples(members, acts, "act_text", args.intent_sample_size, rng, text_lookup=intent_texts)
