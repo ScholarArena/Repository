@@ -258,6 +258,7 @@ def parse_args():
     parser.add_argument("--intent-k", type=int, default=0, help="Number of intent clusters (0 = auto)")
     parser.add_argument("--max-iter", type=int, default=50)
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--issue-cluster-scope", choices=["forum", "global"], default="global")
 
     parser.add_argument("--embed-model", default="text-embedding-3-large")
     parser.add_argument("--embed-base-url", default="https://www.dmxapi.cn/v1")
@@ -468,7 +469,7 @@ def main():
     embed_key = args.embed_api_key or default_api_key()
     llm_key = args.llm_api_key or embed_key
 
-    # Issue clustering per forum
+    # Issue clustering
     issue_texts = [build_issue_text(act, args.issue_text_mode) for act in acts]
     if not embed_key:
         raise SystemExit("Missing API key for embeddings. Provide --embed-api-key or set OPENAI_API_KEY.")
@@ -486,16 +487,20 @@ def main():
     save_embeddings(args.issue_embeddings_out, issue_embeddings)
     issue_embeddings = normalize_vectors(issue_embeddings, in_place=True)
 
-    forum_to_indices = {}
+    scope_to_indices = {}
     for idx, act in enumerate(acts):
-        forum_to_indices.setdefault(act["forum_id"], []).append(idx)
+        if args.issue_cluster_scope == "global":
+            scope_key = "global"
+        else:
+            scope_key = act["forum_id"]
+        scope_to_indices.setdefault(scope_key, []).append(idx)
 
     issue_catalog = []
     issue_assignments = []
     global_issue_memory = []
     rng = random.Random(args.seed)
 
-    for forum_id, indices in forum_to_indices.items():
+    for scope_key, indices in scope_to_indices.items():
         data = issue_embeddings[indices]
         n = data.shape[0]
         k = args.issue_k if args.issue_k > 0 else auto_k(n)
@@ -512,7 +517,7 @@ def main():
                 size_mean = sum(sizes) / len(sizes)
                 size_median = float(np.median(sizes))
                 print(
-                    f"[issue] forum={forum_id} clusters={len(sizes)} "
+                    f"[issue] scope={scope_key} clusters={len(sizes)} "
                     f"size_min={size_min} size_median={size_median:.1f} "
                     f"size_mean={size_mean:.1f} size_max={size_max}",
                     file=sys.stderr,
@@ -532,7 +537,10 @@ def main():
                     api_key=llm_key,
                     base_url=args.llm_base_url,
                 )
-            issue_id = f"{forum_id}#issue_{cluster_id:03d}"
+            if args.issue_cluster_scope == "global":
+                issue_id = f"issue_{cluster_id:03d}"
+            else:
+                issue_id = f"{scope_key}#issue_{cluster_id:03d}"
             label = issue_payload.get("label") if issue_payload else f"Issue_{cluster_id:03d}"
             description = issue_payload.get("description") if issue_payload else ""
             reuse_id = issue_payload.get("reuse_id") if issue_payload else None
@@ -544,7 +552,7 @@ def main():
                 issue_catalog.append(
                     {
                         "issue_id": issue_id,
-                        "forum_id": forum_id,
+                        "forum_id": None if args.issue_cluster_scope == "global" else scope_key,
                         "label": label,
                         "description": description,
                         "examples": samples,
@@ -560,8 +568,8 @@ def main():
                     {
                         "act_id": acts[act_idx]["act_id"],
                         "issue_id": issue_id,
-                        "forum_id": forum_id,
-                        "cluster_id": f"{forum_id}#cluster_{cluster_id:03d}",
+                        "forum_id": acts[act_idx]["forum_id"],
+                        "cluster_id": f"{scope_key}#cluster_{cluster_id:03d}",
                     }
                 )
 
