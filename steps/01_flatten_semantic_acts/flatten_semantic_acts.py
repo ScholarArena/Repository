@@ -302,15 +302,31 @@ def extract_json(text):
     text = (text or "").strip()
     if not text:
         return None
-    try:
-        return json.loads(text)
-    except json.JSONDecodeError:
-        match = re.search(r"\{.*\}", text, flags=re.DOTALL)
-        if match:
+    fence = re.search(r"```(?:json)?\s*(.*?)```", text, flags=re.DOTALL | re.IGNORECASE)
+    if fence:
+        candidate = fence.group(1).strip()
+        if candidate:
             try:
-                return json.loads(match.group(0))
+                return json.loads(candidate)
             except json.JSONDecodeError:
-                return None
+                pass
+    if text[0] in "{[":
+        try:
+            return json.loads(text)
+        except json.JSONDecodeError:
+            pass
+    list_match = re.search(r"\[.*\]", text, flags=re.DOTALL)
+    if list_match:
+        try:
+            return json.loads(list_match.group(0))
+        except json.JSONDecodeError:
+            pass
+    obj_match = re.search(r"\{.*\}", text, flags=re.DOTALL)
+    if obj_match:
+        try:
+            return json.loads(obj_match.group(0))
+        except json.JSONDecodeError:
+            pass
     return None
 
 
@@ -328,9 +344,14 @@ def normalize_label_payload(parsed):
     if isinstance(parsed, dict):
         return parsed
     if isinstance(parsed, list):
+        reuse = None
         for item in parsed:
-            if isinstance(item, dict) and ("label" in item or "action" in item):
-                return item
+            if not isinstance(item, dict):
+                continue
+            if item.get("action") == "reuse" and item.get("reuse_id"):
+                reuse = item
+            if "label" in item or "action" in item:
+                return reuse or item
         return {}
     return {}
 
@@ -353,7 +374,7 @@ def label_with_llm(kind, samples, existing, model, api_key, base_url, debug_dir=
     system = (
         "You are an expert scientific review analyst. "
         "Label clusters of semantic acts with concise, reusable labels. "
-        "Output must be strict JSON and match the provided schema."
+        "Return exactly one JSON object (not a list)."
     )
     user = {
         "task": f"Label {kind} cluster",
@@ -371,6 +392,7 @@ def label_with_llm(kind, samples, existing, model, api_key, base_url, debug_dir=
             "Create a new label only when no existing label fits.",
             "Labels must be short, stable, and domain-agnostic (no paper-specific details).",
             "Description should explain the dispute/strategy in one sentence.",
+            "Return a single JSON object, not an array.",
         ],
         "format": {
             "label_style": "Title_Case with underscores allowed",
