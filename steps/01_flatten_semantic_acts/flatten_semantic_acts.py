@@ -1,8 +1,19 @@
 import argparse
 import json
+import math
+import os
+import random
 import re
 import sys
+import time
 from pathlib import Path
+from urllib import request as url_request
+
+try:
+    import numpy as np
+except ImportError as exc:
+    raise SystemExit("Missing numpy. Install it to run clustering.") from exc
+
 
 ROLE_SPLIT_RE = re.compile(r"\s*(?:,|/|;|\||\band\b|&)\s*", re.IGNORECASE)
 
@@ -89,29 +100,312 @@ def normalize_roles(value):
     return normalized
 
 
+def default_api_key():
+    return (
+        os.environ.get("OPENAI_API_KEY")
+        or os.environ.get("DMX_API_KEY")
+        or os.environ.get("API_KEY")
+        or ""
+    )
+
+
+def call_embeddings(texts, model, api_key, base_url, max_retries, sleep_seconds):
+    endpoint = base_url.rstrip("/") + "/embeddings"
+    payload = json.dumps({"model": model, "input": texts}).encode("utf-8")
+    headers = {"Content-Type": "application/json", "Authorization": f"Bearer {api_key}"}
+    for attempt in range(1, max_retries + 1):
+        try:
+            req = url_request.Request(endpoint, data=payload, headers=headers, method="POST")
+            with url_request.urlopen(req, timeout=360) as resp:
+                data = json.loads(resp.read().decode("utf-8"))
+            embeddings = [item["embedding"] for item in data.get("data", [])]
+            if len(embeddings) != len(texts):
+                raise ValueError("Embedding count mismatch")
+            return embeddings
+        except Exception as exc:
+            if attempt >= max_retries:
+                raise
+            time.sleep(sleep_seconds)
+
+
+def embed_texts(texts, model, api_key, base_url, batch_size, max_retries, sleep_seconds, log_prefix="embed"):
+    embeddings = []
+    total = len(texts)
+    for start in range(0, total, batch_size):
+        batch = texts[start : start + batch_size]
+        batch_embeddings = call_embeddings(
+            batch,
+            model=model,
+            api_key=api_key,
+            base_url=base_url,
+            max_retries=max_retries,
+            sleep_seconds=sleep_seconds,
+        )
+        embeddings.extend(batch_embeddings)
+        if log_prefix:
+            print(f"[{log_prefix}] {min(start + batch_size, total)}/{total}", file=sys.stderr)
+    return np.array(embeddings, dtype=float)
+
+
+def normalize_vectors(matrix, in_place=False):
+    norms = np.linalg.norm(matrix, axis=1, keepdims=True)
+    norms[norms == 0] = 1.0
+    if in_place:
+        matrix /= norms
+        return matrix
+    return matrix / norms
+
+
+def kmeans_plus_plus_init(data, k, rng):
+    n = data.shape[0]
+    centroids = np.empty((k, data.shape[1]), dtype=data.dtype)
+    idx = rng.integers(0, n)
+    centroids[0] = data[idx]
+    distances = np.full(n, np.inf)
+    for i in range(1, k):
+        new_dist = np.linalg.norm(data - centroids[i - 1], axis=1) ** 2
+        distances = np.minimum(distances, new_dist)
+        probs = distances / distances.sum() if distances.sum() > 0 else np.full(n, 1 / n)
+        idx = rng.choice(n, p=probs)
+        centroids[i] = data[idx]
+    return centroids
+
+
+def kmeans(data, k, max_iter=50, seed=42):
+    n = data.shape[0]
+    if k <= 0:
+        raise ValueError("k must be positive")
+    if n == 0:
+        return np.array([]), np.array([])
+    if k > n:
+        k = n
+    rng = np.random.default_rng(seed)
+    centroids = kmeans_plus_plus_init(data, k, rng)
+    labels = np.zeros(n, dtype=int)
+
+    for _ in range(max_iter):
+        distances = np.linalg.norm(data[:, None, :] - centroids[None, :, :], axis=2)
+        new_labels = distances.argmin(axis=1)
+        if np.array_equal(labels, new_labels):
+            break
+        labels = new_labels
+        for idx in range(k):
+            members = data[labels == idx]
+            if len(members) == 0:
+                centroids[idx] = data[rng.integers(0, n)]
+            else:
+                centroids[idx] = members.mean(axis=0)
+
+    return labels, centroids
+
+
+def build_issue_text(act, mode):
+    action = act.get("action") or ""
+    grounding = act.get("grounding_ref") or ""
+    tool_calls = act.get("latent_skill_calls") or []
+    targets = []
+    for call in tool_calls:
+        if isinstance(call, dict):
+            target = call.get("target_type")
+            if target:
+                targets.append(target)
+    target_text = ", ".join(sorted(set(targets)))
+
+    parts = []
+    if "action" in mode:
+        parts.append(action)
+    if "grounding" in mode:
+        parts.append(grounding)
+    if "target" in mode and target_text:
+        parts.append(target_text)
+    return " | ".join([p for p in parts if p]) or action
+
+
+def build_intent_text(act, mode):
+    chain = (act.get("meta") or {}).get("cognitive_chain") or ""
+    role_raw = (act.get("meta") or {}).get("role_raw") or ""
+    action = act.get("action") or ""
+    parts = []
+    if "chain" in mode:
+        parts.append(chain)
+    if "role" in mode and role_raw:
+        parts.append(f"role:{role_raw}")
+    if "action" in mode:
+        parts.append(action)
+    return " | ".join([p for p in parts if p]) or action or chain
+
+
 def parse_args():
-    parser = argparse.ArgumentParser(description="Flatten mining_results into semantic act instances.")
+    parser = argparse.ArgumentParser(description="Build semantic act instances with issue and intent labels.")
     parser.add_argument("--in", dest="input_path", required=True, help="Path to mining_results.jsonl")
-    parser.add_argument("--out", dest="output_path", required=True, help="Output JSONL path")
-    parser.add_argument("--log-every", type=int, default=100, help="Progress log interval (papers)")
-    parser.add_argument("--quiet", action="store_true", help="Disable progress and summary logs")
+    parser.add_argument("--out", dest="output_path", required=True, help="Output semantic acts JSONL")
+    parser.add_argument("--issues-out", default="steps/01_flatten_semantic_acts/issues.jsonl")
+    parser.add_argument("--issue-assignments-out", default="steps/01_flatten_semantic_acts/issue_assignments.jsonl")
+    parser.add_argument("--intents-out", default="steps/01_flatten_semantic_acts/intents.jsonl")
+    parser.add_argument("--intent-assignments-out", default="steps/01_flatten_semantic_acts/intent_assignments.jsonl")
+    parser.add_argument("--issue-embeddings-out", default="steps/01_flatten_semantic_acts/issue_embeddings.npy")
+    parser.add_argument("--intent-embeddings-out", default="steps/01_flatten_semantic_acts/intent_embeddings.npy")
+    parser.add_argument("--limit-papers", type=int, default=0, help="Process only the first N papers")
+    parser.add_argument("--sample-acts", type=int, default=0, help="Randomly sample N acts for a quick test run")
+    parser.add_argument("--sample-seed", type=int, default=42)
+    parser.add_argument("--log-every", type=int, default=100)
+    parser.add_argument("--quiet", action="store_true")
+
+    parser.add_argument("--issue-text-mode", default="action", choices=["action", "action+grounding", "action+target", "action+grounding+target"])
+    parser.add_argument("--intent-text-mode", default="chain+role", choices=["chain", "chain+role", "chain+role+action", "action"])
+
+    parser.add_argument("--issue-k", type=int, default=0, help="Number of clusters per forum (0 = auto)")
+    parser.add_argument("--intent-k", type=int, default=0, help="Number of intent clusters (0 = auto)")
+    parser.add_argument("--max-iter", type=int, default=50)
+    parser.add_argument("--seed", type=int, default=42)
+
+    parser.add_argument("--embed-model", default="text-embedding-3-large")
+    parser.add_argument("--embed-base-url", default="https://www.dmxapi.cn/v1")
+    parser.add_argument("--embed-api-key", default="")
+    parser.add_argument("--embed-batch-size", type=int, default=64)
+    parser.add_argument("--embed-sleep", type=float, default=0.3)
+    parser.add_argument("--embed-retries", type=int, default=3)
+
+    parser.add_argument("--llm-model", default="gpt-4o-mini")
+    parser.add_argument("--llm-base-url", default="https://www.dmxapi.cn/v1")
+    parser.add_argument("--llm-api-key", default="")
+    parser.add_argument("--issue-sample-size", type=int, default=6)
+    parser.add_argument("--intent-sample-size", type=int, default=6)
+    parser.add_argument("--issue-memory-max", type=int, default=50)
+    parser.add_argument("--intent-memory-max", type=int, default=50)
+    parser.add_argument("--issue-memory-scope", choices=["forum", "global"], default="forum")
+    parser.add_argument("--skip-issue-labels", action="store_true")
+    parser.add_argument("--skip-intent-labels", action="store_true")
+
     return parser.parse_args()
+
+
+def call_chat(messages, model, api_key, base_url, max_retries, sleep_seconds):
+    endpoint = base_url.rstrip("/") + "/chat/completions"
+    payload = json.dumps({"model": model, "messages": messages, "temperature": 0.2}).encode("utf-8")
+    headers = {"Content-Type": "application/json", "Authorization": f"Bearer {api_key}"}
+    for attempt in range(1, max_retries + 1):
+        try:
+            req = url_request.Request(endpoint, data=payload, headers=headers, method="POST")
+            with url_request.urlopen(req, timeout=360) as resp:
+                data = json.loads(resp.read().decode("utf-8"))
+            return data
+        except Exception:
+            if attempt >= max_retries:
+                raise
+            time.sleep(sleep_seconds)
+
+
+def extract_json(text):
+    text = (text or "").strip()
+    if not text:
+        return None
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        match = re.search(r"\{.*\}", text, flags=re.DOTALL)
+        if match:
+            try:
+                return json.loads(match.group(0))
+            except json.JSONDecodeError:
+                return None
+    return None
+
+
+def label_with_llm(kind, samples, existing, model, api_key, base_url):
+    kind = kind.lower().strip()
+    if kind == "issue":
+        definition = (
+            "Issue label = a dispute/topic that multiple acts revolve around "
+            "(e.g., missing baselines, unclear methodology, insufficient evidence, "
+            "novelty claims)."
+        )
+    else:
+        definition = (
+            "Intent label = a communicative strategy behind an act "
+            "(e.g., request clarification, defend method, concede minor point, "
+            "challenge novelty)."
+        )
+
+    system = (
+        "You are an expert scientific review analyst. "
+        "Label clusters of semantic acts with concise, reusable labels. "
+        "Output must be strict JSON and match the provided schema."
+    )
+    user = {
+        "task": f"Label {kind} cluster",
+        "definition": definition,
+        "existing_labels": existing or [],
+        "samples": samples,
+        "output_schema": {
+            "action": "reuse|new",
+            "label": "short label",
+            "description": "one-sentence definition",
+            "reuse_id": "if action=reuse, provide existing id",
+        },
+        "rules": [
+            "Reuse an existing label if it matches the cluster meaning.",
+            "Create a new label only when no existing label fits.",
+            "Labels must be short, stable, and domain-agnostic (no paper-specific details).",
+            "Description should explain the dispute/strategy in one sentence.",
+        ],
+        "format": {
+            "label_style": "Title_Case with underscores allowed",
+            "description_style": "one sentence, no markdown",
+        },
+    }
+    messages = [
+        {"role": "system", "content": system},
+        {"role": "user", "content": json.dumps(user, ensure_ascii=True, indent=2)},
+    ]
+    response = call_chat(messages, model, api_key, base_url, max_retries=3, sleep_seconds=0.5)
+    content = ((response.get("choices") or [{}])[0].get("message") or {}).get("content")
+    return extract_json(content) or {}
+
+
+def pick_samples(indices, acts, field, sample_size, rng, text_lookup=None):
+    if not indices:
+        return []
+    selected = indices if len(indices) <= sample_size else rng.sample(indices, sample_size)
+    samples = []
+    for idx in selected:
+        act = acts[idx]
+        text = text_lookup[idx] if text_lookup else act.get(field)
+        samples.append(
+            {
+                "act_id": act.get("act_id"),
+                "role": act.get("role"),
+                "text": text or "",
+            }
+        )
+    return samples
+
+
+def save_embeddings(path, matrix):
+    if not path:
+        return
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    np.save(path, matrix)
+
+
+def auto_k(n):
+    if n <= 1:
+        return 1
+    return max(2, int(round(math.sqrt(n))))
 
 
 def main():
     args = parse_args()
+
     records = read_json_or_jsonl(args.input_path)
-    total_papers = len(records)
-    total_acts = 0
+    if args.limit_papers > 0:
+        records = records[: args.limit_papers]
+
+    acts = []
     empty_mining = 0
     missing_forum = 0
-    acts_with_tool_calls = 0
-    acts_with_grounding_ref = 0
-    multi_role_acts = 0
-    unknown_role_acts = 0
-    role_counts = {}
-    intent_counts = {}
-    out = []
+    total_acts = 0
 
     for idx_paper, paper in enumerate(records, start=1):
         forum_id = paper.get("forum_id") or paper.get("forum")
@@ -126,75 +420,214 @@ def main():
 
         for idx, item in enumerate(mining):
             act_id = f"{forum_id}#{idx:04d}"
-            total_acts += 1
             raw_role = item.get("role")
             roles = normalize_roles(raw_role)
-            if not roles and raw_role not in (None, ""):
-                roles = ["Unknown"]
-                unknown_role_acts += 1
-            if len(roles) > 1:
-                multi_role_acts += 1
             role = roles[0] if roles else None
-            for role_name in roles:
-                role_counts[role_name] = role_counts.get(role_name, 0) + 1
-
-            intent = item.get("strategic_intent")
-            if intent:
-                intent_counts[intent] = intent_counts.get(intent, 0) + 1
-
-            if item.get("latent_tool_calls"):
-                acts_with_tool_calls += 1
-            if item.get("grounding_ref"):
-                acts_with_grounding_ref += 1
-
-            out.append(
+            acts.append(
                 {
                     "act_id": act_id,
                     "act_index": idx,
-                    "issue_id": act_id,
+                    "issue_id": None,
                     "forum_id": forum_id,
                     "title": title,
                     "timestamp": timestamp,
                     "role": role,
                     "roles": roles,
-                    "intent": intent,
-                    "strategic_intent": intent,
+                    "intent": None,
+                    "intent_id": None,
                     "action": item.get("action"),
                     "act_text": item.get("action"),
                     "grounding_ref": item.get("grounding_ref"),
                     "source_seg_ids": item.get("source_seg_ids") or [],
-                    "latent_tool_calls": item.get("latent_tool_calls") or [],
+                    "latent_skill_calls": item.get("latent_tool_calls") or [],
                     "meta": {"cognitive_chain": item.get("cognitive_chain"), "role_raw": raw_role},
                 }
             )
+            total_acts += 1
 
         if not args.quiet and args.log_every > 0 and idx_paper % args.log_every == 0:
             print(
-                f"[flatten] {idx_paper}/{total_papers} papers | acts={total_acts}",
+                f"[flat] {idx_paper}/{len(records)} papers | acts={total_acts}",
                 file=sys.stderr,
             )
 
-    write_jsonl(args.output_path, out)
-
     if not args.quiet:
-        print(
-            f"[summary] papers={total_papers} acts={total_acts} "
-            f"empty_mining={empty_mining} missing_forum_id={missing_forum} "
-            f"with_tool_calls={acts_with_tool_calls} with_grounding_ref={acts_with_grounding_ref}",
-            file=sys.stderr,
-        )
-        print(
-            f"[summary] multi_role_acts={multi_role_acts} unknown_role_acts={unknown_role_acts}",
-            file=sys.stderr,
-        )
-        if role_counts:
-            role_summary = ", ".join(f"{k}:{v}" for k, v in sorted(role_counts.items()))
-            print(f"[summary] roles: {role_summary}", file=sys.stderr)
-        if intent_counts:
-            top_intents = sorted(intent_counts.items(), key=lambda x: (-x[1], x[0]))[:12]
-            intent_summary = ", ".join(f"{k}:{v}" for k, v in top_intents)
-            print(f"[summary] intents(top12): {intent_summary}", file=sys.stderr)
+        print(f"[summary] papers={len(records)} acts={total_acts} empty_mining={empty_mining} missing_forum_id={missing_forum}", file=sys.stderr)
+
+    if total_acts == 0:
+        write_jsonl(args.output_path, [])
+        return
+
+    if args.sample_acts and args.sample_acts > 0 and args.sample_acts < len(acts):
+        rng = random.Random(args.sample_seed)
+        sample_indices = sorted(rng.sample(range(len(acts)), args.sample_acts))
+        acts = [acts[idx] for idx in sample_indices]
+        if not args.quiet:
+            print(f"[sample] acts={len(acts)} (seed={args.sample_seed})", file=sys.stderr)
+
+    embed_key = args.embed_api_key or default_api_key()
+    llm_key = args.llm_api_key or embed_key
+
+    # Issue clustering per forum
+    issue_texts = [build_issue_text(act, args.issue_text_mode) for act in acts]
+    if not embed_key:
+        raise SystemExit("Missing API key for embeddings. Provide --embed-api-key or set OPENAI_API_KEY.")
+
+    issue_embeddings = embed_texts(
+        issue_texts,
+        model=args.embed_model,
+        api_key=embed_key,
+        base_url=args.embed_base_url,
+        batch_size=args.embed_batch_size,
+        max_retries=args.embed_retries,
+        sleep_seconds=args.embed_sleep,
+        log_prefix="embed-issue",
+    )
+    save_embeddings(args.issue_embeddings_out, issue_embeddings)
+    issue_embeddings = normalize_vectors(issue_embeddings, in_place=True)
+
+    forum_to_indices = {}
+    for idx, act in enumerate(acts):
+        forum_to_indices.setdefault(act["forum_id"], []).append(idx)
+
+    issue_catalog = []
+    issue_assignments = []
+    global_issue_memory = []
+    rng = random.Random(args.seed)
+
+    for forum_id, indices in forum_to_indices.items():
+        data = issue_embeddings[indices]
+        n = data.shape[0]
+        k = args.issue_k if args.issue_k > 0 else auto_k(n)
+        labels, _ = kmeans(data, k, max_iter=args.max_iter, seed=args.seed)
+
+        cluster_to_indices = {}
+        for local_idx, cluster_id in enumerate(labels):
+            cluster_to_indices.setdefault(int(cluster_id), []).append(indices[local_idx])
+
+        forum_issue_memory = []
+        for cluster_id, members in sorted(cluster_to_indices.items()):
+            samples = pick_samples(members, acts, "action", args.issue_sample_size, rng, text_lookup=issue_texts)
+            issue_payload = None
+            if not args.skip_issue_labels and llm_key:
+                memory = global_issue_memory if args.issue_memory_scope == "global" else forum_issue_memory
+                issue_payload = label_with_llm(
+                    "issue",
+                    samples,
+                    memory[-args.issue_memory_max :],
+                    model=args.llm_model,
+                    api_key=llm_key,
+                    base_url=args.llm_base_url,
+                )
+            issue_id = f"{forum_id}#issue_{cluster_id:03d}"
+            label = issue_payload.get("label") if issue_payload else f"Issue_{cluster_id:03d}"
+            description = issue_payload.get("description") if issue_payload else ""
+            reuse_id = issue_payload.get("reuse_id") if issue_payload else None
+            action = issue_payload.get("action") if issue_payload else None
+
+            if action == "reuse" and reuse_id:
+                issue_id = reuse_id
+            else:
+                issue_catalog.append(
+                    {
+                        "issue_id": issue_id,
+                        "forum_id": forum_id,
+                        "label": label,
+                        "description": description,
+                        "examples": samples,
+                    }
+                )
+                entry = {"issue_id": issue_id, "label": label, "description": description}
+                forum_issue_memory.append(entry)
+                global_issue_memory.append(entry)
+
+            for act_idx in members:
+                acts[act_idx]["issue_id"] = issue_id
+                issue_assignments.append(
+                    {
+                        "act_id": acts[act_idx]["act_id"],
+                        "issue_id": issue_id,
+                        "forum_id": forum_id,
+                        "cluster_id": f"{forum_id}#cluster_{cluster_id:03d}",
+                    }
+                )
+
+    # Intent clustering (global)
+    intent_texts = [build_intent_text(act, args.intent_text_mode) for act in acts]
+    intent_embeddings = embed_texts(
+        intent_texts,
+        model=args.embed_model,
+        api_key=embed_key,
+        base_url=args.embed_base_url,
+        batch_size=args.embed_batch_size,
+        max_retries=args.embed_retries,
+        sleep_seconds=args.embed_sleep,
+        log_prefix="embed-intent",
+    )
+    save_embeddings(args.intent_embeddings_out, intent_embeddings)
+    intent_embeddings = normalize_vectors(intent_embeddings, in_place=True)
+
+    k_intent = args.intent_k if args.intent_k > 0 else auto_k(len(acts))
+    intent_labels, _ = kmeans(intent_embeddings, k_intent, max_iter=args.max_iter, seed=args.seed)
+
+    intent_catalog = []
+    intent_assignments = []
+    intent_memory = []
+
+    cluster_to_indices = {}
+    for idx, cluster_id in enumerate(intent_labels):
+        cluster_to_indices.setdefault(int(cluster_id), []).append(idx)
+
+    for cluster_id, members in sorted(cluster_to_indices.items()):
+        samples = pick_samples(members, acts, "act_text", args.intent_sample_size, rng, text_lookup=intent_texts)
+        intent_payload = None
+        if not args.skip_intent_labels and llm_key:
+            intent_payload = label_with_llm(
+                "intent",
+                samples,
+                intent_memory[-args.intent_memory_max :],
+                model=args.llm_model,
+                api_key=llm_key,
+                base_url=args.llm_base_url,
+            )
+        intent_id = f"intent_{cluster_id:03d}"
+        label = intent_payload.get("label") if intent_payload else f"Intent_{cluster_id:03d}"
+        description = intent_payload.get("description") if intent_payload else ""
+        reuse_id = intent_payload.get("reuse_id") if intent_payload else None
+        action = intent_payload.get("action") if intent_payload else None
+
+        if action == "reuse" and reuse_id:
+            intent_id = reuse_id
+        else:
+            intent_catalog.append(
+                {
+                    "intent_id": intent_id,
+                    "label": label,
+                    "description": description,
+                    "examples": samples,
+                }
+            )
+            intent_memory.append({"intent_id": intent_id, "label": label, "description": description})
+
+        for act_idx in members:
+            acts[act_idx]["intent_id"] = intent_id
+            acts[act_idx]["intent"] = label
+            intent_assignments.append(
+                {
+                    "act_id": acts[act_idx]["act_id"],
+                    "intent_id": intent_id,
+                    "cluster_id": f"intent_cluster_{cluster_id:03d}",
+                }
+            )
+
+    write_jsonl(args.output_path, acts)
+    write_jsonl(args.issues_out, issue_catalog)
+    write_jsonl(args.issue_assignments_out, issue_assignments)
+    write_jsonl(args.intents_out, intent_catalog)
+    write_jsonl(args.intent_assignments_out, intent_assignments)
 
 
 if __name__ == "__main__":
+    import os
+
     main()

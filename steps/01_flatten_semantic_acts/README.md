@@ -1,7 +1,9 @@
-# Step 01 - Flatten mining_results into semantic act instances
+# Step 01 - Build Semantic Act Instances
 
 Goal
-- Convert `data/raw/mining_results.jsonl` into semantic act instances defined in `论文新方案.md`.
+- Convert `data/raw/mining_results.jsonl` into Semantic Act Instances as defined in `论文新方案.md`.
+- Derive issue/thread identifiers by clustering actions (per forum).
+- Derive intent labels by clustering cognitive chains (global) and labeling via LLM.
 
 Input
 - `data/raw/mining_results.jsonl`
@@ -13,31 +15,37 @@ Input
     - optional `cognitive_chain`
 
 Process
-- For each paper, iterate `analysis.mining_results` and emit one act per item.
-- Normalize role strings into canonical roles (Reviewer/Author/Meta-Reviewer/etc.).
-- Map to semantic act instance fields:
-  - r -> `role`
-  - i -> `issue_id` (forum_id + index)
-  - intent -> `intent`/`strategic_intent`
-  - x -> `action` / `act_text`
-  - rho -> `grounding_ref`, `source_seg_ids`, `latent_tool_calls`
+1. **Flatten** mining results into act-level records.
+2. **Issue clustering** per forum:
+   - Encode `action` (default) and cluster to produce thread-level issue IDs.
+   - For each cluster, sample acts and use LLM to name/describe the issue.
+3. **Intent clustering** (global):
+   - Encode `meta.cognitive_chain + role_raw` and cluster to obtain intent labels.
+   - For each cluster, sample acts and use LLM to label the intent.
+4. Update Semantic Act Instances with `issue_id` and `intent` (label), and rename
+   `latent_tool_calls` -> `latent_skill_calls`.
 
-Output
-- Default target: `data/interim/semantic_acts.jsonl`
-- Each line is a JSON object with core fields:
-  - `act_id`, `act_index`, `issue_id`, `forum_id`, `title`, `timestamp`
-  - `role`, `roles`, `intent`, `action`
-  - `grounding_ref`, `source_seg_ids`, `latent_tool_calls`
-  - `meta.cognitive_chain`, `meta.role_raw`
+Outputs (minimal)
+- `data/interim/semantic_acts.jsonl` (final Semantic Act Instances)
+- `steps/01_flatten_semantic_acts/issues.jsonl` (issue list with labels/descriptions)
+- `steps/01_flatten_semantic_acts/issue_assignments.jsonl` (act_id -> issue_id mapping)
+- `steps/01_flatten_semantic_acts/intents.jsonl` (intent list with labels/descriptions)
+- `steps/01_flatten_semantic_acts/intent_assignments.jsonl` (act_id -> intent_id mapping)
+- `steps/01_flatten_semantic_acts/issue_embeddings.npy` (issue embeddings, same order as acts)
+- `steps/01_flatten_semantic_acts/intent_embeddings.npy` (intent embeddings, same order as acts)
 
-Command
+Command (full pipeline)
 ```bash
 python steps/01_flatten_semantic_acts/flatten_semantic_acts.py \
   --in data/raw/mining_results.jsonl \
   --out data/interim/semantic_acts.jsonl \
-  --log-every 100
+  --embed-model text-embedding-3-large \
+  --llm-model gpt-4o-mini
 ```
 
 Notes
-- If `grounding_ref` or tool calls are missing, the act is still emitted; it is just evidence-incomplete.
-- Summary stats are printed unless `--quiet` is provided.
+- Issue text source is `action` by default. If needed, use `--issue-text-mode action+grounding+target`.
+- Intent text source defaults to `meta.cognitive_chain + role_raw`. Override via `--intent-text-mode`.
+- LLM labeling reuses existing issue/intent labels to avoid duplicates.
+- To skip LLM labeling, add `--skip-issue-labels` and/or `--skip-intent-labels`.
+- Quick test run on a small sample: add `--sample-acts 200` (acts are randomly selected).
