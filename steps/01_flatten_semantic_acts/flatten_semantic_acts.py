@@ -122,16 +122,55 @@ def call_embeddings(texts, model, api_key, base_url, max_retries, sleep_seconds)
             if len(embeddings) != len(texts):
                 raise ValueError("Embedding count mismatch")
             return embeddings
-        except Exception as exc:
+        except Exception:
             if attempt >= max_retries:
                 raise
             time.sleep(sleep_seconds)
 
+def read_progress(path):
+    if not path or not path.exists():
+        return 0
+    try:
+        return int(path.read_text(encoding="utf-8").strip())
+    except ValueError:
+        return 0
 
-def embed_texts(texts, model, api_key, base_url, batch_size, max_retries, sleep_seconds, log_prefix="embed"):
-    embeddings = []
+
+def write_progress(path, value):
+    if not path:
+        return
+    path.write_text(str(int(value)), encoding="utf-8")
+
+
+def embed_texts(
+    texts,
+    model,
+    api_key,
+    base_url,
+    batch_size,
+    max_retries,
+    sleep_seconds,
+    log_prefix="embed",
+    save_path=None,
+    resume=False,
+):
     total = len(texts)
-    for start in range(0, total, batch_size):
+    embeddings = []
+    memmap = None
+    progress_path = Path(f"{save_path}.progress") if save_path else None
+    start_at = 0
+
+    if save_path and resume and Path(save_path).exists():
+        if progress_path and progress_path.exists():
+            start_at = read_progress(progress_path)
+        memmap = np.lib.format.open_memmap(save_path, mode="r+")
+        if memmap.shape[0] != total:
+            memmap = None
+            start_at = 0
+        if log_prefix and start_at:
+            print(f"[{log_prefix}] resume at {start_at}/{total}", file=sys.stderr)
+
+    for start in range(start_at, total, batch_size):
         batch = texts[start : start + batch_size]
         batch_embeddings = call_embeddings(
             batch,
@@ -141,9 +180,26 @@ def embed_texts(texts, model, api_key, base_url, batch_size, max_retries, sleep_
             max_retries=max_retries,
             sleep_seconds=sleep_seconds,
         )
-        embeddings.extend(batch_embeddings)
+        if save_path:
+            if memmap is None:
+                dim = len(batch_embeddings[0]) if batch_embeddings else 0
+                memmap = np.lib.format.open_memmap(
+                    save_path, mode="w+", dtype="float32", shape=(total, dim)
+                )
+                memmap[:] = np.nan
+            end = start + len(batch_embeddings)
+            memmap[start:end] = np.array(batch_embeddings, dtype="float32")
+            memmap.flush()
+            if progress_path:
+                write_progress(progress_path, end)
+        else:
+            embeddings.extend(batch_embeddings)
         if log_prefix:
             print(f"[{log_prefix}] {min(start + batch_size, total)}/{total}", file=sys.stderr)
+    if save_path:
+        if progress_path:
+            write_progress(progress_path, total)
+        return memmap
     return np.array(embeddings, dtype=float)
 
 
@@ -266,6 +322,7 @@ def parse_args():
     parser.add_argument("--embed-batch-size", type=int, default=64)
     parser.add_argument("--embed-sleep", type=float, default=0.3)
     parser.add_argument("--embed-retries", type=int, default=3)
+    parser.add_argument("--embed-resume", action="store_true", help="Resume embeddings from saved .npy files")
 
     parser.add_argument("--llm-model", default="gpt-4o-mini")
     parser.add_argument("--llm-base-url", default="https://www.dmxapi.cn/v1")
@@ -545,8 +602,9 @@ def main():
         max_retries=args.embed_retries,
         sleep_seconds=args.embed_sleep,
         log_prefix="embed-issue",
+        save_path=args.issue_embeddings_out,
+        resume=args.embed_resume,
     )
-    save_embeddings(args.issue_embeddings_out, issue_embeddings)
     issue_embeddings = normalize_vectors(issue_embeddings, in_place=True)
 
     scope_to_indices = {}
@@ -652,8 +710,9 @@ def main():
         max_retries=args.embed_retries,
         sleep_seconds=args.embed_sleep,
         log_prefix="embed-intent",
+        save_path=args.intent_embeddings_out,
+        resume=args.embed_resume,
     )
-    save_embeddings(args.intent_embeddings_out, intent_embeddings)
     intent_embeddings = normalize_vectors(intent_embeddings, in_place=True)
 
     k_intent = args.intent_k if args.intent_k > 0 else auto_k(len(acts))

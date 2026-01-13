@@ -51,3 +51,4 @@ Notes
 - To skip LLM labeling, add `--skip-issue-labels` and/or `--skip-intent-labels`.
 - Quick test run on a small sample: add `--sample-acts 200` (acts are randomly selected).
 - To debug LLM labeling, add `--llm-debug-dir steps/01_flatten_semantic_acts/llm_debug` to save raw responses.
+- To resume embedding after a 429, use `--embed-resume` (relies on `.npy.progress` files).
