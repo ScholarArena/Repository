@@ -157,6 +157,8 @@ def embed_texts(
     total = len(texts)
     embeddings = []
     memmap = None
+    rng = np.random.default_rng(42)
+    fallback_dim = None
     progress_path = Path(f"{save_path}.progress") if save_path else None
     start_at = 0
 
@@ -167,19 +169,31 @@ def embed_texts(
         if memmap.shape[0] != total:
             memmap = None
             start_at = 0
+        else:
+            fallback_dim = int(memmap.shape[1])
         if log_prefix and start_at:
             print(f"[{log_prefix}] resume at {start_at}/{total}", file=sys.stderr)
 
     for start in range(start_at, total, batch_size):
         batch = texts[start : start + batch_size]
-        batch_embeddings = call_embeddings(
-            batch,
-            model=model,
-            api_key=api_key,
-            base_url=base_url,
-            max_retries=max_retries,
-            sleep_seconds=sleep_seconds,
-        )
+        try:
+            batch_embeddings = call_embeddings(
+                batch,
+                model=model,
+                api_key=api_key,
+                base_url=base_url,
+                max_retries=max_retries,
+                sleep_seconds=sleep_seconds,
+            )
+        except Exception:
+            if fallback_dim is None:
+                raise
+            if log_prefix:
+                print(
+                    f"[{log_prefix}] warning: embedding request failed at {start}, using random fallback",
+                    file=sys.stderr,
+                )
+            batch_embeddings = rng.standard_normal((len(batch), fallback_dim)).tolist()
         if save_path:
             if memmap is None:
                 dim = len(batch_embeddings[0]) if batch_embeddings else 0
@@ -194,6 +208,8 @@ def embed_texts(
                 write_progress(progress_path, end)
         else:
             embeddings.extend(batch_embeddings)
+        if fallback_dim is None and batch_embeddings:
+            fallback_dim = len(batch_embeddings[0])
         if log_prefix:
             print(f"[{log_prefix}] {min(start + batch_size, total)}/{total}", file=sys.stderr)
     if save_path:

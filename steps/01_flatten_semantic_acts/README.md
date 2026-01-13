@@ -52,3 +52,4 @@ Notes
 - Quick test run on a small sample: add `--sample-acts 200` (acts are randomly selected).
 - To debug LLM labeling, add `--llm-debug-dir steps/01_flatten_semantic_acts/llm_debug` to save raw responses.
 - To resume embedding after a 429, use `--embed-resume` (relies on `.npy.progress` files).
+- If a rare embedding request fails after some progress, the script falls back to a random embedding to keep running.
