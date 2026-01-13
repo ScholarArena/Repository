@@ -17,10 +17,10 @@ Input
 Process
 1. **Flatten** mining results into act-level records.
 2. **Issue clustering** (global by default):
-   - Encode `action` (default) and cluster to produce thread-level issue IDs.
+   - Heuristically group by action text, embed only group representatives, then cluster.
    - For each cluster, sample acts and use LLM to name/describe the issue.
 3. **Intent clustering** (global):
-   - Encode `meta.cognitive_chain + role_raw` and cluster to obtain intent labels.
+   - Heuristically group by `meta.cognitive_chain + role_raw`, embed representatives, then cluster.
    - For each cluster, sample acts and use LLM to label the intent.
 4. Update Semantic Act Instances with `issue_id` and `intent` (label), and rename
    `latent_tool_calls` -> `latent_skill_calls`.
@@ -28,11 +28,11 @@ Process
 Outputs (minimal)
 - `data/interim/semantic_acts.jsonl` (final Semantic Act Instances)
 - `steps/01_flatten_semantic_acts/issues.jsonl` (issue list with labels/descriptions)
-- `steps/01_flatten_semantic_acts/issue_assignments.jsonl` (act_id -> issue_id mapping)
+- `steps/01_flatten_semantic_acts/issue_assignments.jsonl` (act_id -> issue_id mapping; includes `group_id` in heuristic mode)
 - `steps/01_flatten_semantic_acts/intents.jsonl` (intent list with labels/descriptions)
-- `steps/01_flatten_semantic_acts/intent_assignments.jsonl` (act_id -> intent_id mapping)
-- `steps/01_flatten_semantic_acts/issue_embeddings.npy` (issue embeddings, same order as acts)
-- `steps/01_flatten_semantic_acts/intent_embeddings.npy` (intent embeddings, same order as acts)
+- `steps/01_flatten_semantic_acts/intent_assignments.jsonl` (act_id -> intent_id mapping; includes `group_id` in heuristic mode)
+- `steps/01_flatten_semantic_acts/issue_embeddings.npy` (heuristic group embeddings; group_id suffix matches row order)
+- `steps/01_flatten_semantic_acts/intent_embeddings.npy` (heuristic group embeddings; group_id suffix matches row order)
 
 Command (full pipeline)
 ```bash
@@ -57,3 +57,5 @@ Notes
 - To view k-means progress, set `--kmeans-log-every 10` (logs every N chunks).
 - For faster clustering, use `--kmeans-method minibatch --kmeans-batch-size 4096`.
 - If k-means init is slow, set `--kmeans-init-sample 20000` or `--kmeans-init random`.
+- To force full embeddings over all acts, set `--issue-embed-strategy full --intent-embed-strategy full`.
+- To save representative embeddings, set `--issue-rep-embeddings-out ...` and/or `--intent-rep-embeddings-out ...`.

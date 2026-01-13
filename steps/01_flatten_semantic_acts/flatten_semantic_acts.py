@@ -1,5 +1,6 @@
 import argparse
 import json
+import hashlib
 import math
 import os
 import random
@@ -16,6 +17,51 @@ except ImportError as exc:
 
 
 ROLE_SPLIT_RE = re.compile(r"\s*(?:,|/|;|\||\band\b|&)\s*", re.IGNORECASE)
+TOKEN_RE = re.compile(r"[A-Za-z0-9]+")
+STOPWORDS = {
+    "a",
+    "an",
+    "and",
+    "are",
+    "as",
+    "at",
+    "be",
+    "by",
+    "can",
+    "could",
+    "did",
+    "do",
+    "does",
+    "for",
+    "from",
+    "has",
+    "have",
+    "if",
+    "in",
+    "is",
+    "it",
+    "its",
+    "may",
+    "might",
+    "of",
+    "on",
+    "or",
+    "our",
+    "please",
+    "should",
+    "that",
+    "the",
+    "their",
+    "this",
+    "to",
+    "we",
+    "were",
+    "will",
+    "with",
+    "would",
+    "you",
+    "your",
+}
 
 
 def read_json_or_jsonl(path):
@@ -226,6 +272,65 @@ def normalize_vectors(matrix, in_place=False):
         matrix /= norms
         return matrix
     return matrix / norms
+
+
+def tokenize_for_hash(text):
+    tokens = TOKEN_RE.findall((text or "").lower())
+    return [token for token in tokens if token and token not in STOPWORDS]
+
+
+def simhash64(tokens):
+    if not tokens:
+        return 0
+    accum = [0] * 64
+    for token in tokens:
+        digest = hashlib.md5(token.encode("utf-8")).digest()
+        bits = int.from_bytes(digest[:8], "big")
+        for idx in range(64):
+            if bits & (1 << idx):
+                accum[idx] += 1
+            else:
+                accum[idx] -= 1
+    fingerprint = 0
+    for idx, value in enumerate(accum):
+        if value >= 0:
+            fingerprint |= 1 << idx
+    return fingerprint
+
+
+def heuristic_group_key(text, bits):
+    tokens = tokenize_for_hash(text)
+    if not tokens:
+        return 0
+    fingerprint = simhash64(tokens)
+    if bits <= 0 or bits >= 64:
+        return fingerprint
+    return fingerprint >> (64 - bits)
+
+
+def group_by_heuristic(texts, indices, bits):
+    groups = {}
+    for idx in indices:
+        key = heuristic_group_key(texts[idx], bits)
+        groups.setdefault(key, []).append(idx)
+    return groups
+
+
+def pick_representatives(indices, texts, reps, rng):
+    if reps <= 1 or len(indices) <= reps:
+        if not indices:
+            return []
+        longest = max(indices, key=lambda i: len((texts[i] or "")))
+        if len(indices) == 1 or reps <= 1:
+            return [longest]
+        remaining = [idx for idx in indices if idx != longest]
+        extra = rng.sample(remaining, reps - 1) if remaining else []
+        return [longest] + extra
+    lengths = sorted(indices, key=lambda i: len((texts[i] or "")), reverse=True)
+    head = lengths[:1]
+    remaining = lengths[1:]
+    extra = rng.sample(remaining, reps - 1) if remaining else []
+    return head + extra
 
 
 def kmeans_plus_plus_init(data, k, rng):
@@ -439,6 +544,14 @@ def parse_args():
     parser.add_argument("--embed-sleep", type=float, default=0.3)
     parser.add_argument("--embed-retries", type=int, default=3)
     parser.add_argument("--embed-resume", action="store_true", help="Resume embeddings from saved .npy files")
+    parser.add_argument("--issue-embed-strategy", choices=["full", "heuristic"], default="heuristic")
+    parser.add_argument("--intent-embed-strategy", choices=["full", "heuristic"], default="heuristic")
+    parser.add_argument("--issue-heuristic-bits", type=int, default=12)
+    parser.add_argument("--intent-heuristic-bits", type=int, default=12)
+    parser.add_argument("--issue-heuristic-reps", type=int, default=1)
+    parser.add_argument("--intent-heuristic-reps", type=int, default=1)
+    parser.add_argument("--issue-rep-embeddings-out", default="")
+    parser.add_argument("--intent-rep-embeddings-out", default="")
 
     parser.add_argument("--llm-model", default="gpt-4o-mini")
     parser.add_argument("--llm-base-url", default="https://www.dmxapi.cn/v1")
@@ -637,6 +750,17 @@ def resolve_kmeans_method(method, n, k):
     return method
 
 
+def describe_cluster_sizes(sizes):
+    if not sizes:
+        return None
+    sizes = sorted(sizes)
+    size_min = sizes[0]
+    size_max = sizes[-1]
+    size_mean = sum(sizes) / len(sizes)
+    size_median = float(np.median(sizes))
+    return size_min, size_median, size_mean, size_max
+
+
 def main():
     args = parse_args()
 
@@ -715,20 +839,6 @@ def main():
     if not embed_key:
         raise SystemExit("Missing API key for embeddings. Provide --embed-api-key or set OPENAI_API_KEY.")
 
-    issue_embeddings = embed_texts(
-        issue_texts,
-        model=args.embed_model,
-        api_key=embed_key,
-        base_url=args.embed_base_url,
-        batch_size=args.embed_batch_size,
-        max_retries=args.embed_retries,
-        sleep_seconds=args.embed_sleep,
-        log_prefix="embed-issue",
-        save_path=args.issue_embeddings_out,
-        resume=args.embed_resume,
-    )
-    issue_embeddings = normalize_vectors(issue_embeddings, in_place=True)
-
     scope_to_indices = {}
     for idx, act in enumerate(acts):
         if args.issue_cluster_scope == "global":
@@ -737,43 +847,164 @@ def main():
             scope_key = act["forum_id"]
         scope_to_indices.setdefault(scope_key, []).append(idx)
 
+    issue_embeddings = None
+    if args.issue_embed_strategy == "full":
+        if not args.quiet:
+            print(f"[embed-issue] total_texts={len(issue_texts)}", file=sys.stderr)
+        issue_embeddings = embed_texts(
+            issue_texts,
+            model=args.embed_model,
+            api_key=embed_key,
+            base_url=args.embed_base_url,
+            batch_size=args.embed_batch_size,
+            max_retries=args.embed_retries,
+            sleep_seconds=args.embed_sleep,
+            log_prefix="embed-issue",
+            save_path=args.issue_embeddings_out,
+            resume=args.embed_resume,
+        )
+        issue_embeddings = normalize_vectors(issue_embeddings, in_place=True)
+        if not args.quiet and args.issue_embeddings_out:
+            print(f"[embed-issue] saved embeddings to {args.issue_embeddings_out}", file=sys.stderr)
+
     issue_catalog = []
     issue_assignments = []
+    issue_group_embeddings = []
+    issue_group_counter = 0
+    issue_group_for_act = {}
     global_issue_memory = []
     rng = random.Random(args.seed)
 
     for scope_key, indices in scope_to_indices.items():
-        data = issue_embeddings[indices]
-        n = data.shape[0]
-        k = args.issue_k if args.issue_k > 0 else auto_k(n)
-        method = resolve_kmeans_method(args.kmeans_method, n, k)
-        issue_log_prefix = None
-        if not args.quiet and args.kmeans_log_every:
-            issue_log_prefix = f"kmeans-issue:{scope_key}"
-        labels, _ = kmeans(
-            data,
-            k,
-            max_iter=args.max_iter,
-            seed=args.seed,
-            chunk_size=args.kmeans_chunk_size,
-            log_prefix=issue_log_prefix,
-            log_every=args.kmeans_log_every,
-            method=method,
-            init_method=args.kmeans_init,
-            init_sample=args.kmeans_init_sample,
-            batch_size=args.kmeans_batch_size,
-        )
-
         cluster_to_indices = {}
-        for local_idx, cluster_id in enumerate(labels):
-            cluster_to_indices.setdefault(int(cluster_id), []).append(indices[local_idx])
+        group_id_by_local = {}
+        if not args.quiet:
+            print(f"[issue] scope={scope_key} acts={len(indices)}", file=sys.stderr)
+
+        if args.issue_embed_strategy == "full":
+            data = issue_embeddings[indices]
+            n = data.shape[0]
+            k = args.issue_k if args.issue_k > 0 else auto_k(n)
+            method = resolve_kmeans_method(args.kmeans_method, n, k)
+            issue_log_prefix = None
+            if not args.quiet and args.kmeans_log_every:
+                issue_log_prefix = f"kmeans-issue:{scope_key}"
+            labels, _ = kmeans(
+                data,
+                k,
+                max_iter=args.max_iter,
+                seed=args.seed,
+                chunk_size=args.kmeans_chunk_size,
+                log_prefix=issue_log_prefix,
+                log_every=args.kmeans_log_every,
+                method=method,
+                init_method=args.kmeans_init,
+                init_sample=args.kmeans_init_sample,
+                batch_size=args.kmeans_batch_size,
+            )
+            for local_idx, cluster_id in enumerate(labels):
+                cluster_to_indices.setdefault(int(cluster_id), []).append(indices[local_idx])
+        else:
+            groups = group_by_heuristic(issue_texts, indices, args.issue_heuristic_bits)
+            group_sizes = [len(members) for members in groups.values()]
+            if not args.quiet:
+                stats = describe_cluster_sizes(group_sizes)
+                if stats:
+                    size_min, size_median, size_mean, size_max = stats
+                    print(
+                        f"[heuristic-issue] scope={scope_key} groups={len(groups)} "
+                        f"size_min={size_min} size_median={size_median:.1f} "
+                        f"size_mean={size_mean:.1f} size_max={size_max}",
+                        file=sys.stderr,
+                    )
+
+            group_keys = sorted(groups.keys())
+            group_to_index = {key: idx for idx, key in enumerate(group_keys)}
+            rep_texts = []
+            rep_group_indices = []
+            rep_act_indices = []
+            for key in group_keys:
+                local_idx = group_to_index[key]
+                reps = pick_representatives(groups[key], issue_texts, args.issue_heuristic_reps, rng)
+                for act_idx in reps:
+                    rep_texts.append(issue_texts[act_idx])
+                    rep_group_indices.append(local_idx)
+                    rep_act_indices.append(act_idx)
+            if not args.quiet:
+                avg_reps = len(rep_texts) / max(1, len(group_keys))
+                print(
+                    f"[heuristic-issue] reps={len(rep_texts)} groups={len(group_keys)} "
+                    f"avg_reps={avg_reps:.2f} reps_per_group={args.issue_heuristic_reps}",
+                    file=sys.stderr,
+                )
+
+            rep_save_path = args.issue_rep_embeddings_out or None
+            rep_embeddings = embed_texts(
+                rep_texts,
+                model=args.embed_model,
+                api_key=embed_key,
+                base_url=args.embed_base_url,
+                batch_size=args.embed_batch_size,
+                max_retries=args.embed_retries,
+                sleep_seconds=args.embed_sleep,
+                log_prefix="embed-issue-rep",
+                save_path=rep_save_path,
+                resume=args.embed_resume,
+            )
+            rep_embeddings = normalize_vectors(rep_embeddings, in_place=True)
+            if not args.quiet:
+                print(
+                    f"[embed-issue-rep] embedded={len(rep_texts)} dim={rep_embeddings.shape[1]}",
+                    file=sys.stderr,
+                )
+
+            group_embeddings = np.zeros((len(group_keys), rep_embeddings.shape[1]), dtype=np.float32)
+            group_counts = np.zeros(len(group_keys), dtype=np.int32)
+            for emb, group_idx in zip(rep_embeddings, rep_group_indices):
+                group_embeddings[group_idx] += emb
+                group_counts[group_idx] += 1
+            for idx, count in enumerate(group_counts):
+                if count > 0:
+                    group_embeddings[idx] /= float(count)
+            group_embeddings = normalize_vectors(group_embeddings, in_place=True)
+
+            for local_idx, key in enumerate(group_keys):
+                group_id = f"group_{issue_group_counter:06d}"
+                issue_group_counter += 1
+                group_id_by_local[local_idx] = group_id
+            issue_group_embeddings.append(group_embeddings)
+
+            n = group_embeddings.shape[0]
+            k = args.issue_k if args.issue_k > 0 else auto_k(n)
+            method = resolve_kmeans_method(args.kmeans_method, n, k)
+            issue_log_prefix = None
+            if not args.quiet and args.kmeans_log_every:
+                issue_log_prefix = f"kmeans-issue:{scope_key}"
+            labels, _ = kmeans(
+                group_embeddings,
+                k,
+                max_iter=args.max_iter,
+                seed=args.seed,
+                chunk_size=args.kmeans_chunk_size,
+                log_prefix=issue_log_prefix,
+                log_every=args.kmeans_log_every,
+                method=method,
+                init_method=args.kmeans_init,
+                init_sample=args.kmeans_init_sample,
+                batch_size=args.kmeans_batch_size,
+            )
+            for key, members in groups.items():
+                local_idx = group_to_index[key]
+                cluster_id = int(labels[local_idx])
+                cluster_to_indices.setdefault(cluster_id, []).extend(members)
+                for act_idx in members:
+                    issue_group_for_act[act_idx] = group_id_by_local[local_idx]
+
         if not args.quiet:
             sizes = sorted(len(members) for members in cluster_to_indices.values())
-            if sizes:
-                size_min = sizes[0]
-                size_max = sizes[-1]
-                size_mean = sum(sizes) / len(sizes)
-                size_median = float(np.median(sizes))
+            stats = describe_cluster_sizes(sizes)
+            if stats:
+                size_min, size_median, size_mean, size_max = stats
                 print(
                     f"[issue] scope={scope_key} clusters={len(sizes)} "
                     f"size_min={size_min} size_median={size_median:.1f} "
@@ -828,57 +1059,172 @@ def main():
 
             for act_idx in members:
                 acts[act_idx]["issue_id"] = issue_id
-                issue_assignments.append(
-                    {
-                        "act_id": acts[act_idx]["act_id"],
-                        "issue_id": issue_id,
-                        "forum_id": acts[act_idx]["forum_id"],
-                        "cluster_id": f"{scope_key}#cluster_{cluster_id:03d}",
-                    }
-                )
+                assignment = {
+                    "act_id": acts[act_idx]["act_id"],
+                    "issue_id": issue_id,
+                    "forum_id": acts[act_idx]["forum_id"],
+                    "cluster_id": f"{scope_key}#cluster_{cluster_id:03d}",
+                }
+                group_id = issue_group_for_act.get(act_idx)
+                if group_id:
+                    assignment["group_id"] = group_id
+                issue_assignments.append(assignment)
+
+    if issue_group_embeddings and args.issue_embeddings_out:
+        merged = np.vstack(issue_group_embeddings)
+        save_embeddings(args.issue_embeddings_out, merged)
+        if not args.quiet:
+            print(
+                f"[embed-issue] saved group embeddings to {args.issue_embeddings_out} "
+                f"shape={merged.shape}",
+                file=sys.stderr,
+            )
 
     # Intent clustering (global)
     intent_texts = [build_intent_text(act, args.intent_text_mode) for act in acts]
-    intent_embeddings = embed_texts(
-        intent_texts,
-        model=args.embed_model,
-        api_key=embed_key,
-        base_url=args.embed_base_url,
-        batch_size=args.embed_batch_size,
-        max_retries=args.embed_retries,
-        sleep_seconds=args.embed_sleep,
-        log_prefix="embed-intent",
-        save_path=args.intent_embeddings_out,
-        resume=args.embed_resume,
-    )
-    intent_embeddings = normalize_vectors(intent_embeddings, in_place=True)
+    intent_group_embeddings = []
+    intent_group_for_act = {}
+    intent_group_counter = 0
+    intent_groups = None
+    intent_group_to_index = None
 
-    k_intent = args.intent_k if args.intent_k > 0 else auto_k(len(acts))
-    intent_method = resolve_kmeans_method(args.kmeans_method, len(acts), k_intent)
-    intent_log_prefix = None
-    if not args.quiet and args.kmeans_log_every:
-        intent_log_prefix = "kmeans-intent"
-    intent_labels, _ = kmeans(
-        intent_embeddings,
-        k_intent,
-        max_iter=args.max_iter,
-        seed=args.seed,
-        chunk_size=args.kmeans_chunk_size,
-        log_prefix=intent_log_prefix,
-        log_every=args.kmeans_log_every,
-        method=intent_method,
-        init_method=args.kmeans_init,
-        init_sample=args.kmeans_init_sample,
-        batch_size=args.kmeans_batch_size,
-    )
+    if args.intent_embed_strategy == "full":
+        if not args.quiet:
+            print(f"[embed-intent] total_texts={len(intent_texts)}", file=sys.stderr)
+        intent_embeddings = embed_texts(
+            intent_texts,
+            model=args.embed_model,
+            api_key=embed_key,
+            base_url=args.embed_base_url,
+            batch_size=args.embed_batch_size,
+            max_retries=args.embed_retries,
+            sleep_seconds=args.embed_sleep,
+            log_prefix="embed-intent",
+            save_path=args.intent_embeddings_out,
+            resume=args.embed_resume,
+        )
+        intent_embeddings = normalize_vectors(intent_embeddings, in_place=True)
+        if not args.quiet and args.intent_embeddings_out:
+            print(f"[embed-intent] saved embeddings to {args.intent_embeddings_out}", file=sys.stderr)
+
+        k_intent = args.intent_k if args.intent_k > 0 else auto_k(len(acts))
+        intent_method = resolve_kmeans_method(args.kmeans_method, len(acts), k_intent)
+        intent_log_prefix = None
+        if not args.quiet and args.kmeans_log_every:
+            intent_log_prefix = "kmeans-intent"
+        intent_labels, _ = kmeans(
+            intent_embeddings,
+            k_intent,
+            max_iter=args.max_iter,
+            seed=args.seed,
+            chunk_size=args.kmeans_chunk_size,
+            log_prefix=intent_log_prefix,
+            log_every=args.kmeans_log_every,
+            method=intent_method,
+            init_method=args.kmeans_init,
+            init_sample=args.kmeans_init_sample,
+            batch_size=args.kmeans_batch_size,
+        )
+    else:
+        intent_groups = group_by_heuristic(intent_texts, list(range(len(acts))), args.intent_heuristic_bits)
+        group_sizes = [len(members) for members in intent_groups.values()]
+        if not args.quiet:
+            stats = describe_cluster_sizes(group_sizes)
+            if stats:
+                size_min, size_median, size_mean, size_max = stats
+                print(
+                    f"[heuristic-intent] groups={len(intent_groups)} size_min={size_min} "
+                    f"size_median={size_median:.1f} size_mean={size_mean:.1f} size_max={size_max}",
+                    file=sys.stderr,
+                )
+
+        group_keys = sorted(intent_groups.keys())
+        intent_group_to_index = {key: idx for idx, key in enumerate(group_keys)}
+        rep_texts = []
+        rep_group_indices = []
+        for key in group_keys:
+            local_idx = intent_group_to_index[key]
+            reps = pick_representatives(intent_groups[key], intent_texts, args.intent_heuristic_reps, rng)
+            for act_idx in reps:
+                rep_texts.append(intent_texts[act_idx])
+                rep_group_indices.append(local_idx)
+        if not args.quiet:
+            avg_reps = len(rep_texts) / max(1, len(group_keys))
+            print(
+                f"[heuristic-intent] reps={len(rep_texts)} groups={len(group_keys)} "
+                f"avg_reps={avg_reps:.2f} reps_per_group={args.intent_heuristic_reps}",
+                file=sys.stderr,
+            )
+
+        rep_save_path = args.intent_rep_embeddings_out or None
+        rep_embeddings = embed_texts(
+            rep_texts,
+            model=args.embed_model,
+            api_key=embed_key,
+            base_url=args.embed_base_url,
+            batch_size=args.embed_batch_size,
+            max_retries=args.embed_retries,
+            sleep_seconds=args.embed_sleep,
+            log_prefix="embed-intent-rep",
+            save_path=rep_save_path,
+            resume=args.embed_resume,
+        )
+        rep_embeddings = normalize_vectors(rep_embeddings, in_place=True)
+        if not args.quiet:
+            print(
+                f"[embed-intent-rep] embedded={len(rep_texts)} dim={rep_embeddings.shape[1]}",
+                file=sys.stderr,
+            )
+
+        group_embeddings = np.zeros((len(group_keys), rep_embeddings.shape[1]), dtype=np.float32)
+        group_counts = np.zeros(len(group_keys), dtype=np.int32)
+        for emb, group_idx in zip(rep_embeddings, rep_group_indices):
+            group_embeddings[group_idx] += emb
+            group_counts[group_idx] += 1
+        for idx, count in enumerate(group_counts):
+            if count > 0:
+                group_embeddings[idx] /= float(count)
+        group_embeddings = normalize_vectors(group_embeddings, in_place=True)
+
+        for local_idx, key in enumerate(group_keys):
+            group_id = f"group_{intent_group_counter:06d}"
+            intent_group_counter += 1
+            for act_idx in intent_groups[key]:
+                intent_group_for_act[act_idx] = group_id
+        intent_group_embeddings.append(group_embeddings)
+
+        k_intent = args.intent_k if args.intent_k > 0 else auto_k(len(group_keys))
+        intent_method = resolve_kmeans_method(args.kmeans_method, len(group_keys), k_intent)
+        intent_log_prefix = None
+        if not args.quiet and args.kmeans_log_every:
+            intent_log_prefix = "kmeans-intent"
+        intent_labels, _ = kmeans(
+            group_embeddings,
+            k_intent,
+            max_iter=args.max_iter,
+            seed=args.seed,
+            chunk_size=args.kmeans_chunk_size,
+            log_prefix=intent_log_prefix,
+            log_every=args.kmeans_log_every,
+            method=intent_method,
+            init_method=args.kmeans_init,
+            init_sample=args.kmeans_init_sample,
+            batch_size=args.kmeans_batch_size,
+        )
 
     intent_catalog = []
     intent_assignments = []
     intent_memory = []
 
     cluster_to_indices = {}
-    for idx, cluster_id in enumerate(intent_labels):
-        cluster_to_indices.setdefault(int(cluster_id), []).append(idx)
+    if args.intent_embed_strategy == "full":
+        for idx, cluster_id in enumerate(intent_labels):
+            cluster_to_indices.setdefault(int(cluster_id), []).append(idx)
+    else:
+        for key, members in intent_groups.items():
+            local_idx = intent_group_to_index[key]
+            cluster_id = int(intent_labels[local_idx])
+            cluster_to_indices.setdefault(cluster_id, []).extend(members)
 
     if not args.quiet:
         sizes = sorted(len(members) for members in cluster_to_indices.values())
@@ -938,12 +1284,24 @@ def main():
         for act_idx in members:
             acts[act_idx]["intent_id"] = intent_id
             acts[act_idx]["intent"] = label
-            intent_assignments.append(
-                {
-                    "act_id": acts[act_idx]["act_id"],
-                    "intent_id": intent_id,
-                    "cluster_id": f"intent_cluster_{cluster_id:03d}",
-                }
+            assignment = {
+                "act_id": acts[act_idx]["act_id"],
+                "intent_id": intent_id,
+                "cluster_id": f"intent_cluster_{cluster_id:03d}",
+            }
+            group_id = intent_group_for_act.get(act_idx)
+            if group_id:
+                assignment["group_id"] = group_id
+            intent_assignments.append(assignment)
+
+    if intent_group_embeddings and args.intent_embeddings_out:
+        merged = np.vstack(intent_group_embeddings)
+        save_embeddings(args.intent_embeddings_out, merged)
+        if not args.quiet:
+            print(
+                f"[embed-intent] saved group embeddings to {args.intent_embeddings_out} "
+                f"shape={merged.shape}",
+                file=sys.stderr,
             )
 
     write_jsonl(args.output_path, acts)
