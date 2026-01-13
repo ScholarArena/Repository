@@ -243,7 +243,60 @@ def kmeans_plus_plus_init(data, k, rng):
     return centroids
 
 
-def kmeans(data, k, max_iter=50, seed=42):
+def init_centroids(data, k, rng, method="kmeans++", sample_size=0):
+    n = data.shape[0]
+    if sample_size and sample_size < n:
+        sample_size = max(sample_size, k)
+        sample_idx = rng.choice(n, size=sample_size, replace=False)
+        data_view = data[sample_idx]
+    else:
+        data_view = data
+    if method == "random":
+        if data_view.shape[0] < k:
+            idx = rng.choice(data_view.shape[0], size=k, replace=True)
+        else:
+            idx = rng.choice(data_view.shape[0], size=k, replace=False)
+        return data_view[idx].astype(np.float32, copy=False)
+    return kmeans_plus_plus_init(data_view, k, rng).astype(np.float32, copy=False)
+
+
+def assign_labels_chunked(data, centroids, chunk_size, log_prefix=None, log_every=0, iter_idx=None):
+    n = data.shape[0]
+    labels = np.empty(n, dtype=int)
+    centroids = np.asarray(centroids, dtype=np.float32)
+    c_norm = np.sum(centroids * centroids, axis=1)
+    total_chunks = (n + chunk_size - 1) // chunk_size if chunk_size else 1
+    for start in range(0, n, chunk_size):
+        end = min(start + chunk_size, n)
+        chunk = np.asarray(data[start:end], dtype=np.float32)
+        x_norm = np.sum(chunk * chunk, axis=1, keepdims=True)
+        dots = chunk @ centroids.T
+        dist = x_norm + c_norm - 2.0 * dots
+        labels[start:end] = dist.argmin(axis=1)
+        if log_prefix and log_every:
+            chunk_idx = (start // chunk_size) + 1
+            if chunk_idx % log_every == 0 or chunk_idx == total_chunks:
+                iter_note = f" iter={iter_idx}" if iter_idx is not None else ""
+                print(
+                    f"[{log_prefix}]{iter_note} chunks {chunk_idx}/{total_chunks}",
+                    file=sys.stderr,
+                )
+    return labels
+
+
+def kmeans(
+    data,
+    k,
+    max_iter=50,
+    seed=42,
+    chunk_size=2048,
+    log_prefix=None,
+    log_every=0,
+    method="full",
+    init_method="kmeans++",
+    init_sample=0,
+    batch_size=2048,
+):
     n = data.shape[0]
     if k <= 0:
         raise ValueError("k must be positive")
@@ -251,22 +304,63 @@ def kmeans(data, k, max_iter=50, seed=42):
         return np.array([]), np.array([])
     if k > n:
         k = n
+    if method == "auto":
+        method = "minibatch" if n * k > 1_000_000 else "full"
     rng = np.random.default_rng(seed)
-    centroids = kmeans_plus_plus_init(data, k, rng)
+    data = np.asarray(data, dtype=np.float32)
+    centroids = init_centroids(data, k, rng, method=init_method, sample_size=init_sample)
     labels = np.zeros(n, dtype=int)
 
-    for _ in range(max_iter):
-        distances = np.linalg.norm(data[:, None, :] - centroids[None, :, :], axis=2)
-        new_labels = distances.argmin(axis=1)
-        if np.array_equal(labels, new_labels):
-            break
-        labels = new_labels
-        for idx in range(k):
-            members = data[labels == idx]
-            if len(members) == 0:
-                centroids[idx] = data[rng.integers(0, n)]
-            else:
-                centroids[idx] = members.mean(axis=0)
+    if method == "minibatch":
+        counts = np.zeros(k, dtype=np.int64)
+        for iter_idx in range(1, max_iter + 1):
+            batch_n = min(batch_size, n)
+            batch_idx = rng.choice(n, size=batch_n, replace=False)
+            batch = data[batch_idx]
+            batch_labels = assign_labels_chunked(
+                batch,
+                centroids,
+                chunk_size=min(chunk_size, batch_n),
+                log_prefix=log_prefix,
+                log_every=log_every,
+                iter_idx=iter_idx,
+            )
+            for idx in range(k):
+                members = batch[batch_labels == idx]
+                if len(members) == 0:
+                    continue
+                counts[idx] += len(members)
+                eta = len(members) / counts[idx]
+                centroids[idx] = (1 - eta) * centroids[idx] + eta * members.mean(axis=0)
+        labels = assign_labels_chunked(
+            data,
+            centroids,
+            chunk_size=chunk_size,
+            log_prefix=log_prefix,
+            log_every=log_every,
+            iter_idx="final",
+        )
+    else:
+        for iter_idx in range(1, max_iter + 1):
+            if log_prefix and log_every:
+                print(f"[{log_prefix}] iter={iter_idx}/{max_iter} assign", file=sys.stderr)
+            new_labels = assign_labels_chunked(
+                data,
+                centroids,
+                chunk_size,
+                log_prefix=log_prefix,
+                log_every=log_every,
+                iter_idx=iter_idx,
+            )
+            if np.array_equal(labels, new_labels):
+                break
+            labels = new_labels
+            for idx in range(k):
+                members = data[labels == idx]
+                if len(members) == 0:
+                    centroids[idx] = data[rng.integers(0, n)]
+                else:
+                    centroids[idx] = members.mean(axis=0)
 
     return labels, centroids
 
@@ -331,6 +425,12 @@ def parse_args():
     parser.add_argument("--max-iter", type=int, default=50)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--issue-cluster-scope", choices=["forum", "global"], default="global")
+    parser.add_argument("--kmeans-chunk-size", type=int, default=2048, help="Chunk size for k-means distance computation")
+    parser.add_argument("--kmeans-log-every", type=int, default=0, help="Log every N chunks during k-means assignment (0 disables)")
+    parser.add_argument("--kmeans-method", choices=["full", "minibatch", "auto"], default="auto")
+    parser.add_argument("--kmeans-init", choices=["kmeans++", "random"], default="kmeans++")
+    parser.add_argument("--kmeans-init-sample", type=int, default=0, help="Sample size for centroid init (0 = use full data)")
+    parser.add_argument("--kmeans-batch-size", type=int, default=2048, help="Mini-batch size for k-means")
 
     parser.add_argument("--embed-model", default="text-embedding-3-large")
     parser.add_argument("--embed-base-url", default="https://www.dmxapi.cn/v1")
@@ -531,6 +631,12 @@ def auto_k(n):
     return max(2, int(round(math.sqrt(n))))
 
 
+def resolve_kmeans_method(method, n, k):
+    if method == "auto":
+        return "minibatch" if n * k > 1_000_000 else "full"
+    return method
+
+
 def main():
     args = parse_args()
 
@@ -640,7 +746,23 @@ def main():
         data = issue_embeddings[indices]
         n = data.shape[0]
         k = args.issue_k if args.issue_k > 0 else auto_k(n)
-        labels, _ = kmeans(data, k, max_iter=args.max_iter, seed=args.seed)
+        method = resolve_kmeans_method(args.kmeans_method, n, k)
+        issue_log_prefix = None
+        if not args.quiet and args.kmeans_log_every:
+            issue_log_prefix = f"kmeans-issue:{scope_key}"
+        labels, _ = kmeans(
+            data,
+            k,
+            max_iter=args.max_iter,
+            seed=args.seed,
+            chunk_size=args.kmeans_chunk_size,
+            log_prefix=issue_log_prefix,
+            log_every=args.kmeans_log_every,
+            method=method,
+            init_method=args.kmeans_init,
+            init_sample=args.kmeans_init_sample,
+            batch_size=args.kmeans_batch_size,
+        )
 
         cluster_to_indices = {}
         for local_idx, cluster_id in enumerate(labels):
@@ -732,7 +854,23 @@ def main():
     intent_embeddings = normalize_vectors(intent_embeddings, in_place=True)
 
     k_intent = args.intent_k if args.intent_k > 0 else auto_k(len(acts))
-    intent_labels, _ = kmeans(intent_embeddings, k_intent, max_iter=args.max_iter, seed=args.seed)
+    intent_method = resolve_kmeans_method(args.kmeans_method, len(acts), k_intent)
+    intent_log_prefix = None
+    if not args.quiet and args.kmeans_log_every:
+        intent_log_prefix = "kmeans-intent"
+    intent_labels, _ = kmeans(
+        intent_embeddings,
+        k_intent,
+        max_iter=args.max_iter,
+        seed=args.seed,
+        chunk_size=args.kmeans_chunk_size,
+        log_prefix=intent_log_prefix,
+        log_every=args.kmeans_log_every,
+        method=intent_method,
+        init_method=args.kmeans_init,
+        init_sample=args.kmeans_init_sample,
+        batch_size=args.kmeans_batch_size,
+    )
 
     intent_catalog = []
     intent_assignments = []

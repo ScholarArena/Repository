@@ -16,7 +16,7 @@ Input
 
 Process
 1. **Flatten** mining results into act-level records.
-2. **Issue clustering** (per forum by default):
+2. **Issue clustering** (global by default):
    - Encode `action` (default) and cluster to produce thread-level issue IDs.
    - For each cluster, sample acts and use LLM to name/describe the issue.
 3. **Intent clustering** (global):
@@ -45,7 +45,7 @@ python steps/01_flatten_semantic_acts/flatten_semantic_acts.py \
 
 Notes
 - Issue text source is `action` by default. If needed, use `--issue-text-mode action+grounding+target`.
-- To cluster issues globally across all papers, use `--issue-cluster-scope global`.
+- To cluster issues per forum, use `--issue-cluster-scope forum`.
 - Intent text source defaults to `meta.cognitive_chain + role_raw`. Override via `--intent-text-mode`.
 - LLM labeling reuses existing issue/intent labels to avoid duplicates.
 - To skip LLM labeling, add `--skip-issue-labels` and/or `--skip-intent-labels`.
@@ -53,3 +53,7 @@ Notes
 - To debug LLM labeling, add `--llm-debug-dir steps/01_flatten_semantic_acts/llm_debug` to save raw responses.
 - To resume embedding after a 429, use `--embed-resume` (relies on `.npy.progress` files).
 - If a rare embedding request fails after some progress, the script falls back to a random embedding to keep running.
+- To avoid RAM spikes in k-means, adjust `--kmeans-chunk-size` (smaller uses less memory).
+- To view k-means progress, set `--kmeans-log-every 10` (logs every N chunks).
+- For faster clustering, use `--kmeans-method minibatch --kmeans-batch-size 4096`.
+- If k-means init is slow, set `--kmeans-init-sample 20000` or `--kmeans-init random`.
