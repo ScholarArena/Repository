@@ -1,0 +1,98 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "skill",
+  "name": "External_Literature_Support",
+  "need_summary": "Search OpenAlex and fetch supporting abstracts and metadata.",
+  "spec": {
+    "goal": "Aggregate external literature evidence for a query.",
+    "inputs": {
+      "context": "dict (unused)",
+      "params": "dict with query and cache controls"
+    },
+    "outputs": {
+      "type": "external_support",
+      "payload": {
+        "results": "list",
+        "supported": "bool"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic"
+    ],
+    "dag": [
+      {
+        "id": 1,
+        "type": "primitive",
+        "name": "External_Search_OpenAlex"
+      },
+      {
+        "id": 2,
+        "type": "primitive",
+        "name": "Fetch_Abstract"
+      },
+      {
+        "id": 3,
+        "type": "primitive",
+        "name": "Resolve_DOI_Metadata"
+      }
+    ],
+    "uses_controlled_llm": false,
+    "external": true,
+    "source_type": [
+      "openalex"
+    ]
+  },
+  "tests": [
+    {
+      "name": "test_external_literature_support",
+      "context": {},
+      "params": {
+        "query": "transformer",
+        "include_abstracts": true,
+        "include_metadata": true
+      },
+      "primitive_stubs": {
+        "External_Search_OpenAlex": {
+          "type": "external_search",
+          "payload": {
+            "results": [
+              {
+                "id": "W1",
+                "title": "Paper A",
+                "doi": "10.1234/abcd"
+              }
+            ]
+          },
+          "prov": [],
+          "status": "ok"
+        },
+        "Fetch_Abstract": {
+          "type": "external_abstract",
+          "payload": {
+            "abstract": "abstract text"
+          },
+          "prov": [],
+          "status": "ok"
+        },
+        "Resolve_DOI_Metadata": {
+          "type": "external_metadata",
+          "payload": {
+            "title": "Paper A"
+          },
+          "prov": [],
+          "status": "ok"
+        }
+      },
+      "expected": {
+        "status": "ok",
+        "payload_keys": [
+          "results",
+          "supported"
+        ]
+      }
+    }
+  ],
+  "dependencies": []
+}

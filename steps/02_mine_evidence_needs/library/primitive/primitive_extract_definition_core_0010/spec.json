@@ -1,0 +1,74 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "primitive",
+  "name": "Extract_Definition",
+  "need_summary": "Find definition statements for a term.",
+  "spec": {
+    "goal": "Locate definition sentences for a term.",
+    "inputs": {
+      "context": "dict with segments",
+      "params": "dict with term"
+    },
+    "outputs": {
+      "type": "text",
+      "payload": {
+        "term": "str",
+        "matches": "list"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic",
+      "no network"
+    ]
+  },
+  "tests": [
+    {
+      "name": "test_definition_found",
+      "context": {
+        "segments": [
+          {
+            "id": 1,
+            "text": "We define the margin as the difference."
+          }
+        ]
+      },
+      "params": {
+        "term": "margin"
+      },
+      "expected": {
+        "status": "ok",
+        "prov_contains": [
+          1
+        ],
+        "payload_keys": [
+          "matches",
+          "term"
+        ]
+      }
+    },
+    {
+      "name": "test_definition_missing",
+      "context": {
+        "segments": [
+          {
+            "id": 2,
+            "text": "No definitions here."
+          }
+        ]
+      },
+      "params": {
+        "term": "entropy"
+      },
+      "expected": {
+        "status": "missing",
+        "payload_keys": [
+          "matches",
+          "term"
+        ]
+      }
+    }
+  ],
+  "dependencies": []
+}

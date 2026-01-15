@@ -1,0 +1,45 @@
+[
+  {
+    "name": "test_list_items_found",
+    "context": {
+      "segments": [
+        {
+          "id": 1,
+          "text": "- First item\n- Second item"
+        }
+      ]
+    },
+    "params": {},
+    "expected": {
+      "status": "ok",
+      "prov_contains": [
+        1
+      ],
+      "payload_keys": [
+        "items",
+        "matches"
+      ]
+    }
+  },
+  {
+    "name": "test_list_items_missing",
+    "context": {
+      "segments": [
+        {
+          "id": 2,
+          "text": "No list here."
+        }
+      ]
+    },
+    "params": {
+      "query": "item"
+    },
+    "expected": {
+      "status": "missing",
+      "payload_keys": [
+        "items",
+        "matches"
+      ]
+    }
+  }
+]

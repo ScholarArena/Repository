@@ -1,0 +1,83 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "primitive",
+  "name": "Citation_Graph_Neighbors",
+  "need_summary": "Fetch citation graph neighbors via OpenAlex.",
+  "spec": {
+    "goal": "Retrieve citing or referenced works.",
+    "inputs": {
+      "context": "dict (unused)",
+      "params": "dict with openalex_id or doi, direction, per_page, cache_dir, cache_only, timeout, mailto, snapshot"
+    },
+    "outputs": {
+      "type": "external_citations",
+      "payload": {
+        "neighbors": "list",
+        "count": "int",
+        "sources": "list"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic",
+      "external",
+      "cache_required"
+    ],
+    "external": true,
+    "source_type": [
+      "openalex"
+    ]
+  },
+  "tests": [
+    {
+      "name": "test_citation_neighbors_cited_by",
+      "context": {},
+      "params": {
+        "openalex_id": "W123",
+        "direction": "cited_by",
+        "snapshot": {
+          "results": [
+            {
+              "id": "W9",
+              "display_name": "Paper A",
+              "doi": null,
+              "publication_year": 2022
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "ok",
+        "payload_keys": [
+          "neighbors",
+          "count",
+          "sources"
+        ]
+      }
+    },
+    {
+      "name": "test_citation_neighbors_references",
+      "context": {},
+      "params": {
+        "openalex_id": "W123",
+        "direction": "references",
+        "snapshot": {
+          "referenced_works": [
+            "W1",
+            "W2"
+          ]
+        }
+      },
+      "expected": {
+        "status": "ok",
+        "payload_keys": [
+          "neighbors",
+          "count",
+          "sources"
+        ]
+      }
+    }
+  ],
+  "dependencies": []
+}

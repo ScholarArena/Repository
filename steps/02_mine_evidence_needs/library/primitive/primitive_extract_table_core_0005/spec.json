@@ -1,0 +1,74 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "primitive",
+  "name": "Extract_Table",
+  "need_summary": "Locate table captions or segments by table id.",
+  "spec": {
+    "goal": "Find segments containing a table reference.",
+    "inputs": {
+      "context": "dict with segments",
+      "params": "dict with table_id"
+    },
+    "outputs": {
+      "type": "text",
+      "payload": {
+        "table_id": "str",
+        "matches": "list"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic",
+      "no network"
+    ]
+  },
+  "tests": [
+    {
+      "name": "test_table_found",
+      "context": {
+        "segments": [
+          {
+            "id": 1,
+            "text": "Table 2: Results on CIFAR."
+          }
+        ]
+      },
+      "params": {
+        "table_id": "2"
+      },
+      "expected": {
+        "status": "ok",
+        "prov_contains": [
+          1
+        ],
+        "payload_keys": [
+          "matches",
+          "table_id"
+        ]
+      }
+    },
+    {
+      "name": "test_table_missing",
+      "context": {
+        "segments": [
+          {
+            "id": 2,
+            "text": "No tables here."
+          }
+        ]
+      },
+      "params": {
+        "table_id": "5"
+      },
+      "expected": {
+        "status": "missing",
+        "payload_keys": [
+          "matches",
+          "table_id"
+        ]
+      }
+    }
+  ],
+  "dependencies": []
+}

@@ -1,0 +1,32 @@
+[
+  {
+    "name": "test_openalex_search_snapshot",
+    "context": {},
+    "params": {
+      "query": "transformer",
+      "snapshot": {
+        "meta": {
+          "count": 1
+        },
+        "results": [
+          {
+            "id": "https://openalex.org/W123",
+            "display_name": "Attention Is All You Need",
+            "doi": "https://doi.org/10.5555/123",
+            "publication_year": 2017,
+            "cited_by_count": 1000,
+            "type": "journal-article"
+          }
+        ]
+      }
+    },
+    "expected": {
+      "status": "ok",
+      "payload_keys": [
+        "query",
+        "results",
+        "sources"
+      ]
+    }
+  }
+]

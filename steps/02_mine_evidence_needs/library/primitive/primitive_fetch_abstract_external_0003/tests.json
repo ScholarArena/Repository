@@ -1,0 +1,29 @@
+[
+  {
+    "name": "test_fetch_abstract_snapshot",
+    "context": {},
+    "params": {
+      "openalex_id": "W123",
+      "snapshot": {
+        "abstract_inverted_index": {
+          "deep": [
+            0
+          ],
+          "learning": [
+            1
+          ]
+        }
+      }
+    },
+    "expected": {
+      "status": "ok",
+      "payload_keys": [
+        "abstract",
+        "sources"
+      ],
+      "payload_contains": {
+        "abstract": "deep learning"
+      }
+    }
+  }
+]

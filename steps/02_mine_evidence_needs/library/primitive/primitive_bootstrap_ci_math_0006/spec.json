@@ -1,0 +1,56 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "primitive",
+  "name": "Bootstrap_CI",
+  "need_summary": "Compute bootstrap confidence interval.",
+  "spec": {
+    "goal": "Compute bootstrap CI for mean or median.",
+    "inputs": {
+      "context": "dict (unused)",
+      "params": "dict with values, n_boot, alpha, seed, stat"
+    },
+    "outputs": {
+      "type": "bootstrap_ci",
+      "payload": {
+        "lower": "float",
+        "upper": "float",
+        "alpha": "float"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic"
+    ]
+  },
+  "tests": [
+    {
+      "name": "test_bootstrap_ci",
+      "context": {},
+      "params": {
+        "values": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "n_boot": 200,
+        "alpha": 0.1,
+        "seed": 1,
+        "round": 3
+      },
+      "expected": {
+        "status": "ok",
+        "payload_keys": [
+          "lower",
+          "upper",
+          "alpha"
+        ]
+      }
+    }
+  ],
+  "dependencies": [
+    "numpy"
+  ]
+}

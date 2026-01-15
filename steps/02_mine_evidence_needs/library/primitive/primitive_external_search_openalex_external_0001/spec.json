@@ -1,0 +1,66 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "primitive",
+  "name": "External_Search_OpenAlex",
+  "need_summary": "Search OpenAlex works by query.",
+  "spec": {
+    "goal": "Retrieve OpenAlex works matching a query.",
+    "inputs": {
+      "context": "dict (unused)",
+      "params": "dict with query, per_page, filter, sort, cache_dir, cache_only, timeout, mailto, snapshot"
+    },
+    "outputs": {
+      "type": "external_search",
+      "payload": {
+        "query": "str",
+        "count": "int",
+        "results": "list",
+        "sources": "list"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic",
+      "external",
+      "cache_required"
+    ],
+    "external": true,
+    "source_type": [
+      "openalex"
+    ]
+  },
+  "tests": [
+    {
+      "name": "test_openalex_search_snapshot",
+      "context": {},
+      "params": {
+        "query": "transformer",
+        "snapshot": {
+          "meta": {
+            "count": 1
+          },
+          "results": [
+            {
+              "id": "https://openalex.org/W123",
+              "display_name": "Attention Is All You Need",
+              "doi": "https://doi.org/10.5555/123",
+              "publication_year": 2017,
+              "cited_by_count": 1000,
+              "type": "journal-article"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "ok",
+        "payload_keys": [
+          "query",
+          "results",
+          "sources"
+        ]
+      }
+    }
+  ],
+  "dependencies": []
+}

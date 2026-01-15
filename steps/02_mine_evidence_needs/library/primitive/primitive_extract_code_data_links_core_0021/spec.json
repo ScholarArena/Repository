@@ -1,0 +1,70 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "primitive",
+  "name": "Extract_Code_Data_Links",
+  "need_summary": "Extract code or data URLs.",
+  "spec": {
+    "goal": "Find URLs pointing to code or data.",
+    "inputs": {
+      "context": "dict with segments",
+      "params": "dict"
+    },
+    "outputs": {
+      "type": "text",
+      "payload": {
+        "urls": "list",
+        "matches": "list"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic",
+      "no network"
+    ]
+  },
+  "tests": [
+    {
+      "name": "test_links_found",
+      "context": {
+        "segments": [
+          {
+            "id": 1,
+            "text": "Code: https://github.com/example/repo"
+          }
+        ]
+      },
+      "params": {},
+      "expected": {
+        "status": "ok",
+        "prov_contains": [
+          1
+        ],
+        "payload_keys": [
+          "urls",
+          "matches"
+        ]
+      }
+    },
+    {
+      "name": "test_links_missing",
+      "context": {
+        "segments": [
+          {
+            "id": 2,
+            "text": "No links here."
+          }
+        ]
+      },
+      "params": {},
+      "expected": {
+        "status": "missing",
+        "payload_keys": [
+          "urls",
+          "matches"
+        ]
+      }
+    }
+  ],
+  "dependencies": []
+}

@@ -1,0 +1,43 @@
+[
+  {
+    "name": "test_resources_found",
+    "context": {
+      "segments": [
+        {
+          "id": 1,
+          "text": "Experiments run on 2x V100 GPUs for 10 hours."
+        }
+      ]
+    },
+    "params": {},
+    "expected": {
+      "status": "ok",
+      "prov_contains": [
+        1
+      ],
+      "payload_keys": [
+        "resources",
+        "matches"
+      ]
+    }
+  },
+  {
+    "name": "test_resources_missing",
+    "context": {
+      "segments": [
+        {
+          "id": 2,
+          "text": "No compute info."
+        }
+      ]
+    },
+    "params": {},
+    "expected": {
+      "status": "missing",
+      "payload_keys": [
+        "resources",
+        "matches"
+      ]
+    }
+  }
+]

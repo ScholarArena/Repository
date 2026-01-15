@@ -1,0 +1,67 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "primitive",
+  "name": "Extract_Ablation_Info",
+  "need_summary": "Locate ablation study descriptions.",
+  "spec": {
+    "goal": "Find segments mentioning ablation or removal variants.",
+    "inputs": {
+      "context": "dict with segments",
+      "params": "dict"
+    },
+    "outputs": {
+      "type": "text",
+      "payload": {
+        "matches": "list"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic",
+      "no network"
+    ]
+  },
+  "tests": [
+    {
+      "name": "test_ablation_found",
+      "context": {
+        "segments": [
+          {
+            "id": 1,
+            "text": "Our ablation study removes attention."
+          }
+        ]
+      },
+      "params": {},
+      "expected": {
+        "status": "ok",
+        "prov_contains": [
+          1
+        ],
+        "payload_keys": [
+          "matches"
+        ]
+      }
+    },
+    {
+      "name": "test_ablation_missing",
+      "context": {
+        "segments": [
+          {
+            "id": 2,
+            "text": "No ablation info."
+          }
+        ]
+      },
+      "params": {},
+      "expected": {
+        "status": "missing",
+        "payload_keys": [
+          "matches"
+        ]
+      }
+    }
+  ],
+  "dependencies": []
+}

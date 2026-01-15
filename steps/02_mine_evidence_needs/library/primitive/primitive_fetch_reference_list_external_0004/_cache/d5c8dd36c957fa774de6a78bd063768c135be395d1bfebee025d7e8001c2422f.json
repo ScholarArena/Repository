@@ -1,0 +1,10 @@
+{
+  "url": "https://api.openalex.org/works/W123?",
+  "fetched_at": 1768492079,
+  "payload": {
+    "referenced_works": [
+      "W1",
+      "W2"
+    ]
+  }
+}

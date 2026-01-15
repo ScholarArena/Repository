@@ -1,0 +1,42 @@
+[
+  {
+    "name": "test_method_summary",
+    "context": {
+      "segments": []
+    },
+    "params": {
+      "section_title": "Method"
+    },
+    "primitive_stubs": {
+      "Extract_Section": {
+        "type": "text",
+        "payload": {
+          "matches": [
+            {
+              "segment_id": 13,
+              "text": "Method details"
+            }
+          ]
+        },
+        "prov": [
+          13
+        ],
+        "status": "ok"
+      },
+      "Extract_Span": {
+        "type": "text",
+        "payload": {
+          "matches": []
+        },
+        "prov": [],
+        "status": "missing"
+      }
+    },
+    "expected": {
+      "status": "ok",
+      "payload_keys": [
+        "evidence_texts"
+      ]
+    }
+  }
+]

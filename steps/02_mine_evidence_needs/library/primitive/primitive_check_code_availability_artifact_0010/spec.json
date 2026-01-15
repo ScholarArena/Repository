@@ -1,0 +1,51 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "primitive",
+  "name": "Check_Code_Availability",
+  "need_summary": "Check whether code is available via URLs or local paths.",
+  "spec": {
+    "goal": "Verify code availability.",
+    "inputs": {
+      "context": "dict (unused)",
+      "params": "dict with urls, paths, verify_remote, snapshot"
+    },
+    "outputs": {
+      "type": "code_availability",
+      "payload": {
+        "available": "bool",
+        "checked_urls": "list"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic"
+    ]
+  },
+  "tests": [
+    {
+      "name": "test_code_availability_snapshot",
+      "context": {},
+      "params": {
+        "urls": [
+          "https://example.com/repo"
+        ],
+        "verify_remote": true,
+        "snapshot": [
+          {
+            "url": "https://example.com/repo",
+            "ok": true,
+            "status": 200
+          }
+        ]
+      },
+      "expected": {
+        "status": "ok",
+        "payload_contains": {
+          "available": true
+        }
+      }
+    }
+  ],
+  "dependencies": []
+}

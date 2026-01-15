@@ -1,0 +1,18 @@
+[
+  {
+    "name": "test_parse_sympy_format",
+    "context": {},
+    "params": {
+      "latex": "x**2 + 1",
+      "format": "sympy"
+    },
+    "expected": {
+      "status": "ok",
+      "payload_keys": [
+        "expression",
+        "srepr",
+        "symbols"
+      ]
+    }
+  }
+]

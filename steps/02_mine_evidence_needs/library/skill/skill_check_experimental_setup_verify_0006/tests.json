@@ -1,0 +1,73 @@
+[
+  {
+    "name": "test_experimental_setup_ok",
+    "context": {
+      "segments": []
+    },
+    "params": {
+      "requirements": [
+        "dataset"
+      ],
+      "metrics": [
+        "accuracy"
+      ]
+    },
+    "primitive_stubs": {
+      "Extract_Dataset_Info": {
+        "type": "text",
+        "payload": {
+          "matches": [
+            {}
+          ]
+        },
+        "prov": [
+          7
+        ],
+        "status": "ok"
+      },
+      "Extract_Split_Info": {
+        "type": "text",
+        "payload": {
+          "matches": []
+        },
+        "prov": [],
+        "status": "missing"
+      },
+      "Extract_Hyperparameters": {
+        "type": "text",
+        "payload": {
+          "matches": []
+        },
+        "prov": [],
+        "status": "missing"
+      },
+      "Extract_Training_Details": {
+        "type": "text",
+        "payload": {
+          "matches": []
+        },
+        "prov": [],
+        "status": "missing"
+      },
+      "Extract_Metric_Values": {
+        "type": "text",
+        "payload": {
+          "matches": [
+            {}
+          ]
+        },
+        "prov": [
+          8
+        ],
+        "status": "ok"
+      }
+    },
+    "expected": {
+      "status": "ok",
+      "payload_keys": [
+        "found",
+        "supported"
+      ]
+    }
+  }
+]

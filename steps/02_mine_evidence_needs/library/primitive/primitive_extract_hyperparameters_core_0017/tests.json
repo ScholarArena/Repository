@@ -1,0 +1,43 @@
+[
+  {
+    "name": "test_hparams_found",
+    "context": {
+      "segments": [
+        {
+          "id": 1,
+          "text": "We use learning rate 0.001, batch size 64, and weight decay 1e-4."
+        }
+      ]
+    },
+    "params": {},
+    "expected": {
+      "status": "ok",
+      "prov_contains": [
+        1
+      ],
+      "payload_keys": [
+        "hyperparameters",
+        "matches"
+      ]
+    }
+  },
+  {
+    "name": "test_hparams_missing",
+    "context": {
+      "segments": [
+        {
+          "id": 2,
+          "text": "No hyperparameters listed."
+        }
+      ]
+    },
+    "params": {},
+    "expected": {
+      "status": "missing",
+      "payload_keys": [
+        "hyperparameters",
+        "matches"
+      ]
+    }
+  }
+]

@@ -1,0 +1,63 @@
+[
+  {
+    "name": "test_verify_definition_found",
+    "context": {
+      "segments": []
+    },
+    "params": {
+      "term": "margin"
+    },
+    "primitive_stubs": {
+      "Extract_Definition": {
+        "type": "text",
+        "payload": {
+          "matches": [
+            {
+              "segment_id": 1,
+              "text": "We define margin as..."
+            }
+          ]
+        },
+        "prov": [
+          1
+        ],
+        "status": "ok"
+      }
+    },
+    "expected": {
+      "status": "ok",
+      "prov_contains": [
+        1
+      ],
+      "payload_keys": [
+        "supported",
+        "evidence_texts"
+      ]
+    }
+  },
+  {
+    "name": "test_verify_definition_missing",
+    "context": {
+      "segments": []
+    },
+    "params": {
+      "term": "margin"
+    },
+    "primitive_stubs": {
+      "Extract_Definition": {
+        "type": "text",
+        "payload": {
+          "matches": []
+        },
+        "prov": [],
+        "status": "missing"
+      }
+    },
+    "expected": {
+      "status": "missing",
+      "payload_keys": [
+        "term"
+      ]
+    }
+  }
+]

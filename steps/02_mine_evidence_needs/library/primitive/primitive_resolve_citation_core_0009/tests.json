@@ -1,0 +1,47 @@
+[
+  {
+    "name": "test_citation_found",
+    "context": {
+      "segments": [
+        {
+          "id": 1,
+          "text": "We follow prior work [12]."
+        }
+      ]
+    },
+    "params": {
+      "cite_key": "12"
+    },
+    "expected": {
+      "status": "ok",
+      "prov_contains": [
+        1
+      ],
+      "payload_keys": [
+        "matches",
+        "cite_key"
+      ]
+    }
+  },
+  {
+    "name": "test_citation_missing",
+    "context": {
+      "segments": [
+        {
+          "id": 2,
+          "text": "No citations here."
+        }
+      ]
+    },
+    "params": {
+      "cite_key": "99"
+    },
+    "expected": {
+      "status": "missing",
+      "payload_keys": [
+        "matches",
+        "cite_key"
+      ]
+    }
+  }
+]

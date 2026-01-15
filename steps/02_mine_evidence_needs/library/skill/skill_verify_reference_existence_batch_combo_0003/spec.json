@@ -1,0 +1,65 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "skill",
+  "name": "Verify_Reference_Existence_Batch",
+  "need_summary": "Verify existence of a list of references via OpenAlex.",
+  "spec": {
+    "goal": "Check existence for references.",
+    "inputs": {
+      "context": "dict (unused)",
+      "params": "dict with references"
+    },
+    "outputs": {
+      "type": "external_exists",
+      "payload": {
+        "results": "list",
+        "exists_all": "bool"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic"
+    ],
+    "dag": [
+      {
+        "id": 1,
+        "type": "primitive",
+        "name": "Verify_Reference_Existence"
+      }
+    ],
+    "uses_controlled_llm": false,
+    "external": true,
+    "source_type": [
+      "openalex"
+    ]
+  },
+  "tests": [
+    {
+      "name": "test_reference_exists_batch",
+      "context": {},
+      "params": {
+        "references": [
+          "Attention Is All You Need"
+        ]
+      },
+      "primitive_stubs": {
+        "Verify_Reference_Existence": {
+          "type": "external_exists",
+          "payload": {
+            "exists": true
+          },
+          "prov": [],
+          "status": "ok"
+        }
+      },
+      "expected": {
+        "status": "ok",
+        "payload_contains": {
+          "exists_all": true
+        }
+      }
+    }
+  ],
+  "dependencies": []
+}

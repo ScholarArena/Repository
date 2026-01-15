@@ -1,0 +1,63 @@
+[
+  {
+    "name": "test_verify_claim_found",
+    "context": {
+      "segments": []
+    },
+    "params": {
+      "queries": [
+        "baseline"
+      ]
+    },
+    "primitive_stubs": {
+      "Extract_Span": {
+        "type": "text",
+        "payload": {
+          "matches": [
+            {
+              "segment_id": 2,
+              "text": "baseline results"
+            }
+          ]
+        },
+        "prov": [
+          2
+        ],
+        "status": "ok"
+      }
+    },
+    "expected": {
+      "status": "ok",
+      "payload_contains": {
+        "supported": true
+      }
+    }
+  },
+  {
+    "name": "test_verify_claim_missing",
+    "context": {
+      "segments": []
+    },
+    "params": {
+      "queries": [
+        "baseline"
+      ]
+    },
+    "primitive_stubs": {
+      "Extract_Span": {
+        "type": "text",
+        "payload": {
+          "matches": []
+        },
+        "prov": [],
+        "status": "missing"
+      }
+    },
+    "expected": {
+      "status": "missing",
+      "payload_contains": {
+        "supported": false
+      }
+    }
+  }
+]

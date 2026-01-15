@@ -1,0 +1,67 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "primitive",
+  "name": "Extract_Training_Details",
+  "need_summary": "Locate training procedure details.",
+  "spec": {
+    "goal": "Find segments describing training setup.",
+    "inputs": {
+      "context": "dict with segments",
+      "params": "dict"
+    },
+    "outputs": {
+      "type": "text",
+      "payload": {
+        "matches": "list"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic",
+      "no network"
+    ]
+  },
+  "tests": [
+    {
+      "name": "test_training_found",
+      "context": {
+        "segments": [
+          {
+            "id": 1,
+            "text": "We train for 200 epochs using Adam optimizer."
+          }
+        ]
+      },
+      "params": {},
+      "expected": {
+        "status": "ok",
+        "prov_contains": [
+          1
+        ],
+        "payload_keys": [
+          "matches"
+        ]
+      }
+    },
+    {
+      "name": "test_training_missing",
+      "context": {
+        "segments": [
+          {
+            "id": 2,
+            "text": "No training details."
+          }
+        ]
+      },
+      "params": {},
+      "expected": {
+        "status": "missing",
+        "payload_keys": [
+          "matches"
+        ]
+      }
+    }
+  ],
+  "dependencies": []
+}

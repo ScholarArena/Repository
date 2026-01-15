@@ -1,0 +1,43 @@
+[
+  {
+    "name": "test_baseline_list_found",
+    "context": {
+      "segments": [
+        {
+          "id": 1,
+          "text": "We compare against ResNet-50, VGG16, and DenseNet."
+        }
+      ]
+    },
+    "params": {},
+    "expected": {
+      "status": "ok",
+      "prov_contains": [
+        1
+      ],
+      "payload_keys": [
+        "candidates",
+        "matches"
+      ]
+    }
+  },
+  {
+    "name": "test_baseline_list_missing",
+    "context": {
+      "segments": [
+        {
+          "id": 2,
+        "text": "We report ablation results only."
+        }
+      ]
+    },
+    "params": {},
+    "expected": {
+      "status": "missing",
+      "payload_keys": [
+        "candidates",
+        "matches"
+      ]
+    }
+  }
+]

@@ -1,0 +1,47 @@
+[
+  {
+    "name": "test_subsection_found",
+    "context": {
+      "segments": [
+        {
+          "id": 1,
+          "text": "3.2 Ablation Study\nDetails..."
+        }
+      ]
+    },
+    "params": {
+      "title": "Ablation Study"
+    },
+    "expected": {
+      "status": "ok",
+      "prov_contains": [
+        1
+      ],
+      "payload_keys": [
+        "matches",
+        "title"
+      ]
+    }
+  },
+  {
+    "name": "test_subsection_missing",
+    "context": {
+      "segments": [
+        {
+          "id": 2,
+          "text": "4 Experiments"
+        }
+      ]
+    },
+    "params": {
+      "title": "Notation"
+    },
+    "expected": {
+      "status": "missing",
+      "payload_keys": [
+        "matches",
+        "title"
+      ]
+    }
+  }
+]

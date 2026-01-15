@@ -1,0 +1,43 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "primitive",
+  "name": "Sandbox_Run",
+  "need_summary": "Run a command or Python code snippet in a sandbox.",
+  "spec": {
+    "goal": "Execute a command deterministically with timeout.",
+    "inputs": {
+      "context": "dict (unused)",
+      "params": "dict with command or python_code, timeout"
+    },
+    "outputs": {
+      "type": "sandbox_run",
+      "payload": {
+        "returncode": "int",
+        "stdout": "str",
+        "stderr": "str"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic"
+    ]
+  },
+  "tests": [
+    {
+      "name": "test_sandbox_run_python",
+      "context": {},
+      "params": {
+        "python_code": "print('ok')",
+        "timeout": 5
+      },
+      "expected": {
+        "status": "ok",
+        "payload_contains": {
+          "stdout": "ok"
+        }
+      }
+    }
+  ],
+  "dependencies": []
+}

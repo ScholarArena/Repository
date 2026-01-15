@@ -1,0 +1,129 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "skill",
+  "name": "Check_Experimental_Setup",
+  "need_summary": "Check whether experimental setup elements are present.",
+  "spec": {
+    "goal": "Verify dataset/metrics/splits/hyperparameters/training are described.",
+    "inputs": {
+      "context": "dict with segments",
+      "params": "dict with requirements and metrics"
+    },
+    "outputs": {
+      "type": "verification_result",
+      "payload": {
+        "found": "dict",
+        "supported": "bool"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic"
+    ],
+    "dag": [
+      {
+        "id": 1,
+        "type": "primitive",
+        "name": "Extract_Dataset_Info"
+      },
+      {
+        "id": 2,
+        "type": "primitive",
+        "name": "Extract_Split_Info"
+      },
+      {
+        "id": 3,
+        "type": "primitive",
+        "name": "Extract_Hyperparameters"
+      },
+      {
+        "id": 4,
+        "type": "primitive",
+        "name": "Extract_Training_Details"
+      },
+      {
+        "id": 5,
+        "type": "primitive",
+        "name": "Extract_Metric_Values"
+      }
+    ],
+    "uses_controlled_llm": false,
+    "external": false,
+    "source_type": []
+  },
+  "tests": [
+    {
+      "name": "test_experimental_setup_ok",
+      "context": {
+        "segments": []
+      },
+      "params": {
+        "requirements": [
+          "dataset"
+        ],
+        "metrics": [
+          "accuracy"
+        ]
+      },
+      "primitive_stubs": {
+        "Extract_Dataset_Info": {
+          "type": "text",
+          "payload": {
+            "matches": [
+              {}
+            ]
+          },
+          "prov": [
+            7
+          ],
+          "status": "ok"
+        },
+        "Extract_Split_Info": {
+          "type": "text",
+          "payload": {
+            "matches": []
+          },
+          "prov": [],
+          "status": "missing"
+        },
+        "Extract_Hyperparameters": {
+          "type": "text",
+          "payload": {
+            "matches": []
+          },
+          "prov": [],
+          "status": "missing"
+        },
+        "Extract_Training_Details": {
+          "type": "text",
+          "payload": {
+            "matches": []
+          },
+          "prov": [],
+          "status": "missing"
+        },
+        "Extract_Metric_Values": {
+          "type": "text",
+          "payload": {
+            "matches": [
+              {}
+            ]
+          },
+          "prov": [
+            8
+          ],
+          "status": "ok"
+        }
+      },
+      "expected": {
+        "status": "ok",
+        "payload_keys": [
+          "found",
+          "supported"
+        ]
+      }
+    }
+  ],
+  "dependencies": []
+}

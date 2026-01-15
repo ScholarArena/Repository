@@ -1,0 +1,42 @@
+[
+  {
+    "name": "test_repro_smoke_run",
+    "context": {},
+    "params": {
+      "command": "echo ok",
+      "verify_remote": true
+    },
+    "primitive_stubs": {
+      "Check_Code_Availability": {
+        "type": "code_availability",
+        "payload": {
+          "available": true
+        },
+        "prov": [],
+        "status": "ok"
+      },
+      "Check_Data_Availability": {
+        "type": "data_availability",
+        "payload": {
+          "available": false
+        },
+        "prov": [],
+        "status": "ok"
+      },
+      "Sandbox_Run": {
+        "type": "sandbox_run",
+        "payload": {
+          "returncode": 0
+        },
+        "prov": [],
+        "status": "ok"
+      }
+    },
+    "expected": {
+      "status": "ok",
+      "payload_contains": {
+        "supported": true
+      }
+    }
+  }
+]

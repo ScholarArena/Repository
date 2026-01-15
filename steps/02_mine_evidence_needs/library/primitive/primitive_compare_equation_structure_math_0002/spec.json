@@ -1,0 +1,49 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "primitive",
+  "name": "Compare_Equation_Structure",
+  "need_summary": "Compare two equations for structural or semantic match.",
+  "spec": {
+    "goal": "Compare equation structures using sympy.",
+    "inputs": {
+      "context": "dict (unused)",
+      "params": "dict with eq_a, eq_b, format, semantic"
+    },
+    "outputs": {
+      "type": "equation_compare",
+      "payload": {
+        "match": "bool",
+        "semantic_match": "bool",
+        "srepr_a": "str",
+        "srepr_b": "str"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic"
+    ]
+  },
+  "tests": [
+    {
+      "name": "test_compare_structure",
+      "context": {},
+      "params": {
+        "eq_a": "x + y",
+        "eq_b": "y + x",
+        "format": "sympy"
+      },
+      "expected": {
+        "status": "ok",
+        "payload_keys": [
+          "match",
+          "srepr_a",
+          "srepr_b"
+        ]
+      }
+    }
+  ],
+  "dependencies": [
+    "sympy"
+  ]
+}

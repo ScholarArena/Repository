@@ -1,0 +1,53 @@
+[
+  {
+    "name": "test_reference_exists_true",
+    "context": {},
+    "params": {
+      "query": "Attention Is All You Need",
+      "snapshot": {
+        "results": [
+          {
+            "id": "W123",
+            "display_name": "Attention Is All You Need",
+            "doi": null,
+            "publication_year": 2017
+          }
+        ]
+      }
+    },
+    "expected": {
+      "status": "ok",
+      "payload_keys": [
+        "exists",
+        "match_count",
+        "matches",
+        "sources"
+      ],
+      "payload_contains": {
+        "exists": true
+      }
+    }
+  },
+  {
+    "name": "test_reference_exists_false",
+    "context": {},
+    "params": {
+      "query": "Nonexistent Work",
+      "snapshot": {
+        "results": []
+      }
+    },
+    "expected": {
+      "status": "ok",
+      "payload_keys": [
+        "exists",
+        "match_count",
+        "matches",
+        "sources"
+      ],
+      "payload_contains": {
+        "exists": false
+      }
+    }
+  }
+]

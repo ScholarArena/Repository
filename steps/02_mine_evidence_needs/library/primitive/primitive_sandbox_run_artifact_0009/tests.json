@@ -1,0 +1,16 @@
+[
+  {
+    "name": "test_sandbox_run_python",
+    "context": {},
+    "params": {
+      "python_code": "print('ok')",
+      "timeout": 5
+    },
+    "expected": {
+      "status": "ok",
+      "payload_contains": {
+        "stdout": "ok"
+      }
+    }
+  }
+]

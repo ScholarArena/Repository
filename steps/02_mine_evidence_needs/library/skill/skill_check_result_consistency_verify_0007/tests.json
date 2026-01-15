@@ -1,0 +1,34 @@
+[
+  {
+    "name": "test_result_consistency",
+    "context": {
+      "segments": []
+    },
+    "params": {
+      "expected": {
+        "Accuracy": 0.9
+      },
+      "tolerance": 0.05
+    },
+    "primitive_stubs": {
+      "Extract_Metric_Values": {
+        "type": "text",
+        "payload": {
+          "values": [
+            0.91
+          ]
+        },
+        "prov": [
+          9
+        ],
+        "status": "ok"
+      }
+    },
+    "expected": {
+      "status": "ok",
+      "payload_contains": {
+        "supported": true
+      }
+    }
+  }
+]

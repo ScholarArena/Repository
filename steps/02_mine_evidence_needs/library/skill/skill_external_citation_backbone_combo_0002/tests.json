@@ -1,0 +1,37 @@
+[
+  {
+    "name": "test_external_citation_backbone",
+    "context": {},
+    "params": {
+      "openalex_id": "W1"
+    },
+    "primitive_stubs": {
+      "Fetch_Reference_List": {
+        "type": "external_references",
+        "payload": {
+          "references": [
+            "W2"
+          ]
+        },
+        "prov": [],
+        "status": "ok"
+      },
+      "Citation_Graph_Neighbors": {
+        "type": "external_citations",
+        "payload": {
+          "neighbors": [
+            "W3"
+          ]
+        },
+        "prov": [],
+        "status": "ok"
+      }
+    },
+    "expected": {
+      "status": "ok",
+      "payload_contains": {
+        "supported": true
+      }
+    }
+  }
+]

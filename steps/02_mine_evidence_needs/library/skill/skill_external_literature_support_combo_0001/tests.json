@@ -1,0 +1,50 @@
+[
+  {
+    "name": "test_external_literature_support",
+    "context": {},
+    "params": {
+      "query": "transformer",
+      "include_abstracts": true,
+      "include_metadata": true
+    },
+    "primitive_stubs": {
+      "External_Search_OpenAlex": {
+        "type": "external_search",
+        "payload": {
+          "results": [
+            {
+              "id": "W1",
+              "title": "Paper A",
+              "doi": "10.1234/abcd"
+            }
+          ]
+        },
+        "prov": [],
+        "status": "ok"
+      },
+      "Fetch_Abstract": {
+        "type": "external_abstract",
+        "payload": {
+          "abstract": "abstract text"
+        },
+        "prov": [],
+        "status": "ok"
+      },
+      "Resolve_DOI_Metadata": {
+        "type": "external_metadata",
+        "payload": {
+          "title": "Paper A"
+        },
+        "prov": [],
+        "status": "ok"
+      }
+    },
+    "expected": {
+      "status": "ok",
+      "payload_keys": [
+        "results",
+        "supported"
+      ]
+    }
+  }
+]

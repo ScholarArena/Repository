@@ -1,0 +1,29 @@
+[
+  {
+    "name": "test_derivation_step",
+    "context": {},
+    "params": {
+      "eq_a": "x+1",
+      "eq_b": "1+x",
+      "format": "sympy",
+      "semantic": true
+    },
+    "primitive_stubs": {
+      "Compare_Equation_Structure": {
+        "type": "equation_compare",
+        "payload": {
+          "match": false,
+          "semantic_match": true
+        },
+        "prov": [],
+        "status": "ok"
+      }
+    },
+    "expected": {
+      "status": "ok",
+      "payload_contains": {
+        "supported": true
+      }
+    }
+  }
+]

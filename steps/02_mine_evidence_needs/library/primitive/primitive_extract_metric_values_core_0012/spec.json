@@ -1,0 +1,77 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "primitive",
+  "name": "Extract_Metric_Values",
+  "need_summary": "Extract metric values from text.",
+  "spec": {
+    "goal": "Locate numeric metric values tied to a metric name.",
+    "inputs": {
+      "context": "dict with segments",
+      "params": "dict with metric"
+    },
+    "outputs": {
+      "type": "text",
+      "payload": {
+        "metric": "str",
+        "values": "list",
+        "matches": "list"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic",
+      "no network"
+    ]
+  },
+  "tests": [
+    {
+      "name": "test_metric_values_found",
+      "context": {
+        "segments": [
+          {
+            "id": 1,
+            "text": "Accuracy: 92.5% on test."
+          }
+        ]
+      },
+      "params": {
+        "metric": "Accuracy"
+      },
+      "expected": {
+        "status": "ok",
+        "prov_contains": [
+          1
+        ],
+        "payload_keys": [
+          "metric",
+          "values",
+          "matches"
+        ]
+      }
+    },
+    {
+      "name": "test_metric_values_missing",
+      "context": {
+        "segments": [
+          {
+            "id": 2,
+            "text": "No metrics here."
+          }
+        ]
+      },
+      "params": {
+        "metric": "F1"
+      },
+      "expected": {
+        "status": "missing",
+        "payload_keys": [
+          "metric",
+          "values",
+          "matches"
+        ]
+      }
+    }
+  ],
+  "dependencies": []
+}

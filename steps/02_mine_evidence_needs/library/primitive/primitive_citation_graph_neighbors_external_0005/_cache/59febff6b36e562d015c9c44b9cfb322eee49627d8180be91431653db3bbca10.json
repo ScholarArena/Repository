@@ -1,0 +1,14 @@
+{
+  "url": "https://api.openalex.org/works?filter=cites%3AW123&per_page=5",
+  "fetched_at": 1768492076,
+  "payload": {
+    "results": [
+      {
+        "id": "W9",
+        "display_name": "Paper A",
+        "doi": null,
+        "publication_year": 2022
+      }
+    ]
+  }
+}

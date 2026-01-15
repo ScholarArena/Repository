@@ -1,0 +1,67 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "primitive",
+  "name": "Extract_Split_Info",
+  "need_summary": "Locate train/val/test split descriptions.",
+  "spec": {
+    "goal": "Find segments describing data splits.",
+    "inputs": {
+      "context": "dict with segments",
+      "params": "dict"
+    },
+    "outputs": {
+      "type": "text",
+      "payload": {
+        "matches": "list"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic",
+      "no network"
+    ]
+  },
+  "tests": [
+    {
+      "name": "test_split_found",
+      "context": {
+        "segments": [
+          {
+            "id": 1,
+            "text": "We split data into train/val/test (80/10/10)."
+          }
+        ]
+      },
+      "params": {},
+      "expected": {
+        "status": "ok",
+        "prov_contains": [
+          1
+        ],
+        "payload_keys": [
+          "matches"
+        ]
+      }
+    },
+    {
+      "name": "test_split_missing",
+      "context": {
+        "segments": [
+          {
+            "id": 2,
+            "text": "No split details."
+          }
+        ]
+      },
+      "params": {},
+      "expected": {
+        "status": "missing",
+        "payload_keys": [
+          "matches"
+        ]
+      }
+    }
+  ],
+  "dependencies": []
+}

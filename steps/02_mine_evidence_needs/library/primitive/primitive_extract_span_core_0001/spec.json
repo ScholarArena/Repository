@@ -1,0 +1,76 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "primitive",
+  "name": "Extract_Span",
+  "need_summary": "Locate segments that contain a query string or regex.",
+  "spec": {
+    "goal": "Find matching spans for a query in context.segments.",
+    "inputs": {
+      "context": "dict with segments list of {id:int, text:str}",
+      "params": "dict with query string and optional regex/case_sensitive/max_matches"
+    },
+    "outputs": {
+      "type": "text",
+      "payload": {
+        "query": "str",
+        "regex": "bool",
+        "case_sensitive": "bool",
+        "matches": "list"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic",
+      "no network"
+    ]
+  },
+  "tests": [
+    {
+      "name": "test_span_found",
+      "context": {
+        "segments": [
+          {
+            "id": 1,
+            "text": "We define the F1 score in Section 3."
+          }
+        ]
+      },
+      "params": {
+        "query": "F1 score"
+      },
+      "expected": {
+        "status": "ok",
+        "prov_contains": [
+          1
+        ],
+        "payload_keys": [
+          "matches",
+          "query"
+        ]
+      }
+    },
+    {
+      "name": "test_span_missing",
+      "context": {
+        "segments": [
+          {
+            "id": 2,
+            "text": "No relevant text."
+          }
+        ]
+      },
+      "params": {
+        "query": "missing term"
+      },
+      "expected": {
+        "status": "missing",
+        "payload_keys": [
+          "matches",
+          "query"
+        ]
+      }
+    }
+  ],
+  "dependencies": []
+}

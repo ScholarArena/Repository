@@ -1,0 +1,90 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "skill",
+  "name": "Compute_Effect_Size_With_CI",
+  "need_summary": "Compute effect size and bootstrap CI.",
+  "spec": {
+    "goal": "Return effect size with confidence interval.",
+    "inputs": {
+      "context": "dict (unused)",
+      "params": "dict with group_a, group_b, values"
+    },
+    "outputs": {
+      "type": "effect_size_ci",
+      "payload": {
+        "effect_size": "float",
+        "ci_lower": "float",
+        "ci_upper": "float"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic"
+    ],
+    "dag": [
+      {
+        "id": 1,
+        "type": "primitive",
+        "name": "Compute_Effect_Size"
+      },
+      {
+        "id": 2,
+        "type": "primitive",
+        "name": "Bootstrap_CI"
+      }
+    ],
+    "uses_controlled_llm": false,
+    "external": false,
+    "source_type": []
+  },
+  "tests": [
+    {
+      "name": "test_effect_size_with_ci",
+      "context": {},
+      "params": {
+        "group_a": [
+          1,
+          2
+        ],
+        "group_b": [
+          0,
+          0
+        ],
+        "values": [
+          1,
+          2
+        ],
+        "alpha": 0.1
+      },
+      "primitive_stubs": {
+        "Compute_Effect_Size": {
+          "type": "effect_size",
+          "payload": {
+            "effect_size": 1.0
+          },
+          "prov": [],
+          "status": "ok"
+        },
+        "Bootstrap_CI": {
+          "type": "bootstrap_ci",
+          "payload": {
+            "lower": 0.5,
+            "upper": 1.5
+          },
+          "prov": [],
+          "status": "ok"
+        }
+      },
+      "expected": {
+        "status": "ok",
+        "payload_keys": [
+          "effect_size",
+          "ci_lower",
+          "ci_upper"
+        ]
+      }
+    }
+  ],
+  "dependencies": []
+}

@@ -1,0 +1,100 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "skill",
+  "name": "Check_Ablation_Coverage",
+  "need_summary": "Check whether ablation covers requested components.",
+  "spec": {
+    "goal": "Verify ablation coverage.",
+    "inputs": {
+      "context": "dict with segments",
+      "params": "dict with components"
+    },
+    "outputs": {
+      "type": "verification_result",
+      "payload": {
+        "supported": "bool",
+        "missing_components": "list"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic"
+    ],
+    "dag": [
+      {
+        "id": 1,
+        "type": "primitive",
+        "name": "Extract_Ablation_Info",
+        "inputs": [
+          "context"
+        ],
+        "output": "matches"
+      }
+    ],
+    "uses_controlled_llm": false,
+    "external": false,
+    "source_type": []
+  },
+  "tests": [
+    {
+      "name": "test_ablation_coverage_ok",
+      "context": {
+        "segments": []
+      },
+      "params": {
+        "components": [
+          "attention"
+        ]
+      },
+      "primitive_stubs": {
+        "Extract_Ablation_Info": {
+          "type": "text",
+          "payload": {
+            "matches": [
+              {
+                "segment_id": 6,
+                "text": "ablation removes attention"
+              }
+            ]
+          },
+          "prov": [
+            6
+          ],
+          "status": "ok"
+        }
+      },
+      "expected": {
+        "status": "ok",
+        "payload_contains": {
+          "supported": true
+        }
+      }
+    },
+    {
+      "name": "test_ablation_coverage_missing",
+      "context": {
+        "segments": []
+      },
+      "params": {
+        "components": [
+          "attention"
+        ]
+      },
+      "primitive_stubs": {
+        "Extract_Ablation_Info": {
+          "type": "text",
+          "payload": {
+            "matches": []
+          },
+          "prov": [],
+          "status": "missing"
+        }
+      },
+      "expected": {
+        "status": "missing"
+      }
+    }
+  ],
+  "dependencies": []
+}

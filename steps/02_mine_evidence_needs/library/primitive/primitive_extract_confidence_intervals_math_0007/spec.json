@@ -1,0 +1,42 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "primitive",
+  "name": "Extract_Confidence_Intervals",
+  "need_summary": "Extract confidence intervals from text.",
+  "spec": {
+    "goal": "Parse confidence interval expressions.",
+    "inputs": {
+      "context": "dict (unused)",
+      "params": "dict with text"
+    },
+    "outputs": {
+      "type": "confidence_interval",
+      "payload": {
+        "intervals": "list",
+        "text": "str"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic"
+    ]
+  },
+  "tests": [
+    {
+      "name": "test_extract_ci",
+      "context": {},
+      "params": {
+        "text": "95% CI [0.1, 0.2]"
+      },
+      "expected": {
+        "status": "ok",
+        "payload_keys": [
+          "intervals",
+          "text"
+        ]
+      }
+    }
+  ],
+  "dependencies": []
+}

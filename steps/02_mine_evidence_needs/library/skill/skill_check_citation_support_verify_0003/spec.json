@@ -1,0 +1,103 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "skill",
+  "name": "Check_Citation_Support",
+  "need_summary": "Check whether a citation marker exists.",
+  "spec": {
+    "goal": "Verify citation support for a claim.",
+    "inputs": {
+      "context": "dict with segments",
+      "params": "dict with cite_key"
+    },
+    "outputs": {
+      "type": "verification_result",
+      "payload": {
+        "cite_key": "str",
+        "supported": "bool"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic"
+    ],
+    "dag": [
+      {
+        "id": 1,
+        "type": "primitive",
+        "name": "Resolve_Citation",
+        "inputs": [
+          "context",
+          "params.cite_key"
+        ],
+        "output": "matches"
+      }
+    ],
+    "uses_controlled_llm": false,
+    "external": false,
+    "source_type": []
+  },
+  "tests": [
+    {
+      "name": "test_citation_support",
+      "context": {
+        "segments": []
+      },
+      "params": {
+        "cite_key": "12"
+      },
+      "primitive_stubs": {
+        "Resolve_Citation": {
+          "type": "text",
+          "payload": {
+            "matches": [
+              {
+                "segment_id": 3,
+                "text": "[12]"
+              }
+            ]
+          },
+          "prov": [
+            3
+          ],
+          "status": "ok"
+        }
+      },
+      "expected": {
+        "status": "ok",
+        "prov_contains": [
+          3
+        ],
+        "payload_contains": {
+          "supported": true
+        }
+      }
+    },
+    {
+      "name": "test_citation_support_missing",
+      "context": {
+        "segments": []
+      },
+      "params": {
+        "cite_key": "99"
+      },
+      "primitive_stubs": {
+        "Resolve_Citation": {
+          "type": "text",
+          "payload": {
+            "matches": []
+          },
+          "prov": [],
+          "status": "missing"
+        }
+      },
+      "expected": {
+        "status": "missing",
+        "payload_contains": {
+          "supported": false
+        }
+      }
+    }
+  ],
+  "dependencies": []
+}

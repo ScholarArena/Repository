@@ -1,0 +1,46 @@
+[
+  {
+    "name": "test_equation_assumption",
+    "context": {
+      "segments": []
+    },
+    "params": {
+      "eq_id": "3",
+      "assumption_terms": [
+        "iid"
+      ]
+    },
+    "primitive_stubs": {
+      "Extract_Equation": {
+        "type": "text",
+        "payload": {
+          "matches": [
+            {}
+          ]
+        },
+        "prov": [
+          10
+        ],
+        "status": "ok"
+      },
+      "Extract_Span": {
+        "type": "text",
+        "payload": {
+          "matches": [
+            {}
+          ]
+        },
+        "prov": [
+          11
+        ],
+        "status": "ok"
+      }
+    },
+    "expected": {
+      "status": "ok",
+      "payload_contains": {
+        "supported": true
+      }
+    }
+  }
+]

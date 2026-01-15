@@ -1,0 +1,36 @@
+[
+  {
+    "name": "test_results_summary",
+    "context": {
+      "segments": []
+    },
+    "params": {
+      "section_titles": [
+        "Results"
+      ]
+    },
+    "primitive_stubs": {
+      "Extract_Section": {
+        "type": "text",
+        "payload": {
+          "matches": [
+            {
+              "segment_id": 14,
+              "text": "Results here"
+            }
+          ]
+        },
+        "prov": [
+          14
+        ],
+        "status": "ok"
+      }
+    },
+    "expected": {
+      "status": "ok",
+      "payload_keys": [
+        "evidence_texts"
+      ]
+    }
+  }
+]

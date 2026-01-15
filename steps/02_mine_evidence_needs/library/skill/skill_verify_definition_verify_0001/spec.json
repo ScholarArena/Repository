@@ -1,0 +1,105 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "skill",
+  "name": "Verify_Definition",
+  "need_summary": "Verify that a term definition appears in the paper.",
+  "spec": {
+    "goal": "Check for definition evidence for a term.",
+    "inputs": {
+      "context": "dict with segments",
+      "params": "dict with term"
+    },
+    "outputs": {
+      "type": "verification_result",
+      "payload": {
+        "term": "str",
+        "supported": "bool",
+        "evidence_texts": "list"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic"
+    ],
+    "dag": [
+      {
+        "id": 1,
+        "type": "primitive",
+        "name": "Extract_Definition",
+        "inputs": [
+          "context",
+          "params.term"
+        ],
+        "output": "matches"
+      }
+    ],
+    "uses_controlled_llm": false,
+    "external": false,
+    "source_type": []
+  },
+  "tests": [
+    {
+      "name": "test_verify_definition_found",
+      "context": {
+        "segments": []
+      },
+      "params": {
+        "term": "margin"
+      },
+      "primitive_stubs": {
+        "Extract_Definition": {
+          "type": "text",
+          "payload": {
+            "matches": [
+              {
+                "segment_id": 1,
+                "text": "We define margin as..."
+              }
+            ]
+          },
+          "prov": [
+            1
+          ],
+          "status": "ok"
+        }
+      },
+      "expected": {
+        "status": "ok",
+        "prov_contains": [
+          1
+        ],
+        "payload_keys": [
+          "supported",
+          "evidence_texts"
+        ]
+      }
+    },
+    {
+      "name": "test_verify_definition_missing",
+      "context": {
+        "segments": []
+      },
+      "params": {
+        "term": "margin"
+      },
+      "primitive_stubs": {
+        "Extract_Definition": {
+          "type": "text",
+          "payload": {
+            "matches": []
+          },
+          "prov": [],
+          "status": "missing"
+        }
+      },
+      "expected": {
+        "status": "missing",
+        "payload_keys": [
+          "term"
+        ]
+      }
+    }
+  ],
+  "dependencies": []
+}

@@ -1,0 +1,7 @@
+{
+  "url": "https://api.openalex.org/works?per_page=3&search=Nonexistent+Work",
+  "fetched_at": 1768487551,
+  "payload": {
+    "results": []
+  }
+}

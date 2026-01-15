@@ -1,0 +1,25 @@
+[
+  {
+    "name": "test_data_availability_snapshot",
+    "context": {},
+    "params": {
+      "urls": [
+        "https://example.com/data"
+      ],
+      "verify_remote": true,
+      "snapshot": [
+        {
+          "url": "https://example.com/data",
+          "ok": false,
+          "status": 404
+        }
+      ]
+    },
+    "expected": {
+      "status": "ok",
+      "payload_contains": {
+        "available": false
+      }
+    }
+  }
+]

@@ -1,0 +1,80 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "skill",
+  "name": "External_Citation_Backbone",
+  "need_summary": "Fetch citation backbone via OpenAlex.",
+  "spec": {
+    "goal": "Retrieve references and cited-by neighbors.",
+    "inputs": {
+      "context": "dict (unused)",
+      "params": "dict with openalex_id or doi"
+    },
+    "outputs": {
+      "type": "external_citation",
+      "payload": {
+        "reference_count": "int",
+        "cited_by_count": "int"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic"
+    ],
+    "dag": [
+      {
+        "id": 1,
+        "type": "primitive",
+        "name": "Fetch_Reference_List"
+      },
+      {
+        "id": 2,
+        "type": "primitive",
+        "name": "Citation_Graph_Neighbors"
+      }
+    ],
+    "uses_controlled_llm": false,
+    "external": true,
+    "source_type": [
+      "openalex"
+    ]
+  },
+  "tests": [
+    {
+      "name": "test_external_citation_backbone",
+      "context": {},
+      "params": {
+        "openalex_id": "W1"
+      },
+      "primitive_stubs": {
+        "Fetch_Reference_List": {
+          "type": "external_references",
+          "payload": {
+            "references": [
+              "W2"
+            ]
+          },
+          "prov": [],
+          "status": "ok"
+        },
+        "Citation_Graph_Neighbors": {
+          "type": "external_citations",
+          "payload": {
+            "neighbors": [
+              "W3"
+            ]
+          },
+          "prov": [],
+          "status": "ok"
+        }
+      },
+      "expected": {
+        "status": "ok",
+        "payload_contains": {
+          "supported": true
+        }
+      }
+    }
+  ],
+  "dependencies": []
+}

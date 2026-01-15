@@ -1,0 +1,14 @@
+{
+  "url": "https://api.openalex.org/works?per_page=3&search=Attention+Is+All+You+Need",
+  "fetched_at": 1768487551,
+  "payload": {
+    "results": [
+      {
+        "id": "W123",
+        "display_name": "Attention Is All You Need",
+        "doi": null,
+        "publication_year": 2017
+      }
+    ]
+  }
+}

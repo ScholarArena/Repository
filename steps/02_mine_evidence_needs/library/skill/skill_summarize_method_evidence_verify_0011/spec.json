@@ -1,0 +1,82 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "skill",
+  "name": "Summarize_Method_Evidence",
+  "need_summary": "Summarize method evidence by aggregating matching segments.",
+  "spec": {
+    "goal": "Aggregate evidence for method description.",
+    "inputs": {
+      "context": "dict with segments",
+      "params": "dict with section_title and queries"
+    },
+    "outputs": {
+      "type": "evidence_summary",
+      "payload": {
+        "evidence_texts": "list"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic"
+    ],
+    "dag": [
+      {
+        "id": 1,
+        "type": "primitive",
+        "name": "Extract_Section"
+      },
+      {
+        "id": 2,
+        "type": "primitive",
+        "name": "Extract_Span"
+      }
+    ],
+    "uses_controlled_llm": false,
+    "external": false,
+    "source_type": []
+  },
+  "tests": [
+    {
+      "name": "test_method_summary",
+      "context": {
+        "segments": []
+      },
+      "params": {
+        "section_title": "Method"
+      },
+      "primitive_stubs": {
+        "Extract_Section": {
+          "type": "text",
+          "payload": {
+            "matches": [
+              {
+                "segment_id": 13,
+                "text": "Method details"
+              }
+            ]
+          },
+          "prov": [
+            13
+          ],
+          "status": "ok"
+        },
+        "Extract_Span": {
+          "type": "text",
+          "payload": {
+            "matches": []
+          },
+          "prov": [],
+          "status": "missing"
+        }
+      },
+      "expected": {
+        "status": "ok",
+        "payload_keys": [
+          "evidence_texts"
+        ]
+      }
+    }
+  ],
+  "dependencies": []
+}

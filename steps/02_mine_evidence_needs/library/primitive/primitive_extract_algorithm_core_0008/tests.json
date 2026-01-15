@@ -1,0 +1,47 @@
+[
+  {
+    "name": "test_algorithm_found",
+    "context": {
+      "segments": [
+        {
+          "id": 1,
+          "text": "Algorithm 1: Training Procedure."
+        }
+      ]
+    },
+    "params": {
+      "algo_id": "1"
+    },
+    "expected": {
+      "status": "ok",
+      "prov_contains": [
+        1
+      ],
+      "payload_keys": [
+        "matches",
+        "algo_id"
+      ]
+    }
+  },
+  {
+    "name": "test_algorithm_missing",
+    "context": {
+      "segments": [
+        {
+          "id": 2,
+          "text": "No algorithms here."
+        }
+      ]
+    },
+    "params": {
+      "algo_id": "2"
+    },
+    "expected": {
+      "status": "missing",
+      "payload_keys": [
+        "matches",
+        "algo_id"
+      ]
+    }
+  }
+]

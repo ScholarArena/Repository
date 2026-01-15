@@ -1,0 +1,27 @@
+[
+  {
+    "name": "test_bootstrap_ci",
+    "context": {},
+    "params": {
+      "values": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "n_boot": 200,
+      "alpha": 0.1,
+      "seed": 1,
+      "round": 3
+    },
+    "expected": {
+      "status": "ok",
+      "payload_keys": [
+        "lower",
+        "upper",
+        "alpha"
+      ]
+    }
+  }
+]

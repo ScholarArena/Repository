@@ -1,0 +1,29 @@
+[
+  {
+    "name": "test_dimension_consistent",
+    "context": {},
+    "params": {
+      "lhs": "x",
+      "rhs": "v*t",
+      "format": "sympy",
+      "dimensions": {
+        "x": {
+          "L": 1
+        },
+        "v": {
+          "L": 1,
+          "T": -1
+        },
+        "t": {
+          "T": 1
+        }
+      }
+    },
+    "expected": {
+      "status": "ok",
+      "payload_contains": {
+        "consistent": true
+      }
+    }
+  }
+]

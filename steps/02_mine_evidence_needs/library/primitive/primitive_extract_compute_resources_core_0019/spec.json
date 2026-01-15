@@ -1,0 +1,70 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "primitive",
+  "name": "Extract_Compute_Resources",
+  "need_summary": "Locate compute resource descriptions.",
+  "spec": {
+    "goal": "Find segments describing compute resources.",
+    "inputs": {
+      "context": "dict with segments",
+      "params": "dict"
+    },
+    "outputs": {
+      "type": "text",
+      "payload": {
+        "resources": "list",
+        "matches": "list"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic",
+      "no network"
+    ]
+  },
+  "tests": [
+    {
+      "name": "test_resources_found",
+      "context": {
+        "segments": [
+          {
+            "id": 1,
+            "text": "Experiments run on 2x V100 GPUs for 10 hours."
+          }
+        ]
+      },
+      "params": {},
+      "expected": {
+        "status": "ok",
+        "prov_contains": [
+          1
+        ],
+        "payload_keys": [
+          "resources",
+          "matches"
+        ]
+      }
+    },
+    {
+      "name": "test_resources_missing",
+      "context": {
+        "segments": [
+          {
+            "id": 2,
+            "text": "No compute info."
+          }
+        ]
+      },
+      "params": {},
+      "expected": {
+        "status": "missing",
+        "payload_keys": [
+          "resources",
+          "matches"
+        ]
+      }
+    }
+  ],
+  "dependencies": []
+}

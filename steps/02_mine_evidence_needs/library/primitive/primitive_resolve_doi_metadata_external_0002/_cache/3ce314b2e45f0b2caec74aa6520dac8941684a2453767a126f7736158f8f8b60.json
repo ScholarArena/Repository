@@ -1,0 +1,19 @@
+{
+  "url": "https://api.openalex.org/works/https%3A//doi.org/10.5555/123?",
+  "fetched_at": 1768492080,
+  "payload": {
+    "id": "https://openalex.org/W123",
+    "display_name": "Test Paper",
+    "publication_year": 2020,
+    "host_venue": {
+      "display_name": "TestConf"
+    },
+    "authorships": [
+      {
+        "author": {
+          "display_name": "A. Author"
+        }
+      }
+    ]
+  }
+}

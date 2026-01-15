@@ -1,0 +1,16 @@
+[
+  {
+    "name": "test_extract_ci",
+    "context": {},
+    "params": {
+      "text": "95% CI [0.1, 0.2]"
+    },
+    "expected": {
+      "status": "ok",
+      "payload_keys": [
+        "intervals",
+        "text"
+      ]
+    }
+  }
+]

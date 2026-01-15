@@ -1,0 +1,56 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "primitive",
+  "name": "Fetch_Reference_List",
+  "need_summary": "Fetch referenced works from OpenAlex.",
+  "spec": {
+    "goal": "Retrieve list of referenced works.",
+    "inputs": {
+      "context": "dict (unused)",
+      "params": "dict with openalex_id or doi, max_refs, cache_dir, cache_only, timeout, mailto, snapshot"
+    },
+    "outputs": {
+      "type": "external_references",
+      "payload": {
+        "references": "list",
+        "reference_count": "int",
+        "sources": "list"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic",
+      "external",
+      "cache_required"
+    ],
+    "external": true,
+    "source_type": [
+      "openalex"
+    ]
+  },
+  "tests": [
+    {
+      "name": "test_fetch_references_snapshot",
+      "context": {},
+      "params": {
+        "openalex_id": "W123",
+        "snapshot": {
+          "referenced_works": [
+            "W1",
+            "W2"
+          ]
+        }
+      },
+      "expected": {
+        "status": "ok",
+        "payload_keys": [
+          "references",
+          "reference_count",
+          "sources"
+        ]
+      }
+    }
+  ],
+  "dependencies": []
+}

@@ -1,0 +1,65 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "skill",
+  "name": "Verify_Derivation_Step",
+  "need_summary": "Verify a derivation step via equation comparison.",
+  "spec": {
+    "goal": "Check derivation step equivalence.",
+    "inputs": {
+      "context": "dict (unused)",
+      "params": "dict with eq_a, eq_b, format, semantic"
+    },
+    "outputs": {
+      "type": "verification_result",
+      "payload": {
+        "supported": "bool",
+        "match": "bool"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic"
+    ],
+    "dag": [
+      {
+        "id": 1,
+        "type": "primitive",
+        "name": "Compare_Equation_Structure"
+      }
+    ],
+    "uses_controlled_llm": false,
+    "external": false,
+    "source_type": []
+  },
+  "tests": [
+    {
+      "name": "test_derivation_step",
+      "context": {},
+      "params": {
+        "eq_a": "x+1",
+        "eq_b": "1+x",
+        "format": "sympy",
+        "semantic": true
+      },
+      "primitive_stubs": {
+        "Compare_Equation_Structure": {
+          "type": "equation_compare",
+          "payload": {
+            "match": false,
+            "semantic_match": true
+          },
+          "prov": [],
+          "status": "ok"
+        }
+      },
+      "expected": {
+        "status": "ok",
+        "payload_contains": {
+          "supported": true
+        }
+      }
+    }
+  ],
+  "dependencies": []
+}

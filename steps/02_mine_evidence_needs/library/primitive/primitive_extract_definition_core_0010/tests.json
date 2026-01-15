@@ -1,0 +1,47 @@
+[
+  {
+    "name": "test_definition_found",
+    "context": {
+      "segments": [
+        {
+          "id": 1,
+          "text": "We define the margin as the difference."
+        }
+      ]
+    },
+    "params": {
+      "term": "margin"
+    },
+    "expected": {
+      "status": "ok",
+      "prov_contains": [
+        1
+      ],
+      "payload_keys": [
+        "matches",
+        "term"
+      ]
+    }
+  },
+  {
+    "name": "test_definition_missing",
+    "context": {
+      "segments": [
+        {
+          "id": 2,
+          "text": "No definitions here."
+        }
+      ]
+    },
+    "params": {
+      "term": "entropy"
+    },
+    "expected": {
+      "status": "missing",
+      "payload_keys": [
+        "matches",
+        "term"
+      ]
+    }
+  }
+]

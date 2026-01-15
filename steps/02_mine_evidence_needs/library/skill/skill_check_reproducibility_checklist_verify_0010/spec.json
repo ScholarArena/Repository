@@ -1,0 +1,142 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "skill",
+  "name": "Check_Reproducibility_Checklist",
+  "need_summary": "Check reproducibility checklist items (code/data/hyperparameters/compute/training).",
+  "spec": {
+    "goal": "Verify reproducibility checklist evidence.",
+    "inputs": {
+      "context": "dict with segments",
+      "params": "dict with requirements"
+    },
+    "outputs": {
+      "type": "verification_result",
+      "payload": {
+        "found": "dict",
+        "supported": "bool"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic"
+    ],
+    "dag": [
+      {
+        "id": 1,
+        "type": "primitive",
+        "name": "Extract_Code_Data_Links"
+      },
+      {
+        "id": 2,
+        "type": "primitive",
+        "name": "Extract_Hyperparameters"
+      },
+      {
+        "id": 3,
+        "type": "primitive",
+        "name": "Extract_Compute_Resources"
+      },
+      {
+        "id": 4,
+        "type": "primitive",
+        "name": "Extract_Training_Details"
+      },
+      {
+        "id": 5,
+        "type": "primitive",
+        "name": "Check_Code_Availability"
+      },
+      {
+        "id": 6,
+        "type": "primitive",
+        "name": "Check_Data_Availability"
+      }
+    ],
+    "uses_controlled_llm": false,
+    "external": false,
+    "source_type": []
+  },
+  "tests": [
+    {
+      "name": "test_repro_checklist",
+      "context": {
+        "segments": []
+      },
+      "params": {
+        "requirements": [
+          "code"
+        ],
+        "verify_remote": true,
+        "code_snapshot": [
+          {
+            "url": "https://example.com",
+            "ok": true,
+            "status": 200
+          }
+        ]
+      },
+      "primitive_stubs": {
+        "Extract_Code_Data_Links": {
+          "type": "text",
+          "payload": {
+            "urls": [
+              "https://example.com"
+            ]
+          },
+          "prov": [
+            12
+          ],
+          "status": "ok"
+        },
+        "Extract_Hyperparameters": {
+          "type": "text",
+          "payload": {
+            "hyperparameters": {}
+          },
+          "prov": [],
+          "status": "missing"
+        },
+        "Extract_Compute_Resources": {
+          "type": "text",
+          "payload": {
+            "resources": []
+          },
+          "prov": [],
+          "status": "missing"
+        },
+        "Extract_Training_Details": {
+          "type": "text",
+          "payload": {
+            "matches": []
+          },
+          "prov": [],
+          "status": "missing"
+        },
+        "Check_Code_Availability": {
+          "type": "code_availability",
+          "payload": {
+            "available": true
+          },
+          "prov": [],
+          "status": "ok"
+        },
+        "Check_Data_Availability": {
+          "type": "data_availability",
+          "payload": {
+            "available": false
+          },
+          "prov": [],
+          "status": "ok"
+        }
+      },
+      "expected": {
+        "status": "ok",
+        "payload_contains": {
+          "supported": true
+        }
+      }
+    }
+  ],
+  "dependencies": []
+}

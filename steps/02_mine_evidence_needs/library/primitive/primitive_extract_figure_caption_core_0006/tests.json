@@ -1,0 +1,47 @@
+[
+  {
+    "name": "test_figure_found",
+    "context": {
+      "segments": [
+        {
+          "id": 1,
+          "text": "Figure 1: Architecture overview."
+        }
+      ]
+    },
+    "params": {
+      "figure_id": "1"
+    },
+    "expected": {
+      "status": "ok",
+      "prov_contains": [
+        1
+      ],
+      "payload_keys": [
+        "matches",
+        "figure_id"
+      ]
+    }
+  },
+  {
+    "name": "test_figure_missing",
+    "context": {
+      "segments": [
+        {
+          "id": 2,
+          "text": "No figure references."
+        }
+      ]
+    },
+    "params": {
+      "figure_id": "3"
+    },
+    "expected": {
+      "status": "missing",
+      "payload_keys": [
+        "matches",
+        "figure_id"
+      ]
+    }
+  }
+]

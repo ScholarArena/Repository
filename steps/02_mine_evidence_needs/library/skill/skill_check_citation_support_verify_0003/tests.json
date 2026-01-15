@@ -1,0 +1,62 @@
+[
+  {
+    "name": "test_citation_support",
+    "context": {
+      "segments": []
+    },
+    "params": {
+      "cite_key": "12"
+    },
+    "primitive_stubs": {
+      "Resolve_Citation": {
+        "type": "text",
+        "payload": {
+          "matches": [
+            {
+              "segment_id": 3,
+              "text": "[12]"
+            }
+          ]
+        },
+        "prov": [
+          3
+        ],
+        "status": "ok"
+      }
+    },
+    "expected": {
+      "status": "ok",
+      "prov_contains": [
+        3
+      ],
+      "payload_contains": {
+        "supported": true
+      }
+    }
+  },
+  {
+    "name": "test_citation_support_missing",
+    "context": {
+      "segments": []
+    },
+    "params": {
+      "cite_key": "99"
+    },
+    "primitive_stubs": {
+      "Resolve_Citation": {
+        "type": "text",
+        "payload": {
+          "matches": []
+        },
+        "prov": [],
+        "status": "missing"
+      }
+    },
+    "expected": {
+      "status": "missing",
+      "payload_contains": {
+        "supported": false
+      }
+    }
+  }
+]

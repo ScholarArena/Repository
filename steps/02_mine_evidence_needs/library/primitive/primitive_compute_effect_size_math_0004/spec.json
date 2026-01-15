@@ -1,0 +1,53 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "primitive",
+  "name": "Compute_Effect_Size",
+  "need_summary": "Compute effect size (Cohen's d).",
+  "spec": {
+    "goal": "Compute Cohen's d between two groups.",
+    "inputs": {
+      "context": "dict (unused)",
+      "params": "dict with group_a, group_b, round"
+    },
+    "outputs": {
+      "type": "effect_size",
+      "payload": {
+        "effect_size": "float",
+        "method": "str"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic"
+    ]
+  },
+  "tests": [
+    {
+      "name": "test_effect_size",
+      "context": {},
+      "params": {
+        "group_a": [
+          1,
+          2,
+          3
+        ],
+        "group_b": [
+          1,
+          1,
+          1
+        ],
+        "round": 3
+      },
+      "expected": {
+        "status": "ok",
+        "payload_contains": {
+          "effect_size": 1.414
+        }
+      }
+    }
+  ],
+  "dependencies": [
+    "numpy"
+  ]
+}

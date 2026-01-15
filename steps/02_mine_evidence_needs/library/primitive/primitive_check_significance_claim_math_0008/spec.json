@@ -1,0 +1,43 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "primitive",
+  "name": "Check_Significance_Claim",
+  "need_summary": "Check if a significance claim matches p-value.",
+  "spec": {
+    "goal": "Verify significance claim against p-value.",
+    "inputs": {
+      "context": "dict (unused)",
+      "params": "dict with claim, p_value, alpha"
+    },
+    "outputs": {
+      "type": "significance_check",
+      "payload": {
+        "supported": "bool",
+        "p_value": "float"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic"
+    ]
+  },
+  "tests": [
+    {
+      "name": "test_significance_claim",
+      "context": {},
+      "params": {
+        "claim": "statistically significant",
+        "p_value": 0.01,
+        "alpha": 0.05
+      },
+      "expected": {
+        "status": "ok",
+        "payload_contains": {
+          "supported": true
+        }
+      }
+    }
+  ],
+  "dependencies": []
+}

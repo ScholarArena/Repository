@@ -1,0 +1,71 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "skill",
+  "name": "Summarize_Results_Evidence",
+  "need_summary": "Summarize results evidence by aggregating matching segments.",
+  "spec": {
+    "goal": "Aggregate evidence for results.",
+    "inputs": {
+      "context": "dict with segments",
+      "params": "dict with section_titles"
+    },
+    "outputs": {
+      "type": "evidence_summary",
+      "payload": {
+        "evidence_texts": "list"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic"
+    ],
+    "dag": [
+      {
+        "id": 1,
+        "type": "primitive",
+        "name": "Extract_Section"
+      }
+    ],
+    "uses_controlled_llm": false,
+    "external": false,
+    "source_type": []
+  },
+  "tests": [
+    {
+      "name": "test_results_summary",
+      "context": {
+        "segments": []
+      },
+      "params": {
+        "section_titles": [
+          "Results"
+        ]
+      },
+      "primitive_stubs": {
+        "Extract_Section": {
+          "type": "text",
+          "payload": {
+            "matches": [
+              {
+                "segment_id": 14,
+                "text": "Results here"
+              }
+            ]
+          },
+          "prov": [
+            14
+          ],
+          "status": "ok"
+        }
+      },
+      "expected": {
+        "status": "ok",
+        "payload_keys": [
+          "evidence_texts"
+        ]
+      }
+    }
+  ],
+  "dependencies": []
+}

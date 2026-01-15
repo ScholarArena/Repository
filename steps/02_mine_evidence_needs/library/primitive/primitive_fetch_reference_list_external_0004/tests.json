@@ -1,0 +1,23 @@
+[
+  {
+    "name": "test_fetch_references_snapshot",
+    "context": {},
+    "params": {
+      "openalex_id": "W123",
+      "snapshot": {
+        "referenced_works": [
+          "W1",
+          "W2"
+        ]
+      }
+    },
+    "expected": {
+      "status": "ok",
+      "payload_keys": [
+        "references",
+        "reference_count",
+        "sources"
+      ]
+    }
+  }
+]

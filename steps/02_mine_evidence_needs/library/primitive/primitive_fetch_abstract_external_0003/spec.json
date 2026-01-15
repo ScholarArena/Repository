@@ -1,0 +1,61 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "primitive",
+  "name": "Fetch_Abstract",
+  "need_summary": "Fetch abstract from OpenAlex.",
+  "spec": {
+    "goal": "Retrieve abstract text for a work.",
+    "inputs": {
+      "context": "dict (unused)",
+      "params": "dict with openalex_id or doi, cache_dir, cache_only, timeout, mailto, snapshot"
+    },
+    "outputs": {
+      "type": "external_abstract",
+      "payload": {
+        "abstract": "str",
+        "sources": "list"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic",
+      "external",
+      "cache_required"
+    ],
+    "external": true,
+    "source_type": [
+      "openalex"
+    ]
+  },
+  "tests": [
+    {
+      "name": "test_fetch_abstract_snapshot",
+      "context": {},
+      "params": {
+        "openalex_id": "W123",
+        "snapshot": {
+          "abstract_inverted_index": {
+            "deep": [
+              0
+            ],
+            "learning": [
+              1
+            ]
+          }
+        }
+      },
+      "expected": {
+        "status": "ok",
+        "payload_keys": [
+          "abstract",
+          "sources"
+        ],
+        "payload_contains": {
+          "abstract": "deep learning"
+        }
+      }
+    }
+  ],
+  "dependencies": []
+}

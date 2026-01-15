@@ -1,0 +1,74 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "primitive",
+  "name": "Extract_Algorithm",
+  "need_summary": "Locate algorithm blocks by id.",
+  "spec": {
+    "goal": "Find segments containing an algorithm reference.",
+    "inputs": {
+      "context": "dict with segments",
+      "params": "dict with algo_id"
+    },
+    "outputs": {
+      "type": "text",
+      "payload": {
+        "algo_id": "str",
+        "matches": "list"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic",
+      "no network"
+    ]
+  },
+  "tests": [
+    {
+      "name": "test_algorithm_found",
+      "context": {
+        "segments": [
+          {
+            "id": 1,
+            "text": "Algorithm 1: Training Procedure."
+          }
+        ]
+      },
+      "params": {
+        "algo_id": "1"
+      },
+      "expected": {
+        "status": "ok",
+        "prov_contains": [
+          1
+        ],
+        "payload_keys": [
+          "matches",
+          "algo_id"
+        ]
+      }
+    },
+    {
+      "name": "test_algorithm_missing",
+      "context": {
+        "segments": [
+          {
+            "id": 2,
+            "text": "No algorithms here."
+          }
+        ]
+      },
+      "params": {
+        "algo_id": "2"
+      },
+      "expected": {
+        "status": "missing",
+        "payload_keys": [
+          "matches",
+          "algo_id"
+        ]
+      }
+    }
+  ],
+  "dependencies": []
+}

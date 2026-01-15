@@ -1,0 +1,74 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "primitive",
+  "name": "Resolve_Citation",
+  "need_summary": "Resolve citation markers to reference segments.",
+  "spec": {
+    "goal": "Locate segments containing a citation marker.",
+    "inputs": {
+      "context": "dict with segments",
+      "params": "dict with cite_key"
+    },
+    "outputs": {
+      "type": "text",
+      "payload": {
+        "cite_key": "str",
+        "matches": "list"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic",
+      "no network"
+    ]
+  },
+  "tests": [
+    {
+      "name": "test_citation_found",
+      "context": {
+        "segments": [
+          {
+            "id": 1,
+            "text": "We follow prior work [12]."
+          }
+        ]
+      },
+      "params": {
+        "cite_key": "12"
+      },
+      "expected": {
+        "status": "ok",
+        "prov_contains": [
+          1
+        ],
+        "payload_keys": [
+          "matches",
+          "cite_key"
+        ]
+      }
+    },
+    {
+      "name": "test_citation_missing",
+      "context": {
+        "segments": [
+          {
+            "id": 2,
+            "text": "No citations here."
+          }
+        ]
+      },
+      "params": {
+        "cite_key": "99"
+      },
+      "expected": {
+        "status": "missing",
+        "payload_keys": [
+          "matches",
+          "cite_key"
+        ]
+      }
+    }
+  ],
+  "dependencies": []
+}

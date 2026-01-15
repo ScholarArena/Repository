@@ -1,0 +1,67 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "primitive",
+  "name": "Extract_Limitations",
+  "need_summary": "Locate limitations or future work statements.",
+  "spec": {
+    "goal": "Find segments describing limitations.",
+    "inputs": {
+      "context": "dict with segments",
+      "params": "dict"
+    },
+    "outputs": {
+      "type": "text",
+      "payload": {
+        "matches": "list"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic",
+      "no network"
+    ]
+  },
+  "tests": [
+    {
+      "name": "test_limitations_found",
+      "context": {
+        "segments": [
+          {
+            "id": 1,
+            "text": "Limitations: our method fails on small datasets."
+          }
+        ]
+      },
+      "params": {},
+      "expected": {
+        "status": "ok",
+        "prov_contains": [
+          1
+        ],
+        "payload_keys": [
+          "matches"
+        ]
+      }
+    },
+    {
+      "name": "test_limitations_missing",
+      "context": {
+        "segments": [
+          {
+            "id": 2,
+            "text": "No limitations mentioned."
+          }
+        ]
+      },
+      "params": {},
+      "expected": {
+        "status": "missing",
+        "payload_keys": [
+          "matches"
+        ]
+      }
+    }
+  ],
+  "dependencies": []
+}

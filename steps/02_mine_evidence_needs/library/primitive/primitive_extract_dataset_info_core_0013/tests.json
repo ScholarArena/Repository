@@ -1,0 +1,47 @@
+[
+  {
+    "name": "test_dataset_found",
+    "context": {
+      "segments": [
+        {
+          "id": 1,
+          "text": "We use the CIFAR-10 dataset with 50k images."
+        }
+      ]
+    },
+    "params": {
+      "dataset": "CIFAR-10"
+    },
+    "expected": {
+      "status": "ok",
+      "prov_contains": [
+        1
+      ],
+      "payload_keys": [
+        "dataset",
+        "matches"
+      ]
+    }
+  },
+  {
+    "name": "test_dataset_missing",
+    "context": {
+      "segments": [
+        {
+          "id": 2,
+          "text": "No dataset info."
+        }
+      ]
+    },
+    "params": {
+      "dataset": "ImageNet"
+    },
+    "expected": {
+      "status": "missing",
+      "payload_keys": [
+        "dataset",
+        "matches"
+      ]
+    }
+  }
+]

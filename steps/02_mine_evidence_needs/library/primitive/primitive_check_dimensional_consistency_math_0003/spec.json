@@ -1,0 +1,58 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "primitive",
+  "name": "Check_Dimensional_Consistency",
+  "need_summary": "Check dimensional consistency between lhs and rhs.",
+  "spec": {
+    "goal": "Verify dimensions match for an equation.",
+    "inputs": {
+      "context": "dict (unused)",
+      "params": "dict with lhs, rhs, format, dimensions"
+    },
+    "outputs": {
+      "type": "dimension_check",
+      "payload": {
+        "lhs_dim": "str",
+        "rhs_dim": "str",
+        "consistent": "bool"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic"
+    ]
+  },
+  "tests": [
+    {
+      "name": "test_dimension_consistent",
+      "context": {},
+      "params": {
+        "lhs": "x",
+        "rhs": "v*t",
+        "format": "sympy",
+        "dimensions": {
+          "x": {
+            "L": 1
+          },
+          "v": {
+            "L": 1,
+            "T": -1
+          },
+          "t": {
+            "T": 1
+          }
+        }
+      },
+      "expected": {
+        "status": "ok",
+        "payload_contains": {
+          "consistent": true
+        }
+      }
+    }
+  ],
+  "dependencies": [
+    "sympy"
+  ]
+}

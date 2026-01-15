@@ -1,0 +1,47 @@
+[
+  {
+    "name": "test_equation_found",
+    "context": {
+      "segments": [
+        {
+          "id": 1,
+          "text": "Eq. (3) defines the loss."
+        }
+      ]
+    },
+    "params": {
+      "eq_id": "3"
+    },
+    "expected": {
+      "status": "ok",
+      "prov_contains": [
+        1
+      ],
+      "payload_keys": [
+        "matches",
+        "eq_id"
+      ]
+    }
+  },
+  {
+    "name": "test_equation_missing",
+    "context": {
+      "segments": [
+        {
+          "id": 2,
+          "text": "No equations here."
+        }
+      ]
+    },
+    "params": {
+      "eq_id": "4"
+    },
+    "expected": {
+      "status": "missing",
+      "payload_keys": [
+        "matches",
+        "eq_id"
+      ]
+    }
+  }
+]

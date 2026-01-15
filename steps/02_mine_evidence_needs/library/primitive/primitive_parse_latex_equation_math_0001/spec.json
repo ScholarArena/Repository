@@ -1,0 +1,48 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "primitive",
+  "name": "Parse_LaTeX_Equation",
+  "need_summary": "Parse a LaTeX equation string into a structured form.",
+  "spec": {
+    "goal": "Parse equation text using sympy.",
+    "inputs": {
+      "context": "dict (unused)",
+      "params": "dict with latex/equation and format"
+    },
+    "outputs": {
+      "type": "equation",
+      "payload": {
+        "expression": "str",
+        "srepr": "str",
+        "symbols": "list",
+        "latex": "str"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic"
+    ]
+  },
+  "tests": [
+    {
+      "name": "test_parse_sympy_format",
+      "context": {},
+      "params": {
+        "latex": "x**2 + 1",
+        "format": "sympy"
+      },
+      "expected": {
+        "status": "ok",
+        "payload_keys": [
+          "expression",
+          "srepr",
+          "symbols"
+        ]
+      }
+    }
+  ],
+  "dependencies": [
+    "sympy"
+  ]
+}

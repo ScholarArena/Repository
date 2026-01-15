@@ -1,0 +1,47 @@
+[
+  {
+    "name": "test_span_found",
+    "context": {
+      "segments": [
+        {
+          "id": 1,
+          "text": "We define the F1 score in Section 3."
+        }
+      ]
+    },
+    "params": {
+      "query": "F1 score"
+    },
+    "expected": {
+      "status": "ok",
+      "prov_contains": [
+        1
+      ],
+      "payload_keys": [
+        "matches",
+        "query"
+      ]
+    }
+  },
+  {
+    "name": "test_span_missing",
+    "context": {
+      "segments": [
+        {
+          "id": 2,
+          "text": "No relevant text."
+        }
+      ]
+    },
+    "params": {
+      "query": "missing term"
+    },
+    "expected": {
+      "status": "missing",
+      "payload_keys": [
+        "matches",
+        "query"
+      ]
+    }
+  }
+]

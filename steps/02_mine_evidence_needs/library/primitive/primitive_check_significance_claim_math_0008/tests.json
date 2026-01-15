@@ -1,0 +1,17 @@
+[
+  {
+    "name": "test_significance_claim",
+    "context": {},
+    "params": {
+      "claim": "statistically significant",
+      "p_value": 0.01,
+      "alpha": 0.05
+    },
+    "expected": {
+      "status": "ok",
+      "payload_contains": {
+        "supported": true
+      }
+    }
+  }
+]

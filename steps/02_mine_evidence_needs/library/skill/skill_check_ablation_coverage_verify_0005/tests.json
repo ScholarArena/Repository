@@ -1,0 +1,60 @@
+[
+  {
+    "name": "test_ablation_coverage_ok",
+    "context": {
+      "segments": []
+    },
+    "params": {
+      "components": [
+        "attention"
+      ]
+    },
+    "primitive_stubs": {
+      "Extract_Ablation_Info": {
+        "type": "text",
+        "payload": {
+          "matches": [
+            {
+              "segment_id": 6,
+              "text": "ablation removes attention"
+            }
+          ]
+        },
+        "prov": [
+          6
+        ],
+        "status": "ok"
+      }
+    },
+    "expected": {
+      "status": "ok",
+      "payload_contains": {
+        "supported": true
+      }
+    }
+  },
+  {
+    "name": "test_ablation_coverage_missing",
+    "context": {
+      "segments": []
+    },
+    "params": {
+      "components": [
+        "attention"
+      ]
+    },
+    "primitive_stubs": {
+      "Extract_Ablation_Info": {
+        "type": "text",
+        "payload": {
+          "matches": []
+        },
+        "prov": [],
+        "status": "missing"
+      }
+    },
+    "expected": {
+      "status": "missing"
+    }
+  }
+]

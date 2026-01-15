@@ -1,0 +1,41 @@
+[
+  {
+    "name": "test_limitations_found",
+    "context": {
+      "segments": [
+        {
+          "id": 1,
+          "text": "Limitations: our method fails on small datasets."
+        }
+      ]
+    },
+    "params": {},
+    "expected": {
+      "status": "ok",
+      "prov_contains": [
+        1
+      ],
+      "payload_keys": [
+        "matches"
+      ]
+    }
+  },
+  {
+    "name": "test_limitations_missing",
+    "context": {
+      "segments": [
+        {
+          "id": 2,
+          "text": "No limitations mentioned."
+        }
+      ]
+    },
+    "params": {},
+    "expected": {
+      "status": "missing",
+      "payload_keys": [
+        "matches"
+      ]
+    }
+  }
+]

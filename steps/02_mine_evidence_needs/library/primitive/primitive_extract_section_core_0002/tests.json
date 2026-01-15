@@ -1,0 +1,47 @@
+[
+  {
+    "name": "test_section_found",
+    "context": {
+      "segments": [
+        {
+          "id": 1,
+          "text": "3 Results\nWe report..."
+        }
+      ]
+    },
+    "params": {
+      "title": "Results"
+    },
+    "expected": {
+      "status": "ok",
+      "prov_contains": [
+        1
+      ],
+      "payload_keys": [
+        "matches",
+        "title"
+      ]
+    }
+  },
+  {
+    "name": "test_section_missing",
+    "context": {
+      "segments": [
+        {
+          "id": 2,
+          "text": "Introduction text."
+        }
+      ]
+    },
+    "params": {
+      "title": "Conclusion"
+    },
+    "expected": {
+      "status": "missing",
+      "payload_keys": [
+        "matches",
+        "title"
+      ]
+    }
+  }
+]

@@ -1,0 +1,81 @@
+[
+  {
+    "name": "test_repro_checklist",
+    "context": {
+      "segments": []
+    },
+    "params": {
+      "requirements": [
+        "code"
+      ],
+      "verify_remote": true,
+      "code_snapshot": [
+        {
+          "url": "https://example.com",
+          "ok": true,
+          "status": 200
+        }
+      ]
+    },
+    "primitive_stubs": {
+      "Extract_Code_Data_Links": {
+        "type": "text",
+        "payload": {
+          "urls": [
+            "https://example.com"
+          ]
+        },
+        "prov": [
+          12
+        ],
+        "status": "ok"
+      },
+      "Extract_Hyperparameters": {
+        "type": "text",
+        "payload": {
+          "hyperparameters": {}
+        },
+        "prov": [],
+        "status": "missing"
+      },
+      "Extract_Compute_Resources": {
+        "type": "text",
+        "payload": {
+          "resources": []
+        },
+        "prov": [],
+        "status": "missing"
+      },
+      "Extract_Training_Details": {
+        "type": "text",
+        "payload": {
+          "matches": []
+        },
+        "prov": [],
+        "status": "missing"
+      },
+      "Check_Code_Availability": {
+        "type": "code_availability",
+        "payload": {
+          "available": true
+        },
+        "prov": [],
+        "status": "ok"
+      },
+      "Check_Data_Availability": {
+        "type": "data_availability",
+        "payload": {
+          "available": false
+        },
+        "prov": [],
+        "status": "ok"
+      }
+    },
+    "expected": {
+      "status": "ok",
+      "payload_contains": {
+        "supported": true
+      }
+    }
+  }
+]

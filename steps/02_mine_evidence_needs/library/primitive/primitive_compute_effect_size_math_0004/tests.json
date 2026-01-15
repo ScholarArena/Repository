@@ -1,0 +1,25 @@
+[
+  {
+    "name": "test_effect_size",
+    "context": {},
+    "params": {
+      "group_a": [
+        1,
+        2,
+        3
+      ],
+      "group_b": [
+        1,
+        1,
+        1
+      ],
+      "round": 3
+    },
+    "expected": {
+      "status": "ok",
+      "payload_contains": {
+        "effect_size": 1.414
+      }
+    }
+  }
+]

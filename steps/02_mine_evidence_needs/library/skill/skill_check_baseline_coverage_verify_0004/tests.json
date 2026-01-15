@@ -1,0 +1,66 @@
+[
+  {
+    "name": "test_baseline_coverage_ok",
+    "context": {
+      "segments": []
+    },
+    "params": {
+      "expected_baselines": [
+        "ResNet"
+      ]
+    },
+    "primitive_stubs": {
+      "Extract_Baseline_List": {
+        "type": "text",
+        "payload": {
+          "candidates": [
+            "ResNet",
+            "VGG"
+          ]
+        },
+        "prov": [
+          4
+        ],
+        "status": "ok"
+      }
+    },
+    "expected": {
+      "status": "ok",
+      "payload_contains": {
+        "supported": true
+      }
+    }
+  },
+  {
+    "name": "test_baseline_coverage_partial",
+    "context": {
+      "segments": []
+    },
+    "params": {
+      "expected_baselines": [
+        "ResNet",
+        "DenseNet"
+      ]
+    },
+    "primitive_stubs": {
+      "Extract_Baseline_List": {
+        "type": "text",
+        "payload": {
+          "candidates": [
+            "ResNet"
+          ]
+        },
+        "prov": [
+          5
+        ],
+        "status": "ok"
+      }
+    },
+    "expected": {
+      "status": "ok",
+      "payload_contains": {
+        "supported": false
+      }
+    }
+  }
+]

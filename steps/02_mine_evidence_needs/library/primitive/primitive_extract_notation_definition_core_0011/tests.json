@@ -1,0 +1,47 @@
+[
+  {
+    "name": "test_notation_found",
+    "context": {
+      "segments": [
+        {
+          "id": 1,
+          "text": "Let x denote the input feature vector."
+        }
+      ]
+    },
+    "params": {
+      "symbol": "x"
+    },
+    "expected": {
+      "status": "ok",
+      "prov_contains": [
+        1
+      ],
+      "payload_keys": [
+        "matches",
+        "symbol"
+      ]
+    }
+  },
+  {
+    "name": "test_notation_missing",
+    "context": {
+      "segments": [
+        {
+          "id": 2,
+          "text": "No symbols here."
+        }
+      ]
+    },
+    "params": {
+      "symbol": "z"
+    },
+    "expected": {
+      "status": "missing",
+      "payload_keys": [
+        "matches",
+        "symbol"
+      ]
+    }
+  }
+]

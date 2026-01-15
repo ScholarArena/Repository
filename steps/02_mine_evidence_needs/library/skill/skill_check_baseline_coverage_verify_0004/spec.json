@@ -1,0 +1,106 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "skill",
+  "name": "Check_Baseline_Coverage",
+  "need_summary": "Check whether expected baselines are covered.",
+  "spec": {
+    "goal": "Verify baseline coverage.",
+    "inputs": {
+      "context": "dict with segments",
+      "params": "dict with expected_baselines"
+    },
+    "outputs": {
+      "type": "verification_result",
+      "payload": {
+        "supported": "bool",
+        "missing": "list"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic"
+    ],
+    "dag": [
+      {
+        "id": 1,
+        "type": "primitive",
+        "name": "Extract_Baseline_List",
+        "inputs": [
+          "context"
+        ],
+        "output": "candidates"
+      }
+    ],
+    "uses_controlled_llm": false,
+    "external": false,
+    "source_type": []
+  },
+  "tests": [
+    {
+      "name": "test_baseline_coverage_ok",
+      "context": {
+        "segments": []
+      },
+      "params": {
+        "expected_baselines": [
+          "ResNet"
+        ]
+      },
+      "primitive_stubs": {
+        "Extract_Baseline_List": {
+          "type": "text",
+          "payload": {
+            "candidates": [
+              "ResNet",
+              "VGG"
+            ]
+          },
+          "prov": [
+            4
+          ],
+          "status": "ok"
+        }
+      },
+      "expected": {
+        "status": "ok",
+        "payload_contains": {
+          "supported": true
+        }
+      }
+    },
+    {
+      "name": "test_baseline_coverage_partial",
+      "context": {
+        "segments": []
+      },
+      "params": {
+        "expected_baselines": [
+          "ResNet",
+          "DenseNet"
+        ]
+      },
+      "primitive_stubs": {
+        "Extract_Baseline_List": {
+          "type": "text",
+          "payload": {
+            "candidates": [
+              "ResNet"
+            ]
+          },
+          "prov": [
+            5
+          ],
+          "status": "ok"
+        }
+      },
+      "expected": {
+        "status": "ok",
+        "payload_contains": {
+          "supported": false
+        }
+      }
+    }
+  ],
+  "dependencies": []
+}

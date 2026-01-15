@@ -1,0 +1,87 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "skill",
+  "name": "Verify_Equation_Assumption",
+  "need_summary": "Verify that equation assumptions are stated.",
+  "spec": {
+    "goal": "Check assumption terms appear alongside the equation.",
+    "inputs": {
+      "context": "dict with segments",
+      "params": "dict with eq_id and assumption_terms"
+    },
+    "outputs": {
+      "type": "verification_result",
+      "payload": {
+        "supported": "bool",
+        "missing_terms": "list"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic"
+    ],
+    "dag": [
+      {
+        "id": 1,
+        "type": "primitive",
+        "name": "Extract_Equation"
+      },
+      {
+        "id": 2,
+        "type": "primitive",
+        "name": "Extract_Span"
+      }
+    ],
+    "uses_controlled_llm": false,
+    "external": false,
+    "source_type": []
+  },
+  "tests": [
+    {
+      "name": "test_equation_assumption",
+      "context": {
+        "segments": []
+      },
+      "params": {
+        "eq_id": "3",
+        "assumption_terms": [
+          "iid"
+        ]
+      },
+      "primitive_stubs": {
+        "Extract_Equation": {
+          "type": "text",
+          "payload": {
+            "matches": [
+              {}
+            ]
+          },
+          "prov": [
+            10
+          ],
+          "status": "ok"
+        },
+        "Extract_Span": {
+          "type": "text",
+          "payload": {
+            "matches": [
+              {}
+            ]
+          },
+          "prov": [
+            11
+          ],
+          "status": "ok"
+        }
+      },
+      "expected": {
+        "status": "ok",
+        "payload_contains": {
+          "supported": true
+        }
+      }
+    }
+  ],
+  "dependencies": []
+}

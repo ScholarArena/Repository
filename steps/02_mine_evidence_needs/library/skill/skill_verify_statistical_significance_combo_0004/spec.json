@@ -1,0 +1,84 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "skill",
+  "name": "Verify_Statistical_Significance",
+  "need_summary": "Verify a significance claim using t-test and claim check.",
+  "spec": {
+    "goal": "Check significance claim against computed p-value.",
+    "inputs": {
+      "context": "dict (unused)",
+      "params": "dict with group_a, group_b, claim"
+    },
+    "outputs": {
+      "type": "significance_check",
+      "payload": {
+        "p_value": "float",
+        "supported": "bool"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic"
+    ],
+    "dag": [
+      {
+        "id": 1,
+        "type": "primitive",
+        "name": "Run_T_Test"
+      },
+      {
+        "id": 2,
+        "type": "primitive",
+        "name": "Check_Significance_Claim"
+      }
+    ],
+    "uses_controlled_llm": false,
+    "external": false,
+    "source_type": []
+  },
+  "tests": [
+    {
+      "name": "test_verify_significance",
+      "context": {},
+      "params": {
+        "group_a": [
+          1,
+          2
+        ],
+        "group_b": [
+          0,
+          0
+        ],
+        "claim": "significant",
+        "alpha": 0.05
+      },
+      "primitive_stubs": {
+        "Run_T_Test": {
+          "type": "t_test",
+          "payload": {
+            "t_stat": 2.0,
+            "p_value": 0.01
+          },
+          "prov": [],
+          "status": "ok"
+        },
+        "Check_Significance_Claim": {
+          "type": "significance_check",
+          "payload": {
+            "supported": true
+          },
+          "prov": [],
+          "status": "ok"
+        }
+      },
+      "expected": {
+        "status": "ok",
+        "payload_contains": {
+          "supported": true
+        }
+      }
+    }
+  ],
+  "dependencies": []
+}

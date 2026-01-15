@@ -1,0 +1,33 @@
+[
+  {
+    "name": "test_resolve_doi_snapshot",
+    "context": {},
+    "params": {
+      "doi": "10.5555/123",
+      "snapshot": {
+        "id": "https://openalex.org/W123",
+        "display_name": "Test Paper",
+        "publication_year": 2020,
+        "host_venue": {
+          "display_name": "TestConf"
+        },
+        "authorships": [
+          {
+            "author": {
+              "display_name": "A. Author"
+            }
+          }
+        ]
+      }
+    },
+    "expected": {
+      "status": "ok",
+      "payload_keys": [
+        "doi",
+        "title",
+        "authors",
+        "sources"
+      ]
+    }
+  }
+]

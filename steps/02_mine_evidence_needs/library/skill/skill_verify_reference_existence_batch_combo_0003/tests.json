@@ -1,0 +1,27 @@
+[
+  {
+    "name": "test_reference_exists_batch",
+    "context": {},
+    "params": {
+      "references": [
+        "Attention Is All You Need"
+      ]
+    },
+    "primitive_stubs": {
+      "Verify_Reference_Existence": {
+        "type": "external_exists",
+        "payload": {
+          "exists": true
+        },
+        "prov": [],
+        "status": "ok"
+      }
+    },
+    "expected": {
+      "status": "ok",
+      "payload_contains": {
+        "exists_all": true
+      }
+    }
+  }
+]

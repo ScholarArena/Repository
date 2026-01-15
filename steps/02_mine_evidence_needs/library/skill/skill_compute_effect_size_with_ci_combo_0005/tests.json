@@ -1,0 +1,48 @@
+[
+  {
+    "name": "test_effect_size_with_ci",
+    "context": {},
+    "params": {
+      "group_a": [
+        1,
+        2
+      ],
+      "group_b": [
+        0,
+        0
+      ],
+      "values": [
+        1,
+        2
+      ],
+      "alpha": 0.1
+    },
+    "primitive_stubs": {
+      "Compute_Effect_Size": {
+        "type": "effect_size",
+        "payload": {
+          "effect_size": 1.0
+        },
+        "prov": [],
+        "status": "ok"
+      },
+      "Bootstrap_CI": {
+        "type": "bootstrap_ci",
+        "payload": {
+          "lower": 0.5,
+          "upper": 1.5
+        },
+        "prov": [],
+        "status": "ok"
+      }
+    },
+    "expected": {
+      "status": "ok",
+      "payload_keys": [
+        "effect_size",
+        "ci_lower",
+        "ci_upper"
+      ]
+    }
+  }
+]

@@ -1,0 +1,74 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "primitive",
+  "name": "Extract_Dataset_Info",
+  "need_summary": "Locate dataset descriptions.",
+  "spec": {
+    "goal": "Find segments describing datasets.",
+    "inputs": {
+      "context": "dict with segments",
+      "params": "dict with optional dataset"
+    },
+    "outputs": {
+      "type": "text",
+      "payload": {
+        "dataset": "str",
+        "matches": "list"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic",
+      "no network"
+    ]
+  },
+  "tests": [
+    {
+      "name": "test_dataset_found",
+      "context": {
+        "segments": [
+          {
+            "id": 1,
+            "text": "We use the CIFAR-10 dataset with 50k images."
+          }
+        ]
+      },
+      "params": {
+        "dataset": "CIFAR-10"
+      },
+      "expected": {
+        "status": "ok",
+        "prov_contains": [
+          1
+        ],
+        "payload_keys": [
+          "dataset",
+          "matches"
+        ]
+      }
+    },
+    {
+      "name": "test_dataset_missing",
+      "context": {
+        "segments": [
+          {
+            "id": 2,
+            "text": "No dataset info."
+          }
+        ]
+      },
+      "params": {
+        "dataset": "ImageNet"
+      },
+      "expected": {
+        "status": "missing",
+        "payload_keys": [
+          "dataset",
+          "matches"
+        ]
+      }
+    }
+  ],
+  "dependencies": []
+}

@@ -1,0 +1,59 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "primitive",
+  "name": "Run_T_Test",
+  "need_summary": "Run a t-test on two samples.",
+  "spec": {
+    "goal": "Compute t-statistic and p-value.",
+    "inputs": {
+      "context": "dict (unused)",
+      "params": "dict with group_a, group_b, paired, equal_var, round"
+    },
+    "outputs": {
+      "type": "t_test",
+      "payload": {
+        "t_stat": "float",
+        "p_value": "float",
+        "method": "str"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic"
+    ]
+  },
+  "tests": [
+    {
+      "name": "test_t_test_basic",
+      "context": {},
+      "params": {
+        "group_a": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "group_b": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "round": 4
+      },
+      "expected": {
+        "status": "ok",
+        "payload_keys": [
+          "t_stat",
+          "p_value",
+          "method"
+        ]
+      }
+    }
+  ],
+  "dependencies": [
+    "numpy",
+    "scipy"
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "primitive",
+  "name": "Check_Data_Availability",
+  "need_summary": "Check whether data is available via URLs or local paths.",
+  "spec": {
+    "goal": "Verify data availability.",
+    "inputs": {
+      "context": "dict (unused)",
+      "params": "dict with urls, paths, verify_remote, snapshot"
+    },
+    "outputs": {
+      "type": "data_availability",
+      "payload": {
+        "available": "bool",
+        "checked_urls": "list"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic"
+    ]
+  },
+  "tests": [
+    {
+      "name": "test_data_availability_snapshot",
+      "context": {},
+      "params": {
+        "urls": [
+          "https://example.com/data"
+        ],
+        "verify_remote": true,
+        "snapshot": [
+          {
+            "url": "https://example.com/data",
+            "ok": false,
+            "status": 404
+          }
+        ]
+      },
+      "expected": {
+        "status": "ok",
+        "payload_contains": {
+          "available": false
+        }
+      }
+    }
+  ],
+  "dependencies": []
+}

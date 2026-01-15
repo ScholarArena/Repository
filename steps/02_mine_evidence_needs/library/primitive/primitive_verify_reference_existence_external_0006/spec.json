@@ -1,0 +1,87 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "primitive",
+  "name": "Verify_Reference_Existence",
+  "need_summary": "Verify reference existence via OpenAlex search.",
+  "spec": {
+    "goal": "Check if a referenced work exists in OpenAlex.",
+    "inputs": {
+      "context": "dict (unused)",
+      "params": "dict with doi or query/title, per_page, cache_dir, cache_only, timeout, mailto, snapshot"
+    },
+    "outputs": {
+      "type": "external_exists",
+      "payload": {
+        "exists": "bool",
+        "match_count": "int",
+        "matches": "list",
+        "sources": "list"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic",
+      "external",
+      "cache_required"
+    ],
+    "external": true,
+    "source_type": [
+      "openalex"
+    ]
+  },
+  "tests": [
+    {
+      "name": "test_reference_exists_true",
+      "context": {},
+      "params": {
+        "query": "Attention Is All You Need",
+        "snapshot": {
+          "results": [
+            {
+              "id": "W123",
+              "display_name": "Attention Is All You Need",
+              "doi": null,
+              "publication_year": 2017
+            }
+          ]
+        }
+      },
+      "expected": {
+        "status": "ok",
+        "payload_keys": [
+          "exists",
+          "match_count",
+          "matches",
+          "sources"
+        ],
+        "payload_contains": {
+          "exists": true
+        }
+      }
+    },
+    {
+      "name": "test_reference_exists_false",
+      "context": {},
+      "params": {
+        "query": "Nonexistent Work",
+        "snapshot": {
+          "results": []
+        }
+      },
+      "expected": {
+        "status": "ok",
+        "payload_keys": [
+          "exists",
+          "match_count",
+          "matches",
+          "sources"
+        ],
+        "payload_contains": {
+          "exists": false
+        }
+      }
+    }
+  ],
+  "dependencies": []
+}

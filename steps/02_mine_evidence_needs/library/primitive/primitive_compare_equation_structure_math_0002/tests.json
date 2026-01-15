@@ -1,0 +1,19 @@
+[
+  {
+    "name": "test_compare_structure",
+    "context": {},
+    "params": {
+      "eq_a": "x + y",
+      "eq_b": "y + x",
+      "format": "sympy"
+    },
+    "expected": {
+      "status": "ok",
+      "payload_keys": [
+        "match",
+        "srepr_a",
+        "srepr_b"
+      ]
+    }
+  }
+]
