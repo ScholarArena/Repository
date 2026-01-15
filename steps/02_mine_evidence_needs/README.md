@@ -39,6 +39,18 @@ python steps/02_mine_evidence_needs/mine_evidence_needs.py \
   --llm-model gpt-4o-mini
 ```
 
+Reuse pipeline (recommended)
+```bash
+# 1) cluster only
+python steps/02_mine_evidence_needs/mine_evidence_needs.py --stage cluster
+
+# 2) reuse clusters to generate spec/tests
+python steps/02_mine_evidence_needs/mine_evidence_needs.py --stage spec --reuse-clusters
+
+# 3) reuse specs to run codegen + test gating
+python steps/02_mine_evidence_needs/mine_evidence_needs.py --stage codegen --reuse-specs
+```
+
 Failure prevention plan (recommended)
 1. **Cluster only** to verify sizes and sampling:
    ```bash
@@ -60,3 +72,5 @@ Notes
 - Use `--llm-debug-dir` to save raw LLM responses.
 - Use `--spec-template-mode llm-global|llm-per-cluster` to let LLM generate spec/tests templates.
 - `llm_usage.jsonl` logs token usage if the API returns `usage`; otherwise it logs prompt/completion character counts.
+- Use `--reuse-clusters` with `--clusters-in` (optional) to skip re-clustering.
+- Use `--reuse-specs` with `--specs-in` (optional) to skip spec generation.

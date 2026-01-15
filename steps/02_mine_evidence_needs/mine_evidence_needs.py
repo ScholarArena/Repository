@@ -697,16 +697,24 @@ def normalize_template_payload(payload):
 def build_template_prompt(cluster_samples, max_tests):
     system = (
         "You design templates for ScholarArena spec/tests. "
-        "Output exactly one JSON object."
+        "Be explicit, operational, and deterministic. "
+        "Output exactly one JSON object, no markdown."
     )
     user = {
         "task": "Propose a spec/tests template that improves feasibility and coverage.",
         "clusters": cluster_samples,
+        "schema_notes": [
+            "Observation = {type, payload, prov, status}. prov is a list of segment ids from context.segments.",
+            "context.segments is a list of {id:int, text:str}.",
+            "Tests must be runnable without network or file I/O.",
+        ],
         "constraints": [
             "Template must stay within the existing schema keys.",
             "Use ASCII only.",
             "Tests must be deterministic and runnable without network.",
             "Keep tests minimal but sufficient.",
+            "Prefer at least one ok test and one missing/fail test when possible.",
+            "Avoid external dependencies unless absolutely required.",
         ],
         "output_schema": {
             "spec_template": {
@@ -747,17 +755,26 @@ def build_spec_prompt(samples, max_tests, existing_names, template=None):
     )
     system = (
         "You design evidence needs for ScholarArena. "
-        "Output exactly one JSON object and keep it feasible."
+        "Output exactly one JSON object, no markdown. Keep it feasible and deterministic."
     )
     user = {
         "task": "Summarize the evidence need for this cluster and propose a spec/tests.",
         "definitions": definition,
         "samples": samples,
+        "schema_notes": [
+            "Observation = {type, payload, prov, status}. prov is a list of segment ids from context.segments.",
+            "context.segments is a list of {id:int, text:str}.",
+            "Tests must be runnable without network or file I/O.",
+        ],
         "constraints": [
             "Choose kind=primitive when a single deterministic operator is enough.",
             "Choose kind=skill only when a DAG of primitives is required.",
             "Tests must be small, deterministic, and runnable without network.",
             "Limit tests to the provided max_tests.",
+            "Prefer at least one ok test and one missing/fail test when possible.",
+            "If an existing name fits, reuse it exactly.",
+            "Avoid external dependencies unless absolutely required.",
+            "Use ASCII only.",
         ],
         "existing_names": existing_names or [],
         "template": template or {},
@@ -774,7 +791,7 @@ def build_spec_prompt(samples, max_tests, existing_names, template=None):
                 "inputs": {"context": "dict", "params": "dict"},
                 "outputs": {"type": "string", "payload": "dict", "prov": "list[int]"},
                 "constraints": ["deterministic", "no network"],
-                "dag": "required for skill, list of steps",
+                "dag": "required for skill, list of steps (each step should reference a primitive name or controlled_llm)",
                 "uses_controlled_llm": "bool (skill only)",
             },
             "tests": [
@@ -810,21 +827,30 @@ def build_spec_prompt(samples, max_tests, existing_names, template=None):
 def build_codegen_prompt(spec_payload, error_text=None):
     system = (
         "You write deterministic Python code for ScholarArena primitives/skills. "
-        "Output exactly one JSON object with a 'code' field."
+        "Output exactly one JSON object with a 'code' field, no markdown."
     )
     constraints = [
         "Use Python 3.10 standard library only.",
-        "No network calls, no file I/O.",
+        "No network calls, no file I/O, no randomness, no time-based logic.",
         "Provide execute(context, params, primitives=None, controlled_llm=None).",
         "Return an Observation dict with keys: type, payload, prov, status.",
         "Use runtime.ok/missing/fail from runtime.py.",
+        "If inputs are missing or evidence not found, return missing().",
+        "Never raise; catch errors and return fail(error=...).",
+        "Do not print or log.",
     ]
     user = {
         "task": "Generate code that satisfies the spec and tests.",
         "spec": spec_payload,
+        "behavior_notes": [
+            "context is a dict; if present, context.segments is a list of {id:int, text:str}.",
+            "For skills, use primitives[name] when available; if a required primitive is missing, return fail().",
+            "Use controlled_llm only if spec.spec.uses_controlled_llm is true; otherwise ignore it.",
+            "Keep code small and readable; no external dependencies.",
+        ],
         "constraints": constraints,
         "error_context": error_text or "",
-        "output_schema": {"code": "python code only"},
+        "output_schema": {"code": "python code only, no markdown"},
     }
     messages = [
         {"role": "system", "content": system},
@@ -947,11 +973,14 @@ def parse_args():
     parser.add_argument("--out-dir", default="steps/02_mine_evidence_needs")
     parser.add_argument("--clusters-out", default="")
     parser.add_argument("--assignments-out", default="")
+    parser.add_argument("--clusters-in", default="", help="Reuse clusters from this JSONL file")
+    parser.add_argument("--reuse-clusters", action="store_true", help="Skip clustering and reuse existing clusters")
     parser.add_argument("--specs-out", default="")
     parser.add_argument("--library-index-out", default="")
     parser.add_argument("--requirements-out", default="")
     parser.add_argument("--stage", choices=["cluster", "spec", "codegen", "codegen-only"], default="codegen")
     parser.add_argument("--specs-in", default="")
+    parser.add_argument("--reuse-specs", action="store_true", help="Skip spec generation and reuse existing specs")
 
     parser.add_argument("--limit-acts", type=int, default=0, help="Process only the first N acts")
     parser.add_argument("--sample-acts", type=int, default=0, help="Randomly sample N acts for a quick test run")
@@ -1095,363 +1124,404 @@ def main():
     )
     requirements_out = Path(args.requirements_out) if args.requirements_out else out_dir / "requirements.txt"
 
+    clusters = None
+    specs = None
+
     if args.stage != "codegen-only":
-        cluster_start = time.time()
-        logger(f"[stage] cluster start input={args.input_path}")
-        log_event(events_log, {"event": "stage_start", "stage": "cluster"})
-        acts = read_json_or_jsonl(args.input_path)
-        if args.limit_acts > 0:
-            acts = acts[: args.limit_acts]
-        if args.sample_acts and args.sample_acts < len(acts):
-            rng = random.Random(args.sample_seed)
-            indices = sorted(rng.sample(range(len(acts)), args.sample_acts))
-            acts = [acts[idx] for idx in indices]
-            if not args.quiet:
-                print(f"[sample] acts={len(acts)}", file=sys.stderr)
-            logger(f"[sample] acts={len(acts)} seed={args.sample_seed}")
-        if not acts:
-            write_jsonl(clusters_out, [])
-            write_jsonl(assignments_out, [])
-            logger("[stage] cluster empty input, exiting")
-            log_event(events_log, {"event": "stage_end", "stage": "cluster", "status": "empty"})
-            return
-
-        need_texts = [build_need_text(act, args.need_text_mode) for act in acts]
-        embed_key = args.embed_api_key or default_api_key()
-        if not embed_key:
-            raise SystemExit("Missing API key for embeddings. Provide --embed-api-key or set OPENAI_API_KEY.")
-        logger(
-            f"[cluster] acts={len(acts)} need_text_mode={args.need_text_mode} "
-            f"embed_strategy=heuristic(required) target_cluster_size={args.target_cluster_size}"
-        )
-
-        cluster_to_indices = {}
-        group_id_for_act = {}
-        rng = random.Random(args.seed)
-        indices = list(range(len(acts)))
-        groups = group_by_heuristic(need_texts, indices, args.heuristic_bits)
-        group_sizes = [len(members) for members in groups.values()]
-        if not args.quiet:
-            stats = describe_cluster_sizes(group_sizes)
-            if stats:
-                size_min, size_median, size_mean, size_max = stats
-                print(
-                    f"[heuristic] groups={len(groups)} size_min={size_min} "
-                    f"size_median={size_median:.1f} size_mean={size_mean:.1f} size_max={size_max}",
-                    file=sys.stderr,
-                )
-        group_keys = sorted(groups.keys())
-        group_to_index = {key: idx for idx, key in enumerate(group_keys)}
-        rep_texts = []
-        rep_group_indices = []
-        for key in group_keys:
-            local_idx = group_to_index[key]
-            reps = pick_representatives(groups[key], need_texts, args.heuristic_reps, rng)
-            for act_idx in reps:
-                rep_texts.append(need_texts[act_idx])
-                rep_group_indices.append(local_idx)
-        rep_embeddings = embed_texts(
-            rep_texts,
-            model=args.embed_model,
-            api_key=embed_key,
-            base_url=args.embed_base_url,
-            batch_size=args.embed_batch_size,
-            max_retries=args.embed_retries,
-            sleep_seconds=args.embed_sleep,
-            log_prefix="embed-need-rep",
-            save_path=None,
-            resume=args.embed_resume,
-        )
-        rep_embeddings = normalize_vectors(rep_embeddings, in_place=True)
-
-        group_embeddings = np.zeros((len(group_keys), rep_embeddings.shape[1]), dtype=np.float32)
-        group_counts = np.zeros(len(group_keys), dtype=np.int32)
-        for emb, group_idx in zip(rep_embeddings, rep_group_indices):
-            group_embeddings[group_idx] += emb
-            group_counts[group_idx] += 1
-        for idx, count in enumerate(group_counts):
-            if count > 0:
-                group_embeddings[idx] /= float(count)
-        group_embeddings = normalize_vectors(group_embeddings, in_place=True)
-        if args.group_embeddings_out:
-            np.save(args.group_embeddings_out, group_embeddings)
-
-        n = group_embeddings.shape[0]
-        k = choose_k(n, args.target_cluster_size, args.cluster_k)
-        labels, _ = kmeans(
-            group_embeddings,
-            k,
-            max_iter=args.max_iter,
-            seed=args.seed,
-            chunk_size=args.kmeans_chunk_size,
-            log_prefix="kmeans-needs" if args.kmeans_log_every else None,
-            log_every=args.kmeans_log_every,
-            method=args.kmeans_method,
-            init_method=args.kmeans_init,
-            init_sample=args.kmeans_init_sample,
-            batch_size=args.kmeans_batch_size,
-        )
-        group_id_map = {}
-        group_counter = 0
-        for key in group_keys:
-            group_id = f"group_{group_counter:06d}"
-            group_id_map[key] = group_id
-            group_counter += 1
-
-        for key, members in groups.items():
-            local_idx = group_to_index[key]
-            cluster_id = int(labels[local_idx])
-            cluster_to_indices.setdefault(cluster_id, []).extend(members)
-            for act_idx in members:
-                group_id_for_act[act_idx] = group_id_map[key]
-
-        clusters = []
-        assignments = []
-        for cluster_id, members in sorted(cluster_to_indices.items()):
-            cluster_label = f"need_{cluster_id:04d}"
-            samples = pick_samples(members, acts, need_texts, args.spec_sample_size, rng)
-            clusters.append(
+        if args.reuse_clusters:
+            clusters_path = Path(args.clusters_in) if args.clusters_in else clusters_out
+            if not clusters_path.exists():
+                raise SystemExit(f"Cluster file not found: {clusters_path}")
+            clusters = read_json_or_jsonl(clusters_path)
+            if not clusters:
+                raise SystemExit(f"Cluster file is empty: {clusters_path}")
+            logger(f"[cluster] reuse clusters from {clusters_path} clusters={len(clusters)}")
+            log_event(
+                events_log,
                 {
-                    "cluster_id": cluster_label,
-                    "size": len(members),
-                    "samples": samples,
-                }
+                    "event": "cluster_reuse",
+                    "clusters": len(clusters),
+                    "clusters_path": str(clusters_path),
+                },
             )
-            for act_idx in members:
-                assignment = {
-                    "act_id": acts[act_idx].get("act_id"),
-                    "cluster_id": cluster_label,
-                }
-                group_id = group_id_for_act.get(act_idx)
-                if group_id:
-                    assignment["group_id"] = group_id
-                assignments.append(assignment)
-
-        write_jsonl(clusters_out, clusters)
-        write_jsonl(assignments_out, assignments)
-
-        if not args.quiet:
-            sizes = [len(members) for members in cluster_to_indices.values()]
-            stats = describe_cluster_sizes(sizes)
-            if stats:
-                size_min, size_median, size_mean, size_max = stats
-                print(
-                    f"[cluster] clusters={len(sizes)} size_min={size_min} size_median={size_median:.1f} "
-                    f"size_mean={size_mean:.1f} size_max={size_max}",
-                    file=sys.stderr,
-                )
-                logger(
-                    f"[cluster] clusters={len(sizes)} size_min={size_min} "
-                    f"size_median={size_median:.1f} size_mean={size_mean:.1f} size_max={size_max}"
-                )
-
-        cluster_duration = time.time() - cluster_start
-        logger(f"[stage] cluster end duration={cluster_duration:.2f}s clusters={len(clusters)}")
-        log_event(
-            events_log,
-            {
-                "event": "stage_end",
-                "stage": "cluster",
-                "duration_sec": round(cluster_duration, 3),
-                "clusters": len(clusters),
-            },
-        )
-        if args.stage == "cluster":
-            return
-
-        spec_start = time.time()
-        logger(
-            f"[stage] spec start clusters={len(clusters)} template_mode={args.spec_template_mode}"
-        )
-        log_event(
-            events_log,
-            {
-                "event": "stage_start",
-                "stage": "spec",
-                "clusters": len(clusters),
-                "template_mode": args.spec_template_mode,
-            },
-        )
-
-        llm_key = args.llm_api_key or embed_key
-        if not llm_key:
-            raise SystemExit("Missing API key for LLM. Provide --llm-api-key or set OPENAI_API_KEY.")
-
-        existing_names = []
-        if library_index_out.exists():
-            existing_entries = read_json_or_jsonl(library_index_out)
-            existing_names = [item.get("name") for item in existing_entries if item.get("name")]
-
-        spec_template = {}
-        if args.spec_template_out:
-            spec_template_path = Path(args.spec_template_out)
         else:
-            default_name = (
-                "spec_test_template.jsonl"
-                if args.spec_template_mode == "llm-per-cluster"
-                else "spec_test_template.json"
-            )
-            spec_template_path = out_dir / default_name
-        if args.spec_template_mode == "llm-global":
-            template_clusters = clusters[: min(args.spec_template_clusters, len(clusters))]
-            template_payload = None
-            if template_clusters:
-                template_messages = build_template_prompt(template_clusters, args.spec_max_tests)
-                template_response = call_chat(
-                    template_messages,
-                    args.llm_model,
-                    llm_key,
-                    args.llm_base_url,
-                    3,
-                    0.5,
-                    logger=logger,
-                    usage_recorder=record_usage,
-                    stage="template",
-                    meta={"template_scope": "global", "clusters": len(template_clusters)},
-                )
-                template_content = extract_response_text(template_response)
-                template_parsed = extract_json(template_content) or {}
-                template_payload = normalize_template_payload(template_parsed)
-                if args.llm_debug_dir:
-                    write_llm_debug(
-                        args.llm_debug_dir,
-                        "template",
-                        {
-                            "scope": "global",
-                            "clusters": len(template_clusters),
-                            "messages": template_messages,
-                            "response": template_response,
-                            "parsed": template_parsed,
-                            "normalized": template_payload,
-                        },
-                    )
-            spec_template = template_payload or {}
-            spec_template_path.write_text(
-                json.dumps(spec_template, ensure_ascii=True, indent=2), encoding="utf-8"
-            )
+            cluster_start = time.time()
+            logger(f"[stage] cluster start input={args.input_path}")
+            log_event(events_log, {"event": "stage_start", "stage": "cluster"})
+            acts = read_json_or_jsonl(args.input_path)
+            if args.limit_acts > 0:
+                acts = acts[: args.limit_acts]
+            if args.sample_acts and args.sample_acts < len(acts):
+                rng = random.Random(args.sample_seed)
+                indices = sorted(rng.sample(range(len(acts)), args.sample_acts))
+                acts = [acts[idx] for idx in indices]
+                if not args.quiet:
+                    print(f"[sample] acts={len(acts)}", file=sys.stderr)
+                logger(f"[sample] acts={len(acts)} seed={args.sample_seed}")
+            if not acts:
+                write_jsonl(clusters_out, [])
+                write_jsonl(assignments_out, [])
+                logger("[stage] cluster empty input, exiting")
+                log_event(events_log, {"event": "stage_end", "stage": "cluster", "status": "empty"})
+                return
+
+            need_texts = [build_need_text(act, args.need_text_mode) for act in acts]
+            embed_key = args.embed_api_key or default_api_key()
+            if not embed_key:
+                raise SystemExit("Missing API key for embeddings. Provide --embed-api-key or set OPENAI_API_KEY.")
             logger(
-                f"[template] scope=global clusters={len(template_clusters)} "
-                f"saved={spec_template_path}"
+                f"[cluster] acts={len(acts)} need_text_mode={args.need_text_mode} "
+                f"embed_strategy=heuristic(required) target_cluster_size={args.target_cluster_size}"
             )
-        elif args.spec_template_mode == "llm-per-cluster":
-            spec_template_path.unlink(missing_ok=True)
 
-        specs_out.unlink(missing_ok=True)
-        requirements = set()
-        for idx, cluster in enumerate(clusters, start=1):
-            if args.max_clusters and idx > args.max_clusters:
-                break
-            cluster_id = cluster["cluster_id"]
-            template_for_cluster = spec_template
-            if args.spec_template_mode == "llm-per-cluster":
-                template_messages = build_template_prompt([cluster], args.spec_max_tests)
-                template_response = call_chat(
-                    template_messages,
-                    args.llm_model,
-                    llm_key,
-                    args.llm_base_url,
-                    3,
-                    0.5,
-                    logger=logger,
-                    usage_recorder=record_usage,
-                    stage="template",
-                    meta={"template_scope": "cluster", "cluster_id": cluster_id},
+            cluster_to_indices = {}
+            group_id_for_act = {}
+            rng = random.Random(args.seed)
+            indices = list(range(len(acts)))
+            groups = group_by_heuristic(need_texts, indices, args.heuristic_bits)
+            group_sizes = [len(members) for members in groups.values()]
+            if not args.quiet:
+                stats = describe_cluster_sizes(group_sizes)
+                if stats:
+                    size_min, size_median, size_mean, size_max = stats
+                    print(
+                        f"[heuristic] groups={len(groups)} size_min={size_min} "
+                        f"size_median={size_median:.1f} size_mean={size_mean:.1f} size_max={size_max}",
+                        file=sys.stderr,
+                    )
+            group_keys = sorted(groups.keys())
+            group_to_index = {key: idx for idx, key in enumerate(group_keys)}
+            rep_texts = []
+            rep_group_indices = []
+            for key in group_keys:
+                local_idx = group_to_index[key]
+                reps = pick_representatives(groups[key], need_texts, args.heuristic_reps, rng)
+                for act_idx in reps:
+                    rep_texts.append(need_texts[act_idx])
+                    rep_group_indices.append(local_idx)
+            rep_embeddings = embed_texts(
+                rep_texts,
+                model=args.embed_model,
+                api_key=embed_key,
+                base_url=args.embed_base_url,
+                batch_size=args.embed_batch_size,
+                max_retries=args.embed_retries,
+                sleep_seconds=args.embed_sleep,
+                log_prefix="embed-need-rep",
+                save_path=None,
+                resume=args.embed_resume,
+            )
+            rep_embeddings = normalize_vectors(rep_embeddings, in_place=True)
+
+            group_embeddings = np.zeros((len(group_keys), rep_embeddings.shape[1]), dtype=np.float32)
+            group_counts = np.zeros(len(group_keys), dtype=np.int32)
+            for emb, group_idx in zip(rep_embeddings, rep_group_indices):
+                group_embeddings[group_idx] += emb
+                group_counts[group_idx] += 1
+            for idx, count in enumerate(group_counts):
+                if count > 0:
+                    group_embeddings[idx] /= float(count)
+            group_embeddings = normalize_vectors(group_embeddings, in_place=True)
+            if args.group_embeddings_out:
+                np.save(args.group_embeddings_out, group_embeddings)
+
+            n = group_embeddings.shape[0]
+            k = choose_k(n, args.target_cluster_size, args.cluster_k)
+            labels, _ = kmeans(
+                group_embeddings,
+                k,
+                max_iter=args.max_iter,
+                seed=args.seed,
+                chunk_size=args.kmeans_chunk_size,
+                log_prefix="kmeans-needs" if args.kmeans_log_every else None,
+                log_every=args.kmeans_log_every,
+                method=args.kmeans_method,
+                init_method=args.kmeans_init,
+                init_sample=args.kmeans_init_sample,
+                batch_size=args.kmeans_batch_size,
+            )
+            group_id_map = {}
+            group_counter = 0
+            for key in group_keys:
+                group_id = f"group_{group_counter:06d}"
+                group_id_map[key] = group_id
+                group_counter += 1
+
+            for key, members in groups.items():
+                local_idx = group_to_index[key]
+                cluster_id = int(labels[local_idx])
+                cluster_to_indices.setdefault(cluster_id, []).extend(members)
+                for act_idx in members:
+                    group_id_for_act[act_idx] = group_id_map[key]
+
+            clusters = []
+            assignments = []
+            for cluster_id, members in sorted(cluster_to_indices.items()):
+                cluster_label = f"need_{cluster_id:04d}"
+                samples = pick_samples(members, acts, need_texts, args.spec_sample_size, rng)
+                clusters.append(
+                    {
+                        "cluster_id": cluster_label,
+                        "size": len(members),
+                        "samples": samples,
+                    }
                 )
-                template_content = extract_response_text(template_response)
-                template_parsed = extract_json(template_content) or {}
-                template_for_cluster = normalize_template_payload(template_parsed)
-                append_jsonl(
-                    spec_template_path,
-                    {"cluster_id": cluster_id, "template": template_for_cluster},
-                )
-                if args.llm_debug_dir:
-                    write_llm_debug(
-                        args.llm_debug_dir,
-                        "template",
-                        {
-                            "scope": "cluster",
-                            "cluster_id": cluster_id,
-                            "messages": template_messages,
-                            "response": template_response,
-                            "parsed": template_parsed,
-                            "normalized": template_for_cluster,
-                        },
+                for act_idx in members:
+                    assignment = {
+                        "act_id": acts[act_idx].get("act_id"),
+                        "cluster_id": cluster_label,
+                    }
+                    group_id = group_id_for_act.get(act_idx)
+                    if group_id:
+                        assignment["group_id"] = group_id
+                    assignments.append(assignment)
+
+            write_jsonl(clusters_out, clusters)
+            write_jsonl(assignments_out, assignments)
+
+            if not args.quiet:
+                sizes = [len(members) for members in cluster_to_indices.values()]
+                stats = describe_cluster_sizes(sizes)
+                if stats:
+                    size_min, size_median, size_mean, size_max = stats
+                    print(
+                        f"[cluster] clusters={len(sizes)} size_min={size_min} size_median={size_median:.1f} "
+                        f"size_mean={size_mean:.1f} size_max={size_max}",
+                        file=sys.stderr,
+                    )
+                    logger(
+                        f"[cluster] clusters={len(sizes)} size_min={size_min} "
+                        f"size_median={size_median:.1f} size_mean={size_mean:.1f} size_max={size_max}"
                     )
 
-            messages = build_spec_prompt(
-                cluster["samples"],
-                args.spec_max_tests,
-                existing_names,
-                template=template_for_cluster,
-            )
-            response = call_chat(
-                messages,
-                args.llm_model,
-                llm_key,
-                args.llm_base_url,
-                3,
-                0.5,
-                logger=logger,
-                usage_recorder=record_usage,
-                stage="spec",
-                meta={"cluster_id": cluster_id, "cluster_size": cluster.get("size")},
-            )
-            content = ((response.get("choices") or [{}])[0].get("message") or {}).get("content")
-            parsed = extract_json(content) or {}
-            normalized = normalize_spec_payload(parsed, fallback_name=f"Need_{cluster_id}")
-            normalized["tests"] = (normalized.get("tests") or [])[: args.spec_max_tests]
-            normalized["cluster_id"] = cluster_id
-            append_jsonl(specs_out, normalized)
-            for dep in normalized.get("dependencies", []):
-                if dep:
-                    requirements.add(dep)
-            if args.llm_debug_dir:
-                write_llm_debug(
-                    args.llm_debug_dir,
-                    "spec",
-                    {
-                        "cluster_id": cluster_id,
-                        "samples": cluster["samples"],
-                        "messages": messages,
-                        "response": response,
-                        "parsed": parsed,
-                        "normalized": normalized,
-                    },
-                )
-            if not args.quiet and args.log_every and idx % args.log_every == 0:
-                print(f"[spec] {idx}/{len(clusters)} clusters", file=sys.stderr)
-                logger(f"[spec] {idx}/{len(clusters)} clusters")
-
-        if requirements:
-            requirements_out.write_text("\n".join(sorted(requirements)) + "\n", encoding="utf-8")
-
-        if args.stage == "spec":
-            spec_duration = time.time() - spec_start
-            logger(f"[stage] spec end duration={spec_duration:.2f}s")
+            cluster_duration = time.time() - cluster_start
+            logger(f"[stage] cluster end duration={cluster_duration:.2f}s clusters={len(clusters)}")
             log_event(
                 events_log,
                 {
                     "event": "stage_end",
-                    "stage": "spec",
-                    "duration_sec": round(spec_duration, 3),
+                    "stage": "cluster",
+                    "duration_sec": round(cluster_duration, 3),
+                    "clusters": len(clusters),
                 },
             )
-            summary_payload = {
-                "totals": usage_totals,
-                "by_stage": stage_totals,
-            }
-            llm_usage_summary.write_text(
-                json.dumps(summary_payload, ensure_ascii=True, indent=2), encoding="utf-8"
-            )
-            logger(
-                f"[llm] calls={usage_totals['calls']} "
-                f"tokens_reported_calls={usage_totals['tokens_reported_calls']} "
-                f"total_tokens={usage_totals['total_tokens']} prompt_chars={usage_totals['prompt_chars']} "
-                f"completion_chars={usage_totals['completion_chars']}"
-            )
+
+        if args.stage == "cluster":
             return
 
-        specs = read_json_or_jsonl(specs_out)
+        if args.stage == "codegen" and (args.reuse_specs or args.specs_in):
+            specs_path = Path(args.specs_in) if args.specs_in else specs_out
+            if not specs_path.exists():
+                raise SystemExit(f"Specs file not found: {specs_path}")
+            specs = read_json_or_jsonl(specs_path)
+            if not specs:
+                raise SystemExit(f"Specs file is empty: {specs_path}")
+            logger(f"[spec] reuse specs from {specs_path} specs={len(specs)}")
+            log_event(
+                events_log,
+                {
+                    "event": "spec_reuse",
+                    "specs": len(specs),
+                    "specs_path": str(specs_path),
+                },
+            )
+        else:
+            if not clusters:
+                raise SystemExit("No clusters available. Run --stage cluster or use --reuse-clusters.")
+            spec_start = time.time()
+            logger(
+                f"[stage] spec start clusters={len(clusters)} template_mode={args.spec_template_mode}"
+            )
+            log_event(
+                events_log,
+                {
+                    "event": "stage_start",
+                    "stage": "spec",
+                    "clusters": len(clusters),
+                    "template_mode": args.spec_template_mode,
+                },
+            )
+
+            embed_key = args.embed_api_key or default_api_key()
+            llm_key = args.llm_api_key or embed_key
+            if not llm_key:
+                raise SystemExit("Missing API key for LLM. Provide --llm-api-key or set OPENAI_API_KEY.")
+
+            existing_names = []
+            if library_index_out.exists():
+                existing_entries = read_json_or_jsonl(library_index_out)
+                existing_names = [item.get("name") for item in existing_entries if item.get("name")]
+
+            spec_template = {}
+            if args.spec_template_out:
+                spec_template_path = Path(args.spec_template_out)
+            else:
+                default_name = (
+                    "spec_test_template.jsonl"
+                    if args.spec_template_mode == "llm-per-cluster"
+                    else "spec_test_template.json"
+                )
+                spec_template_path = out_dir / default_name
+            if args.spec_template_mode == "llm-global":
+                template_clusters = clusters[: min(args.spec_template_clusters, len(clusters))]
+                template_payload = None
+                if template_clusters:
+                    template_messages = build_template_prompt(template_clusters, args.spec_max_tests)
+                    template_response = call_chat(
+                        template_messages,
+                        args.llm_model,
+                        llm_key,
+                        args.llm_base_url,
+                        3,
+                        0.5,
+                        logger=logger,
+                        usage_recorder=record_usage,
+                        stage="template",
+                        meta={"template_scope": "global", "clusters": len(template_clusters)},
+                    )
+                    template_content = extract_response_text(template_response)
+                    template_parsed = extract_json(template_content) or {}
+                    template_payload = normalize_template_payload(template_parsed)
+                    if args.llm_debug_dir:
+                        write_llm_debug(
+                            args.llm_debug_dir,
+                            "template",
+                            {
+                                "scope": "global",
+                                "clusters": len(template_clusters),
+                                "messages": template_messages,
+                                "response": template_response,
+                                "parsed": template_parsed,
+                                "normalized": template_payload,
+                            },
+                        )
+                spec_template = template_payload or {}
+                spec_template_path.write_text(
+                    json.dumps(spec_template, ensure_ascii=True, indent=2), encoding="utf-8"
+                )
+                logger(
+                    f"[template] scope=global clusters={len(template_clusters)} "
+                    f"saved={spec_template_path}"
+                )
+            elif args.spec_template_mode == "llm-per-cluster":
+                spec_template_path.unlink(missing_ok=True)
+
+            specs_out.unlink(missing_ok=True)
+            requirements = set()
+            for idx, cluster in enumerate(clusters, start=1):
+                if args.max_clusters and idx > args.max_clusters:
+                    break
+                cluster_id = cluster["cluster_id"]
+                template_for_cluster = spec_template
+                if args.spec_template_mode == "llm-per-cluster":
+                    template_messages = build_template_prompt([cluster], args.spec_max_tests)
+                    template_response = call_chat(
+                        template_messages,
+                        args.llm_model,
+                        llm_key,
+                        args.llm_base_url,
+                        3,
+                        0.5,
+                        logger=logger,
+                        usage_recorder=record_usage,
+                        stage="template",
+                        meta={"template_scope": "cluster", "cluster_id": cluster_id},
+                    )
+                    template_content = extract_response_text(template_response)
+                    template_parsed = extract_json(template_content) or {}
+                    template_for_cluster = normalize_template_payload(template_parsed)
+                    append_jsonl(
+                        spec_template_path,
+                        {"cluster_id": cluster_id, "template": template_for_cluster},
+                    )
+                    if args.llm_debug_dir:
+                        write_llm_debug(
+                            args.llm_debug_dir,
+                            "template",
+                            {
+                                "scope": "cluster",
+                                "cluster_id": cluster_id,
+                                "messages": template_messages,
+                                "response": template_response,
+                                "parsed": template_parsed,
+                                "normalized": template_for_cluster,
+                            },
+                        )
+
+                messages = build_spec_prompt(
+                    cluster["samples"],
+                    args.spec_max_tests,
+                    existing_names,
+                    template=template_for_cluster,
+                )
+                response = call_chat(
+                    messages,
+                    args.llm_model,
+                    llm_key,
+                    args.llm_base_url,
+                    3,
+                    0.5,
+                    logger=logger,
+                    usage_recorder=record_usage,
+                    stage="spec",
+                    meta={"cluster_id": cluster_id, "cluster_size": cluster.get("size")},
+                )
+                content = ((response.get("choices") or [{}])[0].get("message") or {}).get("content")
+                parsed = extract_json(content) or {}
+                normalized = normalize_spec_payload(parsed, fallback_name=f"Need_{cluster_id}")
+                normalized["tests"] = (normalized.get("tests") or [])[: args.spec_max_tests]
+                normalized["cluster_id"] = cluster_id
+                append_jsonl(specs_out, normalized)
+                for dep in normalized.get("dependencies", []):
+                    if dep:
+                        requirements.add(dep)
+                if args.llm_debug_dir:
+                    write_llm_debug(
+                        args.llm_debug_dir,
+                        "spec",
+                        {
+                            "cluster_id": cluster_id,
+                            "samples": cluster["samples"],
+                            "messages": messages,
+                            "response": response,
+                            "parsed": parsed,
+                            "normalized": normalized,
+                        },
+                    )
+                if not args.quiet and args.log_every and idx % args.log_every == 0:
+                    print(f"[spec] {idx}/{len(clusters)} clusters", file=sys.stderr)
+                    logger(f"[spec] {idx}/{len(clusters)} clusters")
+
+            if requirements:
+                requirements_out.write_text("\n".join(sorted(requirements)) + "\n", encoding="utf-8")
+
+            if args.stage == "spec":
+                spec_duration = time.time() - spec_start
+                logger(f"[stage] spec end duration={spec_duration:.2f}s")
+                log_event(
+                    events_log,
+                    {
+                        "event": "stage_end",
+                        "stage": "spec",
+                        "duration_sec": round(spec_duration, 3),
+                    },
+                )
+                summary_payload = {
+                    "totals": usage_totals,
+                    "by_stage": stage_totals,
+                }
+                llm_usage_summary.write_text(
+                    json.dumps(summary_payload, ensure_ascii=True, indent=2), encoding="utf-8"
+                )
+                logger(
+                    f"[llm] calls={usage_totals['calls']} "
+                    f"tokens_reported_calls={usage_totals['tokens_reported_calls']} "
+                    f"total_tokens={usage_totals['total_tokens']} prompt_chars={usage_totals['prompt_chars']} "
+                    f"completion_chars={usage_totals['completion_chars']}"
+                )
+                return
+
+            specs = read_json_or_jsonl(specs_out)
     else:
         if not args.specs_in:
             raise SystemExit("--specs-in is required for stage=codegen-only")
