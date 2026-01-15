@@ -1,0 +1,22 @@
+[
+  {
+    "role": "Reviewer",
+    "utterance": "The definition of Metric M is unclear. Please cite where it is defined."
+  },
+  {
+    "role": "Author",
+    "utterance": "We define Metric M in the method section and can add a clearer citation."
+  },
+  {
+    "role": "Reviewer",
+    "utterance": "Provide evidence for the ablation result in Figure 1."
+  },
+  {
+    "role": "Author",
+    "utterance": "Figure 1 reports the ablation. The caption describes the setup."
+  },
+  {
+    "role": "Meta",
+    "utterance": "Please resolve open evidence requests and confirm the final status."
+  }
+]

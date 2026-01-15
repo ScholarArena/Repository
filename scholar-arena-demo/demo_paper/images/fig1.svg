@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360">
+  <rect width="640" height="360" fill="#f7f3ef" />
+  <rect x="40" y="60" width="560" height="240" rx="18" fill="#e6f2f1" stroke="#1f6f78" stroke-width="3" />
+  <text x="320" y="120" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="28" fill="#1f6f78">Figure 1</text>
+  <text x="320" y="160" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="20" fill="#2f4f4f">Ablation Results (Demo)</text>
+  <line x1="140" y1="220" x2="500" y2="220" stroke="#1f6f78" stroke-width="4" />
+  <circle cx="220" cy="220" r="10" fill="#f28b30" />
+  <circle cx="320" cy="220" r="10" fill="#f28b30" />
+  <circle cx="420" cy="220" r="10" fill="#f28b30" />
+</svg>

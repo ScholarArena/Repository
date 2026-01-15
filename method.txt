@@ -1,0 +1,243 @@
+
+\section{ScholarArena}
+\label{sec:method}
+
+% =========================
+% Fig. (System loop overview) placeholder: place near the beginning of Method.
+% =========================
+\begin{figure*}[t]
+	\centering
+	\fbox{\rule{0pt}{1.55in}\rule{0.98\textwidth}{0pt}}
+	\caption{\textbf{ScholarArena Overview (Bootstrap + Closed Loop).}
+		\textbf{Inputs:} (i) paper PDF parsed into structured context $\mathcal{C}$; (ii) a complete peer-review dialogue log $\mathcal{D}^{raw}$ (multi-party, multi-round).
+		\textbf{Offline Foundry:} invert $\mathcal{D}^{raw}$ into semantic behavior instances $\mathcal{A}^{(0)}$; compile a capability library (Primitives/Skills) via candidate--test gating; re-ground each instance with executable evidence to obtain $\mathcal{A}^{(\star)}$.
+		\textbf{SFT:} train a role-conditioned policy $\pi_\theta$ on $\mathcal{A}^{(\star)}$ with evidence-gated supervision.
+		\textbf{Online Arena:} deploy $\pi_\theta$ with the library to execute issue threads under evidence gating, producing auditable trajectories and failure signals that are fed back to the Foundry for further compilation.}
+	\label{fig:overview}
+\end{figure*}
+
+ScholarArena targets \emph{verifiable} fact-checking and \emph{executable} action orchestration in scientific discussions, with two deliberate scoping choices: (1) unlike prior multi-agent systems~\cite{chen2024agentverse}, it is designed to assist \emph{multiple participants} throughout the scientific discussion process, and (2) it does not aim to replace participants or automate human judgment on subjective dimensions such as novelty, significance, or importance. Rather than treating missing evidence or failed execution as an exception, the framework explicitly models such outcomes and forces the interaction policy to return only auditable follow-ups (e.g., clarification requests or conditional commitments) under hard evidence constraints. 
+
+Next, we will introduce our proposed behavior inversion for replayable semantic instances, the offline foundry for capability compilation and evidence re-grounding, evidence-gated role-conditional training objectives, and the online arena for ledger-based multi-agent thread execution. The overall framework is shown in Figure~\ref{fig:overview}.
+\subsection{Problem Setting and Behavior Inversion}
+\label{sec:inversion}
+
+\paragraph{Paper context.}
+Given a paper, we parse it into a structured context
+$\mathcal{C}=\{c_j\}_{j=1}^{|\mathcal{C}|}$, where each segment $c_j$ is a typed unit (e.g., paragraph, table, figure, caption, reference) with a stable identifier and locatable span for provenance.
+
+\paragraph{Raw dialogue log as the initial input.}
+Let the complete peer-review dialogue log be
+$\mathcal{D}^{raw}=\{(r_t, u_t)\}_{t=1}^{T}$,
+where $r_t\in\{\textsc{Reviewer},\textsc{Author},\textsc{Meta}\}$ and $u_t$ is the utterance at turn $t$.
+ScholarArena does \emph{not} assume $\mathcal{D}^{raw}$ is directly usable for supervised learning due to implicit references, drifting wording, and non-replayable free-text memory.
+
+\paragraph{Semantic behavior instances (via Inversion).}
+We apply an inversion model $\mathcal{I}$ to convert $\mathcal{D}^{raw}$ into replayable semantic behavior instances,
+\begin{equation}
+	\mathcal{A}^{(0)}=\mathcal{I}(\mathcal{D}^{raw},\mathcal{C}),\quad
+	a=\big(r,i,\text{intent},x,\rho^{(0)},\kappa\big),
+	\label{eq:behavior}
+\end{equation}
+where $r$ is the role, $i$ is the issue-thread identifier, $\text{intent}\in\mathcal{I}\!nt$ is a discrete policy label (e.g., \textsf{RequestEvidence}), $x$ is the localized linguistic behavior (a canonicalized short span derived from $u_t$), and $\kappa\in\{1,\dots,T\}$ preserves the total order inherited from $\mathcal{D}^{raw}$ for deterministic replay.
+$\rho^{(0)}$ is an approximate evidence pointer (possibly empty), which will be rewritten by executable provenance in the Offline Foundry (Sec.~\ref{sec:foundry}).
+This factorization ensures \emph{replayability}: thread evolution depends only on $(a,\mathcal{C})$ and the ledger state (Sec.~\ref{sec:arena}), rather than unstable free-text context.
+
+
+\subsection{Offline Foundry}
+\label{sec:foundry}
+
+The Offline Foundry builds a capability library for evidence production and converts the inverted instances into an evidence-grounded supervision set $\mathcal{A}^{(\star)}$ by rewriting $\rho$ with executable provenance. This stage precedes supervised fine-tuning and is re-invoked after Online Arena runs to incorporate newly surfaced evidence needs (Fig.~\ref{fig:overview}).
+
+\paragraph{Observation representation.}
+All system-citable evidence is represented as an Observation
+\begin{equation}
+	o=\big(\text{type},\text{payload},\text{prov},\text{status}\big),
+	\label{eq:observation}
+\end{equation}
+\noindent where $\text{prov}\subseteq\{1,\dots,|\mathcal{C}|\}$ is a set of segment identifiers in $\mathcal{C}$ that localizes the supporting evidence, and $\text{status}\in\{\texttt{ok},\texttt{missing},\texttt{fail}\}$ indicates the executor outcome: \texttt{ok} means the evidence is successfully located; \texttt{missing} means no matching evidence can be located in $\mathcal{C}$ under the issued query (often because the dialogue requests information beyond the paper, e.g., newly added experiments not present in the current version); \texttt{fail} indicates deterministic execution failure (e.g., parsing/runtime errors).
+
+\paragraph{Capability library.}
+We maintain a two-layer library $\mathcal{L}=(\mathcal{P},\mathcal{S})$.
+A \emph{Primitive} $p\in\mathcal{P}$ is a deterministic operator $p(\mathcal{C},\phi)\rightarrow o$ (e.g., span retrieval, table extraction, keyword retrieval).
+A \emph{Skill} $s\in\mathcal{S}$ is an intent-oriented deterministic orchestration
+\begin{equation}
+	s(\mathcal{C},\phi)\Rightarrow \mathrm{DAG}(\mathcal{P},\mathcal{C}\!trl)\rightarrow o,
+	\label{eq:skill_dag}
+\end{equation}
+where a directed acyclic graph (DAG) specifies an execution order that composes multiple primitives and controlled subroutines.
+$\mathcal{C}\!trl$ denotes controlled LLM subroutines used only to expand, aggregate, or normalize the \emph{observed} evidence into the fields of $o$; they cannot introduce standalone claims that bypass observation. The temperature for these subroutines is set to 0.
+
+\paragraph{Mining evidence needs.}
+For each instance $a=(r,i,\text{intent},x,\rho^{(0)},\kappa)$, we derive an evidence need through a deterministic mapper
+\begin{equation}
+	u=\Psi(\text{intent},x,\rho^{(0)}),\quad u\in\mathcal{U},
+	\label{eq:need}
+\end{equation}
+where $\Psi$ specifies what must be observed to support or refute the behavior (e.g., locating the exact definition of a metric).
+
+\paragraph{Executable artifact compilation.}
+Given a need $u$, a compiler proposes candidate artifacts $\{spec,code,tests\}$ for either a Primitive or a Skill, and we accept a candidate only if it passes sandboxed tests
+\begin{equation}
+	\begin{aligned}
+		\{spec,code,tests\} &\leftarrow \mathcal{L}_{comp}(u),\\
+		\textsc{SandboxRun}(code,tests) &\in \{\texttt{pass},\texttt{fail}\}.
+	\end{aligned}
+	\label{eq:eac}
+\end{equation}
+This test-based acceptance is consistent with execution-based evaluation and verification setups where candidate solutions are validated by running suites in a sandboxed environment~\cite{jimenez2024swebench}. If a candidate fails, the sandbox trace is used as structured feedback for iterative repair.
+
+\paragraph{Evidence re-grounding.}
+After updating the library to $\mathcal{L}^{(\star)}$, we re-ground each behavior instance by executing a skill call derived from $(\text{intent},x)$,
+\begin{equation}
+	\text{call}(a)=\Gamma(\text{intent},x),\quad
+	o\leftarrow \textsc{Exec}(\text{call}(a),\mathcal{C};\mathcal{L}^{(\star)}),
+	\label{eq:reground_exec}
+\end{equation}
+and rewrite the evidence pointer as
+\begin{align}
+		\rho^{(\star)}=\begin{cases}
+			\text{prov}(o), & o.\text{status}=\texttt{ok},\\
+			\emptyset, & \text{otherwise},
+		\end{cases}\\
+		a^{(\star)}=\big(r,i,\text{intent},x,\rho^{(\star)},\kappa\big).
+		\label{eq:rho_rewrite}
+\end{align}
+
+The resulting set $\mathcal{A}^{(\star)}=\{a^{(\star)}\}$ is grounded in executable provenance, since any non-empty $\rho^{(\star)}$ is backed by an Observation whose provenance is locatable in $\mathcal{C}$.
+
+% =========================
+% Algorithm (Offline Foundry) - compact.
+% =========================
+\begin{algorithm}[t]
+	\caption{Offline Foundry loop}
+	\label{alg:foundry}
+	\begin{algorithmic}[1]
+		\REQUIRE Context $\mathcal{C}$; instances $\mathcal{A}^{(0)}$; library $\mathcal{L}=(\mathcal{P},\mathcal{S})$; compiler $\mathcal{L}_{comp}$
+		\ENSURE Updated library $\mathcal{L}^{(\star)}$; grounded instances $\mathcal{A}^{(\star)}$
+		\STATE Mine needs: $\mathcal{F}\leftarrow \{\Psi(\text{intent},x,\rho^{(0)}) : a\in \mathcal{A}^{(0)}\}$
+		\FOR{each $u\in\mathcal{F}$}
+		\STATE $\{spec,code,tests\}\leftarrow \mathcal{L}_{comp}(u)$
+		\IF{$\textsc{SandboxRun}(code,tests)=\texttt{pass}$}
+		\STATE Add candidate to $\mathcal{P}$ or $\mathcal{S}$
+		\ELSE
+		\STATE Repair using sandbox traces
+		\ENDIF
+		\ENDFOR
+		\STATE $\mathcal{L}^{(\star)}\leftarrow (\mathcal{P},\mathcal{S})$
+		\FOR{each $a\in\mathcal{A}^{(0)}$}
+		\STATE $o\leftarrow \textsc{Exec}(\Gamma(\text{intent},x),\mathcal{C};\mathcal{L}^{(\star)})$
+		\STATE Rewrite $\rho$ by Eq.~\eqref{eq:rho_rewrite} to obtain $a^{(\star)}$
+		\ENDFOR
+		\STATE $\mathcal{A}^{(\star)}\leftarrow \{a^{(\star)}\}$
+	\end{algorithmic}
+\end{algorithm}
+
+
+\subsection{Policy Training with Evidence-Gated Supervision}
+\label{sec:training}
+
+We train a single role-conditioned policy $\pi_\theta$, where the role identifier $r$ selects the behavioral mode (\textsc{Reviewer}/\textsc{Author}/\textsc{Meta}). Training pairs are obtained by deterministically replaying issue-thread trajectories reconstructed from $\mathcal{A}^{(\star)}$.
+
+\paragraph{Thread ledger and finite-state control.}
+For each issue $i$, we maintain a minimal ledger state together with a finite-state machine (FSM) that encodes the coarse interaction phase:
+\begin{align}
+	S_i^t &= \big(\text{tag}_i,\ \mathcal{L}_i^t,\ \eta_i^t,\ \text{phase}_i^t\big), \nonumber\\
+	\mathcal{L}_i^t &= \big(\mathcal{O}_i^t,\mathcal{R}_i^t,\mathcal{K}_i^t,\text{sev}_i^t\big).
+	\label{eq:state}
+\end{align}
+$\mathcal{O}$ is the set of citable Observations, $\mathcal{R}$ is the active request set, $\mathcal{K}$ is the commitment set, $\text{sev}$ is a discrete severity label, and $\eta_i^t$ is a remaining interaction quota.
+The phase takes values in the four-state FSM
+\begin{equation}
+	\begin{aligned}
+		\text{phase}_i^t \in \{&\texttt{Open},\ \texttt{EvidencePending},\\
+		&\texttt{Negotiation},\ \texttt{Closed}\},
+	\end{aligned}
+	\label{eq:fsm}
+\end{equation}
+and is updated by a deterministic transition function $S_i^{t+1}=\mathcal{T}(S_i^t,o_t,y_t)$.
+
+\paragraph{Intent--skill planning and evidence-conditioned action.}
+Each interaction step (Move) is factorized into planning, execution, and action:
+\begin{equation}
+	\text{Move}_t=\big(\text{intent}_t,\ \text{skill\_call}_t,\ o_t,\ y_t\big).
+	\label{eq:move}
+\end{equation}
+
+Compared with free-form \emph{thought--action} traces (e.g., ReAct-style prompting \cite{yao2023react}), our policy exposes only the minimal \emph{auditable} interface: it first selects a structured intent and an executable skill call, then conditions the subsequent action on the returned Observation.
+Formally,
+\begin{equation}
+	\begin{aligned}
+		(\text{intent}_t,\text{skill\_call}_t) &\sim \pi_\theta(\cdot \mid r,S_i^t,\mathcal{C}),\\
+		o_t &\leftarrow \textsc{Exec}(\text{skill\_call}_t,\mathcal{C};\mathcal{L}^{(\star)}),
+	\end{aligned}
+	\label{eq:plan_exec}
+\end{equation}
+followed by $y_t\sim \pi_\theta(\cdot \mid r,S_i^t,\mathcal{C},o_t)$.
+The structured action $y_t$ instantiates role-specific, actionable outputs that support multi-party participation (e.g., evidence-backed responses, clarification requests, or explicit commitments), rather than unconstrained free-form text.
+
+\paragraph{Hard evidence gating.}
+Let $\mathrm{Claims}(y_t)$ be the set of atomic factual fields in $y_t$.
+Evidence gating enforces that every claim cites some available Observation identifier:
+\begin{equation}
+	\forall c \in \mathrm{Claims}(y_t),\ \exists\, j \in \mathcal{J}_i^t \ \text{s.t.}\ c\ \text{cites}\ j,
+	\label{eq:gating}
+\end{equation}
+where $\mathcal{J}_i^t$ denotes the set of citable observation identifiers associated with $\mathcal{O}_i^t\cup\{o_t\}$.
+
+If $o_t.\text{status}\neq\texttt{ok}$, decoding is additionally restricted to an admissible action subset $\mathcal{Y}_{\neg \texttt{ok}}$ (e.g., clarification request, evidence plan, or conditional commitment), which prevents unsupported factual claims. Related work has studied improving factuality and citation quality under retrieval augmentation~\cite{asai2024selfrag} and enabling fine-grained, sentence-level citations for long-context answers~\cite{zhang2025longcite}.
+
+
+\paragraph{Supervised objectives.}
+We decompose supervision into planning, action, and meta tracking:
+\begin{equation}
+	\mathcal{L}(\theta)=\mathcal{L}_{plan}+\lambda\,\mathcal{L}_{act}.
+	\label{eq:loss}
+\end{equation}
+\textbf{Planning loss} supervises intent and skill invocation:
+\begin{equation}
+	\mathcal{L}_{plan}=
+	-\sum_{(i,t)} \log \pi_\theta(\text{intent}_t,\text{skill\_call}_t \mid r,S_i^t,\mathcal{C}).
+	\label{eq:lplan}
+\end{equation}
+\textbf{Action loss} supervises evidence-conditioned action:
+\begin{equation}
+	\mathcal{L}_{act}=
+	-\sum_{(i,t)} \log \pi_\theta(y_t \mid r,S_i^t,\mathcal{C},o_t).
+	\label{eq:lact}
+\end{equation}
+
+\subsection{Online Arena}
+\label{sec:arena}
+
+The Online Arena deploys $\pi_\theta$ together with the current library $\mathcal{L}^{(\star)}$ to advance issue threads. The key design choice is that the Meta agent operates \emph{only} over ledger states and thread identifiers.
+
+\paragraph{Meta scheduling on ledger states.}
+At round $t$, the Meta agent selects a subset of active threads to advance:
+\begin{equation}
+	\mathcal{I}_t \sim \pi_\theta(\cdot \mid r=\textsc{Meta},\ \{S_i^t\}_{i\in\mathcal{I}^{act}}),
+	\label{eq:meta_schedule}
+\end{equation}
+and does not inject free-text instructions into other agents. This prevents cross-round drift by making all cross-round context auditable in $\{S_i^t\}$.
+
+\paragraph{Per-thread execution.}
+For each selected thread $i\in\mathcal{I}_t$, the acting role $r\in\{\textsc{Reviewer},\textsc{Author}\}$ executes one Move (Eq.~\eqref{eq:move}) with hard evidence gating (Eq.~\eqref{eq:gating}), followed by a deterministic ledger update $S_i^{t+1}=\mathcal{T}(S_i^t,o_t,y_t)$.
+
+% =========================
+% Algorithm (Online Arena) - compact.
+% =========================
+\begin{algorithm}[t]
+	\caption{Online Arena loop}
+	\label{alg:arena}
+	\begin{algorithmic}[1]
+		\REQUIRE Structured context $\mathcal{C}$; policy $\pi_\theta$; library $\mathcal{L}^{(\star)}$; active thread states $\{S_i^t\}$
+		\STATE Meta selects threads $\mathcal{I}_t$ by Eq.~\eqref{eq:meta_schedule}
+		\FOR{each $i\in \mathcal{I}_t$}
+		\STATE Plan: $(\text{intent}_t,\text{skill\_call}_t)\sim \pi_\theta(\cdot \mid r,S_i^t,\mathcal{C})$
+		\STATE Execute: $o_t \leftarrow \textsc{Exec}(\text{skill\_call}_t,\mathcal{C};\mathcal{L}^{(\star)})$
+		\STATE Act: $y_t\sim \pi_\theta(\cdot \mid r,S_i^t,\mathcal{C},o_t)$ subject to gating (Eq.~\eqref{eq:gating})
+		\STATE Update: $S_i^{t+1}\leftarrow \mathcal{T}(S_i^t,o_t,y_t)$
+		\ENDFOR
+		\STATE Log failures/needs from $\{o_t\}$ to refresh $\mathcal{F}$ for the next Foundry cycle
+	\end{algorithmic}
+\end{algorithm}

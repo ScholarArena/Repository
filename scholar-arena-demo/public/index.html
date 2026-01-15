@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ScholarArena Online Demo</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="ambient"></div>
+    <main class="app">
+      <header class="hero">
+        <div class="hero-text">
+          <p class="eyebrow">Evidence-Gated Multi-Agent Arena</p>
+          <h1>ScholarArena Online Demo</h1>
+          <p class="subtitle">
+            Closed LLM core (ChatGPT-5.2 Thinking) orchestrates tool calls and arena roles.
+          </p>
+        </div>
+        <div class="hero-pill">Live Pipeline</div>
+      </header>
+
+      <section class="panel controls">
+        <div class="control-grid">
+          <div class="field">
+            <label for="paperDir">Paper directory (markdown + images)</label>
+            <input id="paperDir" type="text" placeholder="/path/to/paper" />
+          </div>
+          <div class="field">
+            <label for="pdfPath">PDF path (optional)</label>
+            <input id="pdfPath" type="text" placeholder="/path/to/paper.pdf" />
+          </div>
+          <div class="actions">
+            <button id="useDemo" class="btn ghost">Use demo path</button>
+            <button id="runArena" class="btn primary">Run arena</button>
+          </div>
+        </div>
+        <div class="artifact" id="artifactPanel">
+          <div class="artifact-title">Loaded artifacts</div>
+          <div class="artifact-body" id="artifactBody">Awaiting input...</div>
+        </div>
+      </section>
+
+      <section class="grid">
+        <div class="panel steps" id="stepsPanel">
+          <div class="panel-header">
+            <h2>Pipeline</h2>
+            <span class="panel-sub">Real-time status</span>
+          </div>
+          <div class="step-list" id="stepList"></div>
+        </div>
+
+        <div class="panel agents">
+          <div class="panel-header">
+            <h2>Agent Outputs</h2>
+            <span class="panel-sub">Reviewer, Author, Meta</span>
+          </div>
+          <div class="agent-grid">
+            <div class="agent-card" data-role="Reviewer">
+              <div class="agent-head">Reviewer</div>
+              <div class="agent-body" id="agent-Reviewer">Waiting...</div>
+            </div>
+            <div class="agent-card" data-role="Author">
+              <div class="agent-head">Author</div>
+              <div class="agent-body" id="agent-Author">Waiting...</div>
+            </div>
+            <div class="agent-card" data-role="Meta">
+              <div class="agent-head">Meta</div>
+              <div class="agent-body" id="agent-Meta">Waiting...</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel logs">
+          <div class="panel-header">
+            <h2>Live Log</h2>
+            <span class="panel-sub">LLM calls, tools, evidence gating</span>
+          </div>
+          <div class="log-list" id="logList"></div>
+        </div>
+
+        <div class="panel timeline">
+          <div class="panel-header">
+            <h2>Thread Timeline</h2>
+            <span class="panel-sub">Move-by-move dynamics</span>
+          </div>
+          <div class="timeline-list" id="timelineList"></div>
+        </div>
+
+        <div class="panel threads">
+          <div class="panel-header">
+            <h2>Arena Threads</h2>
+            <span class="panel-sub">Ledger snapshots</span>
+          </div>
+          <div class="thread-list" id="threadList"></div>
+        </div>
+
+        <div class="panel library">
+          <div class="panel-header">
+            <h2>Capability Library</h2>
+            <span class="panel-sub">Primitives and skills</span>
+          </div>
+          <div class="library-body">
+            <div class="library-section">
+              <h3>Primitives</h3>
+              <ul id="primitiveList"></ul>
+            </div>
+            <div class="library-section">
+              <h3>Skills</h3>
+              <ul id="skillList"></ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="/app.js" defer></script>
+  </body>
+</html>
