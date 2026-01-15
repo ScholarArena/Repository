@@ -66,7 +66,9 @@ Failure prevention plan (recommended)
 
 Notes
 - Heuristic pre-merge is required (no full-embedding mode).
-- Default `--spec-template-mode llm-global` generates a global spec/tests template via LLM.
+- Default `--spec-template-mode none` disables templates so LLM can explore freely per cluster.
+- Spec generation retries invalid outputs (see `--spec-retries`) and skips clusters that remain invalid.
+- Network access is allowed during spec/code generation; keep tests time-bounded and stable.
 - Use `--target-cluster-size` to keep clusters small.
 - Use `--codegen-retries` to control repair attempts with test errors.
 - Use `--llm-debug-dir` to save raw LLM responses.

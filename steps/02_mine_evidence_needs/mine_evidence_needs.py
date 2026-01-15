@@ -660,6 +660,11 @@ def write_llm_debug(debug_dir, kind, payload):
 def normalize_spec_payload(payload, fallback_name):
     if not isinstance(payload, dict):
         payload = {}
+    action = payload.get("action") or "accept"
+    action = str(action).strip().lower()
+    if action not in {"accept", "skip"}:
+        action = "accept"
+    skip_reason = payload.get("skip_reason") or ""
     kind = payload.get("kind") or payload.get("candidate_kind") or "primitive"
     kind = kind.strip().lower()
     if kind not in {"primitive", "skill"}:
@@ -672,6 +677,8 @@ def normalize_spec_payload(payload, fallback_name):
     if kind == "skill" and "dag" not in spec:
         spec["dag"] = []
     normalized = {
+        "action": action,
+        "skip_reason": skip_reason,
         "kind": kind,
         "name": name,
         "need_summary": summary,
@@ -694,6 +701,97 @@ def normalize_template_payload(payload):
     return template
 
 
+SPEC_VAGUE_TERMS = {
+    "robustness",
+    "robust",
+    "novelty",
+    "significance",
+    "important",
+    "impact",
+    "overall",
+    "quality",
+    "assess",
+    "evaluate",
+    "validate",
+    "judge",
+    "soundness",
+}
+SPEC_ACTION_TERMS = {
+    "extract",
+    "locate",
+    "find",
+    "match",
+    "identify",
+    "list",
+    "count",
+    "parse",
+    "retrieve",
+    "compare",
+    "compute",
+    "check",
+    "verify",
+    "detect",
+}
+
+
+def _text_has_any(text, terms):
+    if not text:
+        return False
+    lowered = text.lower()
+    return any(term in lowered for term in terms)
+
+
+def validate_spec_payload(spec):
+    issues = []
+    if not isinstance(spec, dict):
+        return ["spec_not_dict"]
+    if spec.get("action") == "skip":
+        return issues
+    kind = spec.get("kind")
+    tests = spec.get("tests") or []
+    spec_body = spec.get("spec") or {}
+    external = bool(spec_body.get("external")) or bool(spec_body.get("source_type"))
+    if not tests:
+        issues.append("no_tests")
+    statuses = set()
+    for test in tests:
+        expected = test.get("expected") or {}
+        status = expected.get("status")
+        if status:
+            statuses.add(status)
+        context = test.get("context") or {}
+        segments = context.get("segments") or []
+        if not segments and not external:
+            issues.append("test_missing_segments")
+            break
+        for seg in segments:
+            if "id" not in seg or "text" not in seg:
+                issues.append("segment_missing_id_or_text")
+                break
+        if issues:
+            break
+    if "ok" not in statuses:
+        issues.append("no_ok_test")
+    if kind == "skill":
+        dag = spec_body.get("dag") or []
+        uses_ctrl = bool(spec_body.get("uses_controlled_llm"))
+        if not dag and not uses_ctrl:
+            issues.append("skill_without_dag_or_controlled_llm")
+    outputs = spec_body.get("outputs") or {}
+    if "prov" not in outputs:
+        issues.append("outputs_missing_prov")
+    goal_text = " ".join(
+        [
+            str(spec.get("need_summary") or ""),
+            str(spec_body.get("goal") or ""),
+            str(spec.get("name") or ""),
+        ]
+    )
+    if _text_has_any(goal_text, SPEC_VAGUE_TERMS) and not _text_has_any(goal_text, SPEC_ACTION_TERMS):
+        issues.append("vague_goal_or_summary")
+    return issues
+
+
 def build_template_prompt(cluster_samples, max_tests):
     system = (
         "You design templates for ScholarArena spec/tests. "
@@ -706,15 +804,17 @@ def build_template_prompt(cluster_samples, max_tests):
         "schema_notes": [
             "Observation = {type, payload, prov, status}. prov is a list of segment ids from context.segments.",
             "context.segments is a list of {id:int, text:str}.",
-            "Tests must be runnable without network or file I/O.",
+            "Tests must be runnable without file I/O.",
+            "Network access is allowed but tests should remain stable and time-bounded.",
         ],
         "constraints": [
             "Template must stay within the existing schema keys.",
             "Use ASCII only.",
-            "Tests must be deterministic and runnable without network.",
+            "Tests must be deterministic and runnable without file I/O.",
             "Keep tests minimal but sufficient.",
             "Prefer at least one ok test and one missing/fail test when possible.",
             "Avoid external dependencies unless absolutely required.",
+            "If external retrieval is needed, require explicit timeouts and simple checks.",
         ],
         "output_schema": {
             "spec_template": {
@@ -747,7 +847,7 @@ def build_template_prompt(cluster_samples, max_tests):
     return messages
 
 
-def build_spec_prompt(samples, max_tests, existing_names, template=None):
+def build_spec_prompt(samples, max_tests, existing_names, template=None, issues=None):
     definition = (
         "Primitive: deterministic operator p(C, phi) -> Observation. "
         "Skill: deterministic DAG over primitives and controlled LLM subroutines "
@@ -764,25 +864,27 @@ def build_spec_prompt(samples, max_tests, existing_names, template=None):
         "schema_notes": [
             "Observation = {type, payload, prov, status}. prov is a list of segment ids from context.segments.",
             "context.segments is a list of {id:int, text:str}.",
-            "Tests must be runnable without network or file I/O.",
+            "Tests must be runnable without file I/O.",
+            "Network access is allowed but should be time-bounded and stable.",
         ],
         "constraints": [
             "Choose kind=primitive when a single deterministic operator is enough.",
             "Choose kind=skill only when a DAG of primitives is required.",
-            "Tests must be small, deterministic, and runnable without network.",
+            "Tests must be small, deterministic, and runnable without file I/O.",
             "Limit tests to the provided max_tests.",
             "Prefer at least one ok test and one missing/fail test when possible.",
             "If an existing name fits, reuse it exactly.",
             "Avoid external dependencies unless absolutely required.",
             "Use ASCII only.",
+            "Only propose tasks that can be deterministically derived from context segments.",
+            "If the need is subjective or not directly computable, set action=skip with a reason.",
+            "If external retrieval is needed, mark spec.external=true and include source_type.",
         ],
         "existing_names": existing_names or [],
-        "template": template or {},
-        "template_rules": [
-            "If template is provided, follow its structure and fill concrete values.",
-            "Do not introduce new required keys beyond output_schema.",
-        ],
+        "quality_issues": issues or [],
         "output_schema": {
+            "action": "accept|skip",
+            "skip_reason": "if action=skip, provide a short reason",
             "kind": "primitive|skill",
             "name": "Title_Case identifier",
             "need_summary": "one sentence",
@@ -790,9 +892,11 @@ def build_spec_prompt(samples, max_tests, existing_names, template=None):
                 "goal": "short description",
                 "inputs": {"context": "dict", "params": "dict"},
                 "outputs": {"type": "string", "payload": "dict", "prov": "list[int]"},
-                "constraints": ["deterministic", "no network"],
+                "constraints": ["deterministic"],
                 "dag": "required for skill, list of steps (each step should reference a primitive name or controlled_llm)",
                 "uses_controlled_llm": "bool (skill only)",
+                "external": "bool (true if external retrieval is required)",
+                "source_type": "list of strings, e.g., arxiv|semantic_scholar|doi|github|web",
             },
             "tests": [
                 {
@@ -817,6 +921,12 @@ def build_spec_prompt(samples, max_tests, existing_names, template=None):
             "If tests do not need primitive_stubs, omit that field.",
         ],
     }
+    if template:
+        user["template"] = template
+        user["template_rules"] = [
+            "If template is provided, follow its structure and fill concrete values.",
+            "Do not introduce new required keys beyond output_schema.",
+        ]
     messages = [
         {"role": "system", "content": system},
         {"role": "user", "content": json.dumps(user, ensure_ascii=True, indent=2)},
@@ -831,7 +941,8 @@ def build_codegen_prompt(spec_payload, error_text=None):
     )
     constraints = [
         "Use Python 3.10 standard library only.",
-        "No network calls, no file I/O, no randomness, no time-based logic.",
+        "Network calls are allowed but must use short timeouts and simple GET/POST.",
+        "No file I/O, no randomness, no time-based logic.",
         "Provide execute(context, params, primitives=None, controlled_llm=None).",
         "Return an Observation dict with keys: type, payload, prov, status.",
         "Use runtime.ok/missing/fail from runtime.py.",
@@ -846,6 +957,8 @@ def build_codegen_prompt(spec_payload, error_text=None):
             "context is a dict; if present, context.segments is a list of {id:int, text:str}.",
             "For skills, use primitives[name] when available; if a required primitive is missing, return fail().",
             "Use controlled_llm only if spec.spec.uses_controlled_llm is true; otherwise ignore it.",
+            "If spec.spec.external is true, include payload.sources with URLs or identifiers.",
+            "If external retrieval fails or times out, return missing() or fail() with an error message.",
             "Keep code small and readable; no external dependencies.",
         ],
         "constraints": constraints,
@@ -1023,10 +1136,11 @@ def parse_args():
     parser.add_argument("--llm-debug-dir", default="")
     parser.add_argument("--spec-sample-size", type=int, default=6)
     parser.add_argument("--spec-max-tests", type=int, default=3)
+    parser.add_argument("--spec-retries", type=int, default=2)
     parser.add_argument(
         "--spec-template-mode",
-        choices=["static", "llm-global", "llm-per-cluster"],
-        default="llm-global",
+        choices=["none", "static", "llm-global", "llm-per-cluster"],
+        default="none",
     )
     parser.add_argument("--spec-template-out", default="")
     parser.add_argument("--spec-template-clusters", type=int, default=20)
@@ -1408,6 +1522,7 @@ def main():
 
             specs_out.unlink(missing_ok=True)
             requirements = set()
+            skipped_specs = 0
             for idx, cluster in enumerate(clusters, start=1):
                 if args.max_clusters and idx > args.max_clusters:
                     break
@@ -1448,44 +1563,110 @@ def main():
                             },
                         )
 
-                messages = build_spec_prompt(
-                    cluster["samples"],
-                    args.spec_max_tests,
-                    existing_names,
-                    template=template_for_cluster,
-                )
-                response = call_chat(
-                    messages,
-                    args.llm_model,
-                    llm_key,
-                    args.llm_base_url,
-                    3,
-                    0.5,
-                    logger=logger,
-                    usage_recorder=record_usage,
-                    stage="spec",
-                    meta={"cluster_id": cluster_id, "cluster_size": cluster.get("size")},
-                )
-                content = ((response.get("choices") or [{}])[0].get("message") or {}).get("content")
-                parsed = extract_json(content) or {}
-                normalized = normalize_spec_payload(parsed, fallback_name=f"Need_{cluster_id}")
-                normalized["tests"] = (normalized.get("tests") or [])[: args.spec_max_tests]
-                normalized["cluster_id"] = cluster_id
-                append_jsonl(specs_out, normalized)
-                for dep in normalized.get("dependencies", []):
-                    if dep:
-                        requirements.add(dep)
-                if args.llm_debug_dir:
-                    write_llm_debug(
-                        args.llm_debug_dir,
-                        "spec",
-                        {
+                issues = []
+                accepted = False
+                for attempt in range(1, args.spec_retries + 1):
+                    messages = build_spec_prompt(
+                        cluster["samples"],
+                        args.spec_max_tests,
+                        existing_names,
+                        template=template_for_cluster,
+                        issues=issues,
+                    )
+                    response = call_chat(
+                        messages,
+                        args.llm_model,
+                        llm_key,
+                        args.llm_base_url,
+                        3,
+                        0.5,
+                        logger=logger,
+                        usage_recorder=record_usage,
+                        stage="spec",
+                        meta={
                             "cluster_id": cluster_id,
-                            "samples": cluster["samples"],
-                            "messages": messages,
-                            "response": response,
-                            "parsed": parsed,
-                            "normalized": normalized,
+                            "cluster_size": cluster.get("size"),
+                            "attempt": attempt,
+                        },
+                    )
+                    content = ((response.get("choices") or [{}])[0].get("message") or {}).get("content")
+                    parsed = extract_json(content) or {}
+                    normalized = normalize_spec_payload(parsed, fallback_name=f"Need_{cluster_id}")
+                    normalized["tests"] = (normalized.get("tests") or [])[: args.spec_max_tests]
+                    normalized["cluster_id"] = cluster_id
+                    issues = validate_spec_payload(normalized)
+                    if normalized.get("action") == "skip":
+                        skipped_specs += 1
+                        logger(
+                            f"[spec] cluster={cluster_id} action=skip reason={normalized.get('skip_reason')}"
+                        )
+                        log_event(
+                            events_log,
+                            {
+                                "event": "spec_skip",
+                                "cluster_id": cluster_id,
+                                "reason": normalized.get("skip_reason"),
+                            },
+                        )
+                        if args.llm_debug_dir:
+                            write_llm_debug(
+                                args.llm_debug_dir,
+                                "spec",
+                                {
+                                    "cluster_id": cluster_id,
+                                    "samples": cluster["samples"],
+                                    "messages": messages,
+                                    "response": response,
+                                    "parsed": parsed,
+                                    "normalized": normalized,
+                                    "issues": issues,
+                                },
+                            )
+                        break
+                    if not issues:
+                        append_jsonl(specs_out, normalized)
+                        for dep in normalized.get("dependencies", []):
+                            if dep:
+                                requirements.add(dep)
+                        if args.llm_debug_dir:
+                            write_llm_debug(
+                                args.llm_debug_dir,
+                                "spec",
+                                {
+                                    "cluster_id": cluster_id,
+                                    "samples": cluster["samples"],
+                                    "messages": messages,
+                                    "response": response,
+                                    "parsed": parsed,
+                                    "normalized": normalized,
+                                    "issues": issues,
+                                },
+                            )
+                        accepted = True
+                        break
+                    if args.llm_debug_dir:
+                        write_llm_debug(
+                            args.llm_debug_dir,
+                            "spec",
+                            {
+                                "cluster_id": cluster_id,
+                                "samples": cluster["samples"],
+                                "messages": messages,
+                                "response": response,
+                                "parsed": parsed,
+                                "normalized": normalized,
+                                "issues": issues,
+                            },
+                        )
+                if not accepted and issues:
+                    skipped_specs += 1
+                    logger(f"[spec] cluster={cluster_id} rejected issues={issues}")
+                    log_event(
+                        events_log,
+                        {
+                            "event": "spec_reject",
+                            "cluster_id": cluster_id,
+                            "issues": issues,
                         },
                     )
                 if not args.quiet and args.log_every and idx % args.log_every == 0:
@@ -1497,13 +1678,14 @@ def main():
 
             if args.stage == "spec":
                 spec_duration = time.time() - spec_start
-                logger(f"[stage] spec end duration={spec_duration:.2f}s")
+                logger(f"[stage] spec end duration={spec_duration:.2f}s skipped={skipped_specs}")
                 log_event(
                     events_log,
                     {
                         "event": "stage_end",
                         "stage": "spec",
                         "duration_sec": round(spec_duration, 3),
+                        "skipped": skipped_specs,
                     },
                 )
                 summary_payload = {
