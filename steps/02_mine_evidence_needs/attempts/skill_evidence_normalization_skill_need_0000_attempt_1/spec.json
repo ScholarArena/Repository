@@ -1,0 +1,114 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "skill",
+  "name": "Evidence_Normalization_Skill",
+  "need_summary": "To normalize evidence from context segments for specific academic discussion targets using controlled LLM.",
+  "spec": {
+    "goal": "Extract and provide a normalized observation for a given target type based on context segments.",
+    "inputs": {
+      "context": "dict with key 'segments' as a list of {id:int, text:str}",
+      "params": "dict with key 'target_type' as a string specifying the evidence target (e.g., 'Author_Rebuttal')"
+    },
+    "outputs": {
+      "type": "evidence_normalized",
+      "payload": {
+        "observation": "string describing the normalized evidence",
+        "target": "string from params.target_type"
+      },
+      "prov": "list[int] of segment ids used"
+    },
+    "constraints": [
+      "deterministic"
+    ],
+    "dag": [
+      {
+        "step": "generate_prompt",
+        "primitive": "FormatPrompt",
+        "inputs": {
+          "segments": "context.segments",
+          "target_type": "params.target_type"
+        },
+        "output": "prompt_text"
+      },
+      {
+        "step": "call_llm",
+        "controlled_llm": true,
+        "inputs": {
+          "prompt": "prompt_text from previous step"
+        },
+        "output": "llm_response"
+      },
+      {
+        "step": "parse_response",
+        "primitive": "ParseObservation",
+        "inputs": {
+          "response": "llm_response",
+          "target_type": "params.target_type",
+          "segment_ids": "list of ids from context.segments"
+        },
+        "output": "observation_output"
+      }
+    ],
+    "uses_controlled_llm": true,
+    "external": false,
+    "source_type": []
+  },
+  "tests": [
+    {
+      "name": "ok_rebuttal_inconsistency",
+      "context": {
+        "segments": [
+          {
+            "id": 1,
+            "text": "Original proof cites Theorem A to conclude result X."
+          },
+          {
+            "id": 2,
+            "text": "Author rebuttal states that Theorem B was used instead, but does not address the flaw in the original argument."
+          }
+        ]
+      },
+      "params": {
+        "target_type": "Author_Rebuttal"
+      },
+      "expected": {
+        "status": "ok",
+        "prov_contains": [
+          1,
+          2
+        ],
+        "payload_keys": [
+          "observation",
+          "target"
+        ]
+      }
+    },
+    {
+      "name": "missing_experiment_data",
+      "context": {
+        "segments": [
+          {
+            "id": 1,
+            "text": "The paper discusses general machine learning concepts."
+          }
+        ]
+      },
+      "params": {
+        "target_type": "Magpie_Dataset_Experiment"
+      },
+      "expected": {
+        "status": "missing",
+        "prov_contains": [],
+        "payload_keys": [
+          "observation",
+          "target"
+        ]
+      }
+    }
+  ],
+  "dependencies": [
+    "openai"
+  ],
+  "cluster_id": "need_0000"
+}

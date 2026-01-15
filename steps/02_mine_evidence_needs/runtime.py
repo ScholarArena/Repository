@@ -10,18 +10,34 @@ def make_observation(obs_type, payload, prov, status):
     }
 
 
-def ok(payload=None, prov=None, obs_type="evidence"):
+def ok(payload=None, prov=None, obs_type="evidence", **kwargs):
+    if "type" in kwargs and obs_type == "evidence":
+        obs_type = kwargs["type"]
+    if prov is None and "prov" in kwargs:
+        prov = kwargs["prov"]
+    if payload is None and "payload" in kwargs:
+        payload = kwargs["payload"]
     return make_observation(obs_type, payload, prov, "ok")
 
 
-def missing(reason="", obs_type="evidence"):
-    payload = {"reason": reason} if reason else {}
-    return make_observation(obs_type, payload, [], "missing")
+def missing(reason="", obs_type="evidence", payload=None, prov=None, **kwargs):
+    if "type" in kwargs and obs_type == "evidence":
+        obs_type = kwargs["type"]
+    if payload is None:
+        payload = {"reason": reason} if reason else {}
+    if prov is None:
+        prov = []
+    return make_observation(obs_type, payload, prov, "missing")
 
 
-def fail(error="", obs_type="evidence"):
-    payload = {"error": error} if error else {}
-    return make_observation(obs_type, payload, [], "fail")
+def fail(error="", obs_type="evidence", payload=None, prov=None, **kwargs):
+    if "type" in kwargs and obs_type == "evidence":
+        obs_type = kwargs["type"]
+    if payload is None:
+        payload = {"error": error} if error else {}
+    if prov is None:
+        prov = []
+    return make_observation(obs_type, payload, prov, "fail")
 
 
 def normalize_observation(obj, default_type="evidence"):
@@ -48,9 +64,17 @@ def normalize_observation(obj, default_type="evidence"):
     return data
 
 
-def controlled_llm_stub(prompt, evidence):
-    if not evidence:
-        raise ValueError("controlled_llm requires evidence")
+def controlled_llm_stub(prompt=None, evidence=None, **kwargs):
+    if evidence is None:
+        evidence = kwargs.get("evidence")
+    if evidence is None:
+        evidence = kwargs.get("context")
+    if evidence is None:
+        evidence = kwargs.get("segments")
+    if evidence is None:
+        evidence = prompt
+    if evidence is None:
+        raise ValueError("controlled_llm requires evidence or prompt")
     evidence_copy = copy.deepcopy(evidence)
     if isinstance(evidence_copy, list):
         summary = " | ".join(str(item) for item in evidence_copy)

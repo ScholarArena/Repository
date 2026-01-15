@@ -1,0 +1,53 @@
+[
+  {
+    "name": "ok_rebuttal_inconsistency",
+    "context": {
+      "segments": [
+        {
+          "id": 1,
+          "text": "Original proof cites Theorem A to conclude result X."
+        },
+        {
+          "id": 2,
+          "text": "Author rebuttal states that Theorem B was used instead, but does not address the flaw in the original argument."
+        }
+      ]
+    },
+    "params": {
+      "target_type": "Author_Rebuttal"
+    },
+    "expected": {
+      "status": "ok",
+      "prov_contains": [
+        1,
+        2
+      ],
+      "payload_keys": [
+        "observation",
+        "target"
+      ]
+    }
+  },
+  {
+    "name": "missing_experiment_data",
+    "context": {
+      "segments": [
+        {
+          "id": 1,
+          "text": "The paper discusses general machine learning concepts."
+        }
+      ]
+    },
+    "params": {
+      "target_type": "Magpie_Dataset_Experiment"
+    },
+    "expected": {
+      "status": "missing",
+      "prov_contains": [],
+      "payload_keys": [
+        "observation",
+        "target"
+      ]
+    }
+  }
+]

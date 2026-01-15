@@ -657,7 +657,7 @@ def write_llm_debug(debug_dir, kind, payload):
         f.write(json.dumps(payload, ensure_ascii=True) + "\n")
 
 
-def normalize_spec_payload(payload, fallback_name):
+def normalize_spec_payload(payload, fallback_name, allow_primitive_specs=True):
     if not isinstance(payload, dict):
         payload = {}
     action = payload.get("action") or "accept"
@@ -676,6 +676,15 @@ def normalize_spec_payload(payload, fallback_name):
     dependencies = payload.get("dependencies") if isinstance(payload.get("dependencies"), list) else []
     if kind == "skill" and "dag" not in spec:
         spec["dag"] = []
+    primitive_specs_raw = (
+        payload.get("primitive_specs") if allow_primitive_specs and isinstance(payload.get("primitive_specs"), list) else []
+    )
+    primitive_specs = []
+    for idx, prim in enumerate(primitive_specs_raw, start=1):
+        prim_norm = normalize_spec_payload(prim, f"{name}_Primitive_{idx}", allow_primitive_specs=False)
+        prim_norm["kind"] = "primitive"
+        prim_norm["primitive_specs"] = []
+        primitive_specs.append(prim_norm)
     normalized = {
         "action": action,
         "skip_reason": skip_reason,
@@ -685,6 +694,7 @@ def normalize_spec_payload(payload, fallback_name):
         "spec": spec,
         "tests": tests,
         "dependencies": [str(dep) for dep in dependencies if dep],
+        "primitive_specs": primitive_specs,
     }
     return normalized
 
@@ -741,7 +751,21 @@ def _text_has_any(text, terms):
     return any(term in lowered for term in terms)
 
 
-def validate_spec_payload(spec):
+def extract_dag_primitives(dag):
+    names = []
+    for step in dag or []:
+        if not isinstance(step, dict):
+            continue
+        if "primitive" in step and step.get("primitive"):
+            names.append(str(step.get("primitive")))
+            continue
+        if step.get("type") == "primitive" and step.get("name"):
+            names.append(str(step.get("name")))
+            continue
+    return sorted(set(names))
+
+
+def validate_spec_payload(spec, existing_primitives=None):
     issues = []
     if not isinstance(spec, dict):
         return ["spec_not_dict"]
@@ -751,6 +775,7 @@ def validate_spec_payload(spec):
     tests = spec.get("tests") or []
     spec_body = spec.get("spec") or {}
     external = bool(spec_body.get("external")) or bool(spec_body.get("source_type"))
+    existing_primitives = set(existing_primitives or [])
     if not tests:
         issues.append("no_tests")
     statuses = set()
@@ -777,6 +802,25 @@ def validate_spec_payload(spec):
         uses_ctrl = bool(spec_body.get("uses_controlled_llm"))
         if not dag and not uses_ctrl:
             issues.append("skill_without_dag_or_controlled_llm")
+        dag_prims = extract_dag_primitives(dag)
+        if dag_prims:
+            missing_prims = [name for name in dag_prims if name not in existing_primitives]
+            primitive_specs = spec.get("primitive_specs") or []
+            prim_names = {prim.get("name") for prim in primitive_specs if prim.get("name")}
+            if missing_prims and not primitive_specs:
+                issues.append("missing_primitive_specs")
+            else:
+                missing_specs = [name for name in missing_prims if name not in prim_names]
+                if missing_specs:
+                    issues.append("missing_primitive_specs_for:" + ",".join(sorted(missing_specs)))
+            for test in tests:
+                stubs = test.get("primitive_stubs") or {}
+                if not stubs:
+                    issues.append("missing_primitive_stubs")
+                    break
+                if any(name not in stubs for name in dag_prims):
+                    issues.append("incomplete_primitive_stubs")
+                    break
     outputs = spec_body.get("outputs") or {}
     if "prov" not in outputs:
         issues.append("outputs_missing_prov")
@@ -789,6 +833,13 @@ def validate_spec_payload(spec):
     )
     if _text_has_any(goal_text, SPEC_VAGUE_TERMS) and not _text_has_any(goal_text, SPEC_ACTION_TERMS):
         issues.append("vague_goal_or_summary")
+    primitive_specs = spec.get("primitive_specs") or []
+    for prim in primitive_specs:
+        prim_issues = validate_spec_payload(prim, existing_primitives=existing_primitives)
+        if prim_issues:
+            name = prim.get("name") or "unknown"
+            issues.append(f"primitive_spec_invalid:{name}:{','.join(prim_issues)}")
+            break
     return issues
 
 
@@ -847,7 +898,7 @@ def build_template_prompt(cluster_samples, max_tests):
     return messages
 
 
-def build_spec_prompt(samples, max_tests, existing_names, template=None, issues=None):
+def build_spec_prompt(samples, max_tests, existing_names, existing_primitives, template=None, issues=None):
     definition = (
         "Primitive: deterministic operator p(C, phi) -> Observation. "
         "Skill: deterministic DAG over primitives and controlled LLM subroutines "
@@ -882,8 +933,11 @@ def build_spec_prompt(samples, max_tests, existing_names, template=None, issues=
             "If external retrieval is needed, mark spec.external=true and include source_type.",
             "Do not create subjective scores or judgments; only objective retrieval or computation.",
             "Generate tests with explicit expected outputs that follow from the given context or retrieval.",
+            "If kind=skill and DAG references primitives not in existing_primitives, include primitive_specs with tests.",
+            "Skill tests must include primitive_stubs for all referenced primitives.",
         ],
         "existing_names": existing_names or [],
+        "existing_primitives": existing_primitives or [],
         "quality_issues": issues or [],
         "output_schema": {
             "action": "accept|skip",
@@ -901,6 +955,32 @@ def build_spec_prompt(samples, max_tests, existing_names, template=None, issues=
                 "external": "bool (true if external retrieval is required)",
                 "source_type": "list of strings, e.g., arxiv|semantic_scholar|doi|github|web",
             },
+            "primitive_specs": [
+                {
+                    "kind": "primitive",
+                    "name": "Title_Case identifier",
+                    "need_summary": "one sentence",
+                    "spec": {
+                        "goal": "short description",
+                        "inputs": {"context": "dict", "params": "dict"},
+                        "outputs": {"type": "string", "payload": "dict", "prov": "list[int]"},
+                        "constraints": ["deterministic"],
+                    },
+                    "tests": [
+                        {
+                            "name": "short test name",
+                            "context": {"segments": [{"id": 1, "text": "..."}]},
+                            "params": {"query": "value"},
+                            "expected": {
+                                "status": "ok|missing|fail",
+                                "prov_contains": [1],
+                                "payload_keys": ["key1", "key2"],
+                            },
+                        }
+                    ],
+                    "dependencies": ["pip_package_name"],
+                }
+            ],
             "tests": [
                 {
                     "name": "short test name",
@@ -952,6 +1032,8 @@ def build_codegen_prompt(spec_payload, error_text=None):
         "If inputs are missing or evidence not found, return missing().",
         "Never raise; catch errors and return fail(error=...).",
         "Do not print or log.",
+        "Primitive functions must be called as primitives[name](context, params).",
+        "controlled_llm must be called as controlled_llm(prompt, evidence).",
     ]
     user = {
         "task": "Generate code that satisfies the spec and tests.",
@@ -963,6 +1045,7 @@ def build_codegen_prompt(spec_payload, error_text=None):
             "If spec.spec.external is true, include payload.sources with URLs or identifiers.",
             "If external retrieval fails or times out, return missing() or fail() with an error message.",
             "Keep code small and readable; no external dependencies.",
+            "When calling primitives, pass context and params dicts (not arbitrary kwargs).",
         ],
         "constraints": constraints,
         "error_context": error_text or "",
@@ -1029,7 +1112,7 @@ def make_stub_primitives(stubs):
         return primitives
     for name, obs in stubs.items():
         obs_copy = json.loads(json.dumps(obs))
-        def _fn(context, params, _obs=obs_copy):
+        def _fn(*args, **kwargs):
             return _obs
         primitives[name] = _fn
     return primitives
@@ -1465,9 +1548,15 @@ def main():
                 raise SystemExit("Missing API key for LLM. Provide --llm-api-key or set OPENAI_API_KEY.")
 
             existing_names = []
+            existing_primitives = []
             if library_index_out.exists():
                 existing_entries = read_json_or_jsonl(library_index_out)
                 existing_names = [item.get("name") for item in existing_entries if item.get("name")]
+                existing_primitives = [
+                    item.get("name")
+                    for item in existing_entries
+                    if item.get("name") and item.get("kind") == "primitive"
+                ]
 
             spec_template = {}
             if args.spec_template_out:
@@ -1573,6 +1662,7 @@ def main():
                         cluster["samples"],
                         args.spec_max_tests,
                         existing_names,
+                        existing_primitives,
                         template=template_for_cluster,
                         issues=issues,
                     )
@@ -1597,7 +1687,7 @@ def main():
                     normalized = normalize_spec_payload(parsed, fallback_name=f"Need_{cluster_id}")
                     normalized["tests"] = (normalized.get("tests") or [])[: args.spec_max_tests]
                     normalized["cluster_id"] = cluster_id
-                    issues = validate_spec_payload(normalized)
+                    issues = validate_spec_payload(normalized, existing_primitives=existing_primitives)
                     if normalized.get("action") == "skip":
                         skipped_specs += 1
                         logger(
@@ -1728,11 +1818,35 @@ def main():
             },
         )
 
+    existing_primitives = set()
+    if library_index_out.exists():
+        existing_entries = read_json_or_jsonl(library_index_out)
+        for entry in existing_entries:
+            if entry.get("kind") == "primitive" and entry.get("name"):
+                existing_primitives.add(entry.get("name"))
+
+    spec_queue = []
+    seen_primitives = set(existing_primitives)
+    for spec in specs:
+        prim_specs = spec.get("primitive_specs") or []
+        for idx, prim in enumerate(prim_specs, start=1):
+            prim_name = prim.get("name")
+            if prim_name and prim_name in seen_primitives:
+                continue
+            prim_copy = dict(prim)
+            prim_copy["kind"] = "primitive"
+            prim_copy["cluster_id"] = f"{spec.get('cluster_id', 'cluster')}__prim_{idx:02d}"
+            prim_copy["parent_cluster_id"] = spec.get("cluster_id")
+            spec_queue.append(prim_copy)
+            if prim_name:
+                seen_primitives.add(prim_name)
+        spec_queue.append(spec)
+
     codegen_start = time.time()
-    logger(f"[stage] codegen start artifacts={len(specs)}")
+    logger(f"[stage] codegen start artifacts={len(spec_queue)}")
     log_event(
         events_log,
-        {"event": "stage_start", "stage": "codegen", "artifacts": len(specs)},
+        {"event": "stage_start", "stage": "codegen", "artifacts": len(spec_queue)},
     )
 
     attempts_dir = out_dir / "attempts"
@@ -1742,13 +1856,18 @@ def main():
     env = os.environ.copy()
     env["PYTHONPATH"] = str(out_dir) + os.pathsep + env.get("PYTHONPATH", "")
 
-    for idx, spec in enumerate(specs, start=1):
+    for idx, spec in enumerate(spec_queue, start=1):
         if args.max_clusters and idx > args.max_clusters:
             break
+        if spec.get("action") == "skip":
+            logger(f"[codegen] artifact skipped name={spec.get('name')}")
+            continue
         kind = spec.get("kind", "primitive")
         name = spec.get("name") or f"Need_{idx:04d}"
         cluster_id = spec.get("cluster_id") or f"need_{idx:04d}"
         artifact_id = f"{kind}_{slugify(name)}_{cluster_id}"
+        spec_for_codegen = dict(spec)
+        spec_for_codegen.pop("primitive_specs", None)
         tests = spec.get("tests") or []
         if not tests:
             append_jsonl(
@@ -1777,7 +1896,7 @@ def main():
             tests_path.write_text(json.dumps(tests, ensure_ascii=True, indent=2), encoding="utf-8")
             write_tests_runner(test_runner_path)
 
-            messages = build_codegen_prompt(spec, error_text=last_error)
+            messages = build_codegen_prompt(spec_for_codegen, error_text=last_error)
             response = call_chat(
                 messages,
                 args.llm_model,
@@ -1868,8 +1987,8 @@ def main():
             last_error = error_text
 
         if not args.quiet and args.log_every and idx % args.log_every == 0:
-            print(f"[codegen] {idx}/{len(specs)} artifacts", file=sys.stderr)
-            logger(f"[codegen] {idx}/{len(specs)} artifacts")
+            print(f"[codegen] {idx}/{len(spec_queue)} artifacts", file=sys.stderr)
+            logger(f"[codegen] {idx}/{len(spec_queue)} artifacts")
 
     codegen_duration = time.time() - codegen_start
     logger(f"[stage] codegen end duration={codegen_duration:.2f}s")

@@ -1,0 +1,98 @@
+[
+  {
+    "name": "test_hyperparameter_justification_found",
+    "context": {
+      "segments": [
+        {
+          "id": 1,
+          "text": "We chose the numerical values 1.25 and 3 grids based on a grid search optimization and prior studies that showed optimal performance at these settings."
+        },
+        {
+          "id": 2,
+          "text": "Other parameters were set to default."
+        }
+      ]
+    },
+    "params": {
+      "aspect": "hyperparameter_choice"
+    },
+    "primitive_stubs": {
+      "Extract_Aspect_Segments": {
+        "type": "text",
+        "payload": {
+          "text": "We chose the numerical values 1.25 and 3 grids based on a grid search optimization and prior studies that showed optimal performance at these settings."
+        },
+        "prov": [
+          1
+        ],
+        "status": "ok"
+      }
+    },
+    "expected": {
+      "status": "ok",
+      "prov_contains": [
+        1
+      ],
+      "payload_keys": [
+        "evidence_found",
+        "summary",
+        "relevant_segments"
+      ],
+      "payload": {
+        "evidence_found": true,
+        "summary": "Justification provided based on grid search and prior studies.",
+        "relevant_segments": [
+          1
+        ]
+      }
+    }
+  },
+  {
+    "name": "test_ablation_scope_bias_missing",
+    "context": {
+      "segments": [
+        {
+          "id": 3,
+          "text": "The ablation study was conducted in a single maze environment to evaluate component contributions."
+        },
+        {
+          "id": 4,
+          "text": "Results showed improved performance."
+        }
+      ]
+    },
+    "params": {
+      "aspect": "ablation_scope"
+    },
+    "primitive_stubs": {
+      "Extract_Aspect_Segments": {
+        "type": "text",
+        "payload": {
+          "text": "The ablation study was conducted in a single maze environment to evaluate component contributions."
+        },
+        "prov": [
+          3
+        ],
+        "status": "ok"
+      }
+    },
+    "expected": {
+      "status": "missing",
+      "prov_contains": [
+        3
+      ],
+      "payload_keys": [
+        "evidence_found",
+        "summary",
+        "relevant_segments"
+      ],
+      "payload": {
+        "evidence_found": false,
+        "summary": "No mention of bias or limitations due to single environment scope.",
+        "relevant_segments": [
+          3
+        ]
+      }
+    }
+  }
+]

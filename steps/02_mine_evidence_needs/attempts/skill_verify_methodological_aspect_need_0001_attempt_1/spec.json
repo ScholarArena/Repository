@@ -1,0 +1,153 @@
+{
+  "action": "accept",
+  "skip_reason": "",
+  "kind": "skill",
+  "name": "Verify_Methodological_Aspect",
+  "need_summary": "Check for evidence supporting justifications or explanations of methodological choices, terminology, or contributions in the paper.",
+  "spec": {
+    "goal": "Determine if the context segments provide clear evidence or explanation for a specified methodological aspect.",
+    "inputs": {
+      "context": "dict with 'segments' list of {id:int, text:str}",
+      "params": "dict with 'aspect' string describing what to verify, e.g., 'hyperparameter_choice', 'ablation_scope', 'terminology_clarification', 'contribution_summary'"
+    },
+    "outputs": {
+      "type": "verification_result",
+      "payload": {
+        "evidence_found": "bool",
+        "summary": "str",
+        "relevant_segments": "list[int]"
+      },
+      "prov": "list[int]"
+    },
+    "constraints": [
+      "deterministic"
+    ],
+    "dag": [
+      {
+        "id": 1,
+        "type": "primitive",
+        "name": "Extract_Aspect_Segments",
+        "inputs": [
+          "context.segments",
+          "params.aspect"
+        ],
+        "output": "extracted_text with prov"
+      },
+      {
+        "id": 2,
+        "type": "controlled_llm",
+        "name": "Assess_Justification",
+        "inputs": [
+          "step1.output",
+          "params.aspect"
+        ],
+        "prompt": "Given the extracted text, determine if there is a clear justification, explanation, or definition for the aspect '{params.aspect}'. Output a JSON object with 'evidence_found' (boolean) and 'reason' (string summarizing the evidence or lack thereof). Only use information from the provided text."
+      }
+    ],
+    "uses_controlled_llm": true,
+    "external": false,
+    "source_type": []
+  },
+  "tests": [
+    {
+      "name": "test_hyperparameter_justification_found",
+      "context": {
+        "segments": [
+          {
+            "id": 1,
+            "text": "We chose the numerical values 1.25 and 3 grids based on a grid search optimization and prior studies that showed optimal performance at these settings."
+          },
+          {
+            "id": 2,
+            "text": "Other parameters were set to default."
+          }
+        ]
+      },
+      "params": {
+        "aspect": "hyperparameter_choice"
+      },
+      "primitive_stubs": {
+        "Extract_Aspect_Segments": {
+          "type": "text",
+          "payload": {
+            "text": "We chose the numerical values 1.25 and 3 grids based on a grid search optimization and prior studies that showed optimal performance at these settings."
+          },
+          "prov": [
+            1
+          ],
+          "status": "ok"
+        }
+      },
+      "expected": {
+        "status": "ok",
+        "prov_contains": [
+          1
+        ],
+        "payload_keys": [
+          "evidence_found",
+          "summary",
+          "relevant_segments"
+        ],
+        "payload": {
+          "evidence_found": true,
+          "summary": "Justification provided based on grid search and prior studies.",
+          "relevant_segments": [
+            1
+          ]
+        }
+      }
+    },
+    {
+      "name": "test_ablation_scope_bias_missing",
+      "context": {
+        "segments": [
+          {
+            "id": 3,
+            "text": "The ablation study was conducted in a single maze environment to evaluate component contributions."
+          },
+          {
+            "id": 4,
+            "text": "Results showed improved performance."
+          }
+        ]
+      },
+      "params": {
+        "aspect": "ablation_scope"
+      },
+      "primitive_stubs": {
+        "Extract_Aspect_Segments": {
+          "type": "text",
+          "payload": {
+            "text": "The ablation study was conducted in a single maze environment to evaluate component contributions."
+          },
+          "prov": [
+            3
+          ],
+          "status": "ok"
+        }
+      },
+      "expected": {
+        "status": "missing",
+        "prov_contains": [
+          3
+        ],
+        "payload_keys": [
+          "evidence_found",
+          "summary",
+          "relevant_segments"
+        ],
+        "payload": {
+          "evidence_found": false,
+          "summary": "No mention of bias or limitations due to single environment scope.",
+          "relevant_segments": [
+            3
+          ]
+        }
+      }
+    }
+  ],
+  "dependencies": [
+    "openai"
+  ],
+  "cluster_id": "need_0001"
+}
