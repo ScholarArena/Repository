@@ -866,6 +866,7 @@ def build_spec_prompt(samples, max_tests, existing_names, template=None, issues=
             "context.segments is a list of {id:int, text:str}.",
             "Tests must be runnable without file I/O.",
             "Network access is allowed but should be time-bounded and stable.",
+            "Ignore subjective factors (novelty, significance, robustness, importance).",
         ],
         "constraints": [
             "Choose kind=primitive when a single deterministic operator is enough.",
@@ -879,6 +880,8 @@ def build_spec_prompt(samples, max_tests, existing_names, template=None, issues=
             "Only propose tasks that can be deterministically derived from context segments.",
             "If the need is subjective or not directly computable, set action=skip with a reason.",
             "If external retrieval is needed, mark spec.external=true and include source_type.",
+            "Do not create subjective scores or judgments; only objective retrieval or computation.",
+            "Generate tests with explicit expected outputs that follow from the given context or retrieval.",
         ],
         "existing_names": existing_names or [],
         "quality_issues": issues or [],
