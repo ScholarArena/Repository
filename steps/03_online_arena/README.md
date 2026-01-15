@@ -45,6 +45,7 @@ Command (single policy)
 python steps/03_online_arena/run_online_arena.py \
   --acts-in data/processed/issues.sample.jsonl \
   --contexts-dir data/processed/contexts \
+  --papers-md-dir data/raw/papers_md \
   --intents-in steps/01_flatten_semantic_acts/intents.jsonl \
   --policy-model gpt-4o-mini \
   --policy-base-url https://api.openai.com/v1
@@ -78,5 +79,6 @@ Policy swap config example (`steps/03_online_arena/policy_swap.json`)
 
 Notes / Missing prerequisites
 - Paper contexts (`C`) are required for tool execution. If you do not have parsed PDF segments, tools will return `missing` and gating will force clarification-only actions.
+- As a fallback, the runner can parse `data/raw/papers_md/<forum_id>/auto/<forum_id>.md` when `--papers-md-dir` is provided.
 - PlanAcc requires re-grounded supervision with explicit `(intent, skill_call)` targets (i.e., `A^{(*)}`); the current pipeline does not generate these yet.
 - Policy swap across GPT/Claude/Gemini/etc. assumes OpenAI-compatible endpoints or provider-specific adapters.

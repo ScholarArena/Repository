@@ -1,6 +1,7 @@
 import argparse
 import json
 import os
+import re
 import sys
 import time
 from pathlib import Path
@@ -61,6 +62,8 @@ def load_context_for_thread(
     cache: Dict[str, Dict[str, Any]],
     contexts_dir: Optional[str],
     default_context_path: Optional[str],
+    papers_md_dir: Optional[str],
+    md_max_chars: int,
 ) -> Dict[str, Any]:
     if default_context_path:
         if default_context_path in cache:
@@ -86,6 +89,14 @@ def load_context_for_thread(
             context = load_context_file(path)
             cache[path] = context
             return context
+    if papers_md_dir and context_id:
+        md_path = os.path.join(papers_md_dir, context_id, "auto", f"{context_id}.md")
+        if os.path.exists(md_path):
+            if md_path in cache:
+                return cache[md_path]
+            context = load_markdown_context(md_path, md_max_chars)
+            cache[md_path] = context
+            return context
     return {"segments": []}
 
 
@@ -97,6 +108,63 @@ def load_context_file(path: str) -> Dict[str, Any]:
                 segments.append({"id": record["id"], "text": record["text"]})
         return {"segments": segments}
     return read_json(path)
+
+
+def load_markdown_context(path: str, max_chars: int) -> Dict[str, Any]:
+    text = Path(path).read_text(encoding="utf-8", errors="ignore")
+    segments = parse_markdown_segments(text, max_chars)
+    return {"segments": segments}
+
+
+def parse_markdown_segments(text: str, max_chars: int) -> List[Dict[str, Any]]:
+    lines = text.splitlines()
+    segments: List[Dict[str, Any]] = []
+    buffer: List[str] = []
+    current_section = None
+
+    def flush() -> None:
+        nonlocal buffer
+        if not buffer:
+            return
+        chunk = "\n".join(buffer).strip()
+        buffer = []
+        if not chunk:
+            return
+        for part in split_long_text(chunk, max_chars):
+            segments.append({"id": len(segments) + 1, "text": part, "section": current_section})
+
+    for line in lines:
+        heading = parse_heading(line)
+        if heading:
+            flush()
+            current_section = heading
+            segments.append({"id": len(segments) + 1, "text": heading, "section": current_section})
+            continue
+        if not line.strip():
+            flush()
+            continue
+        buffer.append(line)
+    flush()
+    return segments
+
+
+def parse_heading(line: str) -> Optional[str]:
+    match = re.match(r"^(#{1,6})\s+(.*)$", line.strip())
+    if not match:
+        return None
+    return match.group(2).strip()
+
+
+def split_long_text(text: str, max_chars: int) -> List[str]:
+    if max_chars <= 0 or len(text) <= max_chars:
+        return [text]
+    parts = []
+    start = 0
+    while start < len(text):
+        end = min(len(text), start + max_chars)
+        parts.append(text[start:end])
+        start = end
+    return parts
 
 
 def enforce_gating(action: Dict[str, Any], observation: Dict[str, Any], allowed_ids: List[str]) -> Dict[str, Any]:
@@ -177,7 +245,14 @@ def run_arena(args: argparse.Namespace) -> Dict[str, Any]:
         })
 
         for thread in selected:
-            context = load_context_for_thread(thread, context_cache, args.contexts_dir, args.context_path)
+            context = load_context_for_thread(
+                thread,
+                context_cache,
+                args.contexts_dir,
+                args.context_path,
+                args.papers_md_dir,
+                args.md_max_chars,
+            )
             role = next_role(thread)
             plan = policy.plan_move(role, summarize_state(thread), intents, skills)
             observation = library.execute(plan.get("skill_call"), context)
@@ -226,6 +301,8 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("--acts-in", default="")
     parser.add_argument("--contexts-dir", default="")
     parser.add_argument("--context-path", default="")
+    parser.add_argument("--papers-md-dir", default="data/raw/papers_md")
+    parser.add_argument("--md-max-chars", type=int, default=900)
     parser.add_argument("--intents-in", default="")
     parser.add_argument(
         "--library-index",

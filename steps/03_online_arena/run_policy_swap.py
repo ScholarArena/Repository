@@ -32,6 +32,8 @@ def main() -> None:
     parser.add_argument("--acts-in", default="")
     parser.add_argument("--contexts-dir", default="")
     parser.add_argument("--context-path", default="")
+    parser.add_argument("--papers-md-dir", default="data/raw/papers_md")
+    parser.add_argument("--md-max-chars", type=int, default=900)
     parser.add_argument("--intents-in", default="")
     parser.add_argument("--library-index", default="steps/02_mine_evidence_needs/library_index.jsonl")
     parser.add_argument("--out-dir", default="steps/03_online_arena/outputs")
@@ -62,6 +64,8 @@ def main() -> None:
         arena_args.acts_in = args.acts_in
         arena_args.contexts_dir = args.contexts_dir
         arena_args.context_path = args.context_path
+        arena_args.papers_md_dir = args.papers_md_dir
+        arena_args.md_max_chars = args.md_max_chars
         arena_args.intents_in = args.intents_in
         arena_args.library_index = args.library_index
         arena_args.out_dir = args.out_dir
