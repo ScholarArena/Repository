@@ -834,7 +834,7 @@ def main():
     embed_key = args.embed_api_key or default_api_key()
     llm_key = args.llm_api_key or embed_key
 
-    # Issue clustering
+
     issue_texts = [build_issue_text(act, args.issue_text_mode) for act in acts]
     if not embed_key:
         raise SystemExit("Missing API key for embeddings. Provide --embed-api-key or set OPENAI_API_KEY.")
@@ -1080,7 +1080,7 @@ def main():
                 file=sys.stderr,
             )
 
-    # Intent clustering (global)
+
     intent_texts = [build_intent_text(act, args.intent_text_mode) for act in acts]
     intent_group_embeddings = []
     intent_group_for_act = {}
